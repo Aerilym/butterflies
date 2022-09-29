@@ -14,6 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthenticationMethod, AuthenticationProvider, AuthIcons } from '../../types/auth';
 import { startAsync, makeRedirectUri } from 'expo-auth-session';
 import type { Provider } from '@supabase/gotrue-js';
+import { Platform } from 'react-native';
 
 import { Layout, Text, TextInput, Button, useTheme, themeColor } from 'react-native-rapi-ui';
 
@@ -52,6 +53,14 @@ export default function ({ navigation }: NativeStackScreenProps<AuthStackParamLi
     } else if (method.provider === 'apple') {
       Linking.openURL('https://youtu.be/tjc6Ob1jo8I?t=14');
     } else {
+      console.log(Platform.OS);
+      if (Platform.OS === 'web') {
+        const { user, session, error } = await supabase.auth.signIn({
+          provider: method.provider,
+        });
+        return;
+      }
+
       const returnUrl = makeRedirectUri({ useProxy: false });
       const provider = method.provider;
       const authUrl = `https://btueksreggheiyvqbbdx.supabase.co/auth/v1/authorize?provider=${provider}&redirect_to=${returnUrl}`;
