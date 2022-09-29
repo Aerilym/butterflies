@@ -29,12 +29,7 @@ export default () => {
     <NavigationContainer>
       {user == null && <Loading />}
       {user == false && <Auth />}
-      {user == true &&
-        isNewUser(auth.session?.user?.created_at || '') === true &&
-        localStorage.getItem('onBoardComplete') === 'false' && <Onboarding />}
-      {user == true &&
-        (isNewUser(auth.session?.user?.created_at || '') === false ||
-          localStorage.getItem('onBoardComplete') === 'true') && <Main />}
+      {user == true && <Main />}
     </NavigationContainer>
   );
 };
