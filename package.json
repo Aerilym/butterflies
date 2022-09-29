@@ -5,6 +5,10 @@
     "format": "prettier --config .prettierrc src/**/*.ts --write",
     "lint": "eslint . --ext .ts"
   },
+  "workspaces": [
+    "packages/api",
+    "packages/wap"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
