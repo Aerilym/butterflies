@@ -38,6 +38,8 @@ async function handleFetch({ request, env, ctx }: FetchPayload): Promise<Respons
     supabaseKey: env.SB_KEY,
   };
 
+  const tmp = 2;
+
   const body: AuthBody = await request.json();
 
   const supabase = createClient(config.supabaseUrl, config.supabaseKey);
