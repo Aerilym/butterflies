@@ -1,0 +1,24 @@
+name = "supabase-auth"
+main = "src/index.ts"
+compatibility_date = "2022-08-08"
+
+[dev]
+port=8002
+
+[env.stg]
+name = "supabase-auth-stg"
+
+[env.prd]
+name = "supabase-auth"
+
+[vars]
+# The necessary secrets are:
+# - 
+# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
+ENVIRONMENT = "stg"
+
+[env.stg.vars]
+ENVIRONMENT = "stg"
+
+[env.prd.vars]
+ENVIRONMENT = "prd"
