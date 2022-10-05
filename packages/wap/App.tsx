@@ -1,21 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { ThemeProvider } from 'react-native-rapi-ui';
+import { registerRootComponent } from 'expo';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import 'react-native-url-polyfill/auto';
 import Navigation from './src/navigation';
 import { AuthProvider } from './src/provider/AuthProvider';
 
 export default function App() {
-  const images = [
-    require('./assets/images/login.png'),
-    require('./assets/images/register.png'),
-    require('./assets/images/forget.png'),
-  ];
   return (
-    <ThemeProvider images={images}>
+    <SafeAreaProvider>
       <AuthProvider>
         <Navigation />
       </AuthProvider>
-      <StatusBar />
-    </ThemeProvider>
+    </SafeAreaProvider>
   );
 }

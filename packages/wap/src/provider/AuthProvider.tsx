@@ -1,11 +1,20 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { supabase } from '../initSupabase';
-import { Session } from '@supabase/supabase-js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createClient, Session } from '@supabase/supabase-js';
+
+import { SB_URL, SB_KEY } from '@env';
+
+export const supabase = createClient(SB_URL, SB_KEY, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    storage: AsyncStorage,
+  },
+});
+
 type ContextProps = {
-  user: null | boolean;
-  newUser: null | boolean;
-  completeOnboarding: null | boolean;
-  session: Session | null;
+  hasAuth: null | boolean;
+  session: null | Session;
 };
 
 const AuthContext = createContext<Partial<ContextProps>>({});
@@ -15,32 +24,75 @@ interface Props {
 }
 
 const AuthProvider = (props: Props) => {
-  // user null = loading
-  const [user, setUser] = useState<null | boolean>(null);
-  const [newUser, setNewUser] = useState<null | boolean>(true);
-  const [completeOnboarding, setCompleteOnboarding] = useState<null | boolean>(false);
-  const [session, setSession] = useState<Session | null>(null);
+  const [hasAuth, setHasAuthState] = useState<null | boolean>(null);
+  const [session, setSessionState] = useState<null | Session>(null);
+
+  // Get current auth state from AsyncStorage
+  const getHasAuthState = async () => {
+    try {
+      const authDataString = await AsyncStorage.getItem('auth');
+      setHasAuthState(JSON.parse(authDataString || 'false'));
+    } catch (err) {
+      setHasAuthState(false);
+    }
+  };
+
+  // Update AsyncStorage & context state
+  const setHasAuth = async (hasAuth: null | boolean) => {
+    try {
+      await AsyncStorage.setItem('auth', JSON.stringify(hasAuth));
+      setHasAuthState(hasAuth);
+    } catch (error) {
+      Promise.reject(error);
+    }
+  };
+
+  // Get current auth state from AsyncStorage
+  const getSessionState = async () => {
+    try {
+      const sessionString = await AsyncStorage.getItem('session');
+      setSessionState(JSON.parse(sessionString || '') as Session);
+    } catch (err) {
+      setSessionState(null);
+    }
+  };
+
+  // Update AsyncStorage & context state
+  const setSession = async (session: null | Session) => {
+    try {
+      await AsyncStorage.setItem('session', JSON.stringify(session));
+      setSessionState(session);
+    } catch (error) {
+      Promise.reject(error);
+    }
+  };
 
   useEffect(() => {
-    const session = supabase.auth.session();
-    setSession(session);
-    setUser(session ? true : false);
+    getHasAuthState();
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log(`Supabase auth event: ${event}`);
-      setSession(session);
-      setUser(session ? true : false);
+
+      switch (event) {
+        case 'SIGNED_IN':
+          session ? setHasAuth(true) : setHasAuth(false);
+          session ? setSession(session) : setSession(null);
+          break;
+
+        default:
+          setHasAuth(false);
+          setSession(null);
+          break;
+      }
     });
     return () => {
-      authListener!.unsubscribe();
+      authListener!.subscription.unsubscribe();
     };
-  }, [user]);
+  });
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        newUser,
-        completeOnboarding,
+        hasAuth,
         session,
       }}
     >
