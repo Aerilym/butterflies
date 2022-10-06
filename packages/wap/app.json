@@ -9,6 +9,7 @@
     "orientation": "portrait",
     "primaryColor": "#8d51db",
     "icon": "./assets/icon.png",
+    "scheme": "dating",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

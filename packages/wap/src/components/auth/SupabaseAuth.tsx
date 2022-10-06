@@ -26,7 +26,7 @@ export function SupabaseAuth() {
   const enabledProviders: Provider[] = ['spotify', 'apple', 'facebook', 'google'];
 
   const authButtons = enabledProviders.map((provider) => {
-    return <AuthButton provider={provider} icon={icons[provider]} />;
+    return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
   });
 
   return (

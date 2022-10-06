@@ -1,11 +1,44 @@
-import { Provider } from '@supabase/supabase-js';
+import { Provider, Session } from '@supabase/supabase-js';
 import { supabase } from '../../provider/AuthProvider';
-import { TouchableOpacity, Text, Image } from 'react-native';
+import { TouchableOpacity, Text, Image, Platform } from 'react-native';
+import { startAsync, makeRedirectUri } from 'expo-auth-session';
 
 export function AuthButton({ provider, icon }: { provider: Provider; icon: any }) {
-  const handleLogin = async (provider: Provider) => {
-    const { data, error } = await supabase.auth.signInWithOAuth({ provider });
-  };
+  async function handleLogin(provider: Provider) {
+    if (Platform.OS === 'web') {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: 'http://localhost:19006' },
+      });
+      if (error) {
+        console.log(error);
+      }
+      console.log(data);
+      return;
+    }
+
+    const returnUrl = makeRedirectUri({ useProxy: false });
+    const authUrl = `https://btueksreggheiyvqbbdx.supabase.co/auth/v1/authorize?provider=${provider}&redirect_to=${returnUrl}`;
+    const response = await startAsync({ authUrl, returnUrl });
+
+    if (response.type !== 'success') {
+      return;
+    }
+
+    if (!response.params?.refresh_token) {
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo: 'exp://192.168.1.131:19000',  },
+    });
+    if (error) {
+      console.log(error);
+    }
+    console.log(data);
+    return;
+  }
 
   return (
     <TouchableOpacity

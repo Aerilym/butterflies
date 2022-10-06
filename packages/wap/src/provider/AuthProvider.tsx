@@ -3,12 +3,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, Session } from '@supabase/supabase-js';
 
 import { SB_URL, SB_KEY } from '@env';
+import { Platform } from 'react-native';
+
+const isWeb = Platform.OS === 'web';
 
 export const supabase = createClient(SB_URL, SB_KEY, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     storage: AsyncStorage,
+    detectSessionInUrl: isWeb ? true : false,
   },
 });
 
@@ -31,7 +35,7 @@ const AuthProvider = (props: Props) => {
   const getHasAuthState = async () => {
     try {
       const authDataString = await AsyncStorage.getItem('auth');
-      setHasAuthState(JSON.parse(authDataString || 'false'));
+      setHasAuthState(JSON.parse(authDataString ?? 'false'));
     } catch (err) {
       setHasAuthState(false);
     }
@@ -74,13 +78,16 @@ const AuthProvider = (props: Props) => {
 
       switch (event) {
         case 'SIGNED_IN':
-          session ? setHasAuth(true) : setHasAuth(false);
-          session ? setSession(session) : setSession(null);
+          session ? await setHasAuth(true) : await setHasAuth(false);
+          session ? await setSession(session) : await setSession(null);
+          break;
+
+        case 'SIGNED_OUT':
+          await setHasAuth(false);
+          await setSession(null);
           break;
 
         default:
-          setHasAuth(false);
-          setSession(null);
           break;
       }
     });
