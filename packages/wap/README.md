@@ -6,6 +6,8 @@ The web app is a [React Native](https://reactnative.dev/) app built using [Expo]
 
 A `.env` file is required to run the app. You can use the `.env.example` file as a template to populate the environment variables.
 
+Install all the required packages by running `yarn`.
+
 To run the app, run `yarn start`. This will start the Expo development server. You can then run the app on your device by scanning the QR code in the terminal, or by opening the app in a web browser.
 
 ## Troubleshooting
