@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { KeyboardAvoidingView } from 'react-native';
+
 import { SupabaseAuth } from '../../components/auth/SupabaseAuth';
-import { AuthContext } from '../../provider/AuthProvider';
 
 export default function () {
   return (

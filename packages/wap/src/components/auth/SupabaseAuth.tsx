@@ -1,6 +1,7 @@
-import { Provider } from '@supabase/supabase-js';
-import { Text, View } from 'react-native';
-import { AuthIcons } from '../../types/auth';
+import type { Provider } from '@supabase/supabase-js';
+import { ImageSourcePropType, View } from 'react-native';
+
+import type { AuthIcons } from '../../types/auth';
 import { AuthButton } from './AuthButton';
 
 const icons: AuthIcons = {
@@ -16,10 +17,10 @@ const icons: AuthIcons = {
   spotify: require('../../../assets/icons/spotify.png'),
   twitch: require('../../../assets/icons/twitch.png'),
   twitter: require('../../../assets/icons/twitter.png'),
-  keycloak: '',
-  linkedin: '',
-  notion: '',
-  workos: '',
+  keycloak: '' as ImageSourcePropType,
+  linkedin: '' as ImageSourcePropType,
+  notion: '' as ImageSourcePropType,
+  workos: '' as ImageSourcePropType,
 };
 
 export function SupabaseAuth() {

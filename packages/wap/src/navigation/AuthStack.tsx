@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../screens/auth/Login';
 
 const AuthStack = createNativeStackNavigator();
-const Auth = () => {
+export default function Auth() {
   return (
     <AuthStack.Navigator
       screenOptions={{
@@ -14,6 +14,4 @@ const Auth = () => {
       <AuthStack.Screen name="Login" component={Login} />
     </AuthStack.Navigator>
   );
-};
-
-export default Auth;
+}

@@ -5,10 +5,10 @@ import MainTabs from './MainTabs';
 import Filters from '../screens/profile/Filters';
 import Profile from '../screens/profile/Profile';
 import Settings from '../screens/settings/Settings';
-import { MainStackParamList } from '../types/navigation';
+import type { MainStackParamList } from '../types/navigation';
 
 const MainStack = createNativeStackNavigator<MainStackParamList>();
-const Main = () => {
+export default function Main() {
   return (
     <MainStack.Navigator
       screenOptions={{
@@ -21,6 +21,4 @@ const Main = () => {
       <MainStack.Screen name="Settings" component={Settings} />
     </MainStack.Navigator>
   );
-};
-
-export default Main;
+}

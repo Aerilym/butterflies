@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-import { MainStackParamList } from '../../types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import type { MainStackParamList } from '../../types/navigation';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Chat'>) {
   return (

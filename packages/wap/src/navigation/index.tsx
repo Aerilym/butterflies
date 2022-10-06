@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { Dimensions, Platform, View, StyleSheet } from 'react-native';
 
 import Main from './MainStack';
 import Auth from './AuthStack';
 import Loading from '../screens/utility/Loading';
 import { AuthContext } from '../provider/AuthProvider';
-import { Dimensions, Platform, View, StyleSheet } from 'react-native';
 
 export default () => {
   const { hasAuth } = useContext(AuthContext);

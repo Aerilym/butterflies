@@ -1,9 +1,10 @@
-import { Provider, Session } from '@supabase/supabase-js';
-import { supabase } from '../../provider/AuthProvider';
-import { TouchableOpacity, Text, Image, Platform } from 'react-native';
+import type { Provider } from '@supabase/supabase-js';
+import { TouchableOpacity, Text, Image, Platform, ImageSourcePropType } from 'react-native';
 import { startAsync, makeRedirectUri } from 'expo-auth-session';
 
-export function AuthButton({ provider, icon }: { provider: Provider; icon: any }) {
+import { supabase } from '../../provider/AuthProvider';
+
+export function AuthButton({ provider, icon }: { provider: Provider; icon: ImageSourcePropType }) {
   async function handleLogin(provider: Provider) {
     if (Platform.OS === 'web') {
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -31,7 +32,7 @@ export function AuthButton({ provider, icon }: { provider: Provider; icon: any }
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: 'exp://192.168.1.131:19000',  },
+      options: { redirectTo: 'exp://192.168.1.131:19000' },
     });
     if (error) {
       console.log(error);

@@ -1,9 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, Session } from '@supabase/supabase-js';
+import { Platform } from 'react-native';
 
 import { SB_URL, SB_KEY } from '@env';
-import { Platform } from 'react-native';
 
 const isWeb = Platform.OS === 'web';
 
@@ -52,6 +52,7 @@ const AuthProvider = (props: Props) => {
   };
 
   // Get current auth state from AsyncStorage
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getSessionState = async () => {
     try {
       const sessionString = await AsyncStorage.getItem('session');
@@ -92,6 +93,7 @@ const AuthProvider = (props: Props) => {
       }
     });
     return () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       authListener!.subscription.unsubscribe();
     };
   });

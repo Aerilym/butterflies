@@ -6,7 +6,7 @@ import Dashboard from '../screens/main/Dashboard';
 import Chat from '../screens/main/Chat';
 import TabBarText from '../components/utility/TabBarText';
 import TabBarIcon from '../components/utility/TabBarIcon';
-import { MainStackParamList } from '../types/navigation';
+import type { MainStackParamList } from '../types/navigation';
 
 const Tabs = createBottomTabNavigator<MainStackParamList>();
 export default function MainTabs() {

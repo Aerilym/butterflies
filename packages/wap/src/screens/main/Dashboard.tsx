@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { View, Text, Button, Image } from 'react-native';
-import { MainStackParamList } from '../../types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import type { MainStackParamList } from '../../types/navigation';
 import { AuthContext, supabase } from '../../provider/AuthProvider';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Dashboard'>) {
