@@ -1,11 +1,15 @@
 {
   "expo": {
     "name": "dating",
-    "slug": "vibecheck",
+    "description": "dating app",
+    "slug": "dating",
     "owner": "aerilym",
+    "privacy": "hidden",
     "version": "1.0.0",
     "orientation": "portrait",
+    "primaryColor": "#8d51db",
     "icon": "./assets/icon.png",
+    "scheme": "dating",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -14,9 +18,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -24,16 +26,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.aerilym.vibecheck"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "93db3f52-119e-4146-bf75-979fabe849ad"
-      }
     }
   }
 }

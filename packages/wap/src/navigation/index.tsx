@@ -1,35 +1,44 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../provider/AuthProvider';
-
 import { NavigationContainer } from '@react-navigation/native';
+import { Dimensions, Platform, View, StyleSheet } from 'react-native';
 
 import Main from './MainStack';
 import Auth from './AuthStack';
-import Onboarding from './OnboardingStack';
-import Loading from '../screens/utils/Loading';
+import Loading from '../screens/utility/Loading';
+import { AuthContext } from '../provider/AuthProvider';
 
 export default () => {
-  const auth = useContext(AuthContext);
-  const user = auth.user;
-  const newUser = auth.newUser;
-
-  function isNewUser(creationDate: string): boolean {
-    if (creationDate === null) return true;
-    const cDate = new Date().valueOf();
-    const userDate = new Date(creationDate || '').valueOf();
-    const diff = cDate - userDate;
-    if (diff < 300000) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  const { hasAuth } = useContext(AuthContext);
 
   return (
-    <NavigationContainer>
-      {user == null && <Loading />}
-      {user == false && <Auth />}
-      {user == true && <Main />}
-    </NavigationContainer>
+    <View style={styles.mobBox}>
+      <NavigationContainer>
+        {hasAuth == null && <Loading />}
+        {hasAuth == false && <Auth />}
+        {hasAuth == true && <Main />}
+      </NavigationContainer>
+    </View>
   );
 };
+
+const ScreenHeight = Dimensions.get('window').height;
+const ScreenWidth = Dimensions.get('window').width;
+const isWeb = Platform.OS === 'web';
+const paddingOffset = 7;
+const innerPadding = 4;
+
+const styles = StyleSheet.create({
+  mobBox: {
+    flex: 1,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F5FCFF',
+    borderWidth: isWeb ? 4 : undefined,
+    borderStyle: isWeb ? 'solid' : undefined,
+    borderColor: isWeb ? 'rgb(71, 77, 80)' : undefined,
+    borderRadius: isWeb ? 6 : undefined,
+    width: isWeb ? ScreenHeight / 1.7 + (innerPadding + innerPadding + paddingOffset) : ScreenWidth,
+    paddingLeft: isWeb ? innerPadding : undefined,
+    paddingRight: isWeb ? innerPadding + paddingOffset : undefined,
+  },
+});

@@ -1,56 +1,48 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { themeColor, useTheme } from 'react-native-rapi-ui';
-import TabBarIcon from '../components/utils/TabBarIcon';
-import TabBarText from '../components/utils/TabBarText';
+import Swipe from '../screens/main/Swipe';
+import Dashboard from '../screens/main/Dashboard';
+import Chat from '../screens/main/Chat';
+import TabBarText from '../components/utility/TabBarText';
+import TabBarIcon from '../components/utility/TabBarIcon';
+import type { MainStackParamList } from '../types/navigation';
 
-import Home from '../screens/Home';
-import Chats from '../screens/Chats';
-import Profile from '../screens/Profile';
-
-const Tabs = createBottomTabNavigator();
-const MainTabs = () => {
-  const { isDarkmode } = useTheme();
+const Tabs = createBottomTabNavigator<MainStackParamList>();
+export default function MainTabs() {
   return (
     <Tabs.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          borderTopColor: isDarkmode ? themeColor.dark100 : '#c0c0c0',
-          backgroundColor: isDarkmode ? themeColor.dark200 : '#ffffff',
-        },
       }}
     >
       {/* these icons using Ionicons */}
       <Tabs.Screen
-        name="Home"
-        component={Home}
+        name="Swipe"
+        component={Swipe}
         options={{
-          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Home" />,
+          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Swipe" />,
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'albums-outline'} />,
         }}
       />
       <Tabs.Screen
-        name="Chats"
-        component={Chats}
+        name="Chat"
+        component={Chat}
         options={{
-          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Chats" />,
+          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Chat" />,
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} icon={'chatbubble-ellipses-outline'} />
           ),
         }}
       />
       <Tabs.Screen
-        name="Profile"
-        component={Profile}
+        name="Dashboard"
+        component={Dashboard}
         options={{
-          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Profile" />,
+          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Dashboard" />,
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'person'} />,
         }}
       />
     </Tabs.Navigator>
   );
-};
-
-export default MainTabs;
+}

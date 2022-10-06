@@ -1,13 +1,14 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Filters from '../screens/Filters';
-import Settings from '../screens/Settings';
-import AddAccount from '../screens/AddAccount';
 import MainTabs from './MainTabs';
+import Filters from '../screens/profile/Filters';
+import Profile from '../screens/profile/Profile';
+import Settings from '../screens/settings/Settings';
+import type { MainStackParamList } from '../types/navigation';
 
-const MainStack = createNativeStackNavigator();
-const Main = () => {
+const MainStack = createNativeStackNavigator<MainStackParamList>();
+export default function Main() {
   return (
     <MainStack.Navigator
       screenOptions={{
@@ -16,10 +17,8 @@ const Main = () => {
     >
       <MainStack.Screen name="MainTabs" component={MainTabs} />
       <MainStack.Screen name="Filters" component={Filters} />
+      <MainStack.Screen name="Profile" component={Profile} />
       <MainStack.Screen name="Settings" component={Settings} />
-      <MainStack.Screen name="AddAccount" component={AddAccount} />
     </MainStack.Navigator>
   );
-};
-
-export default Main;
+}

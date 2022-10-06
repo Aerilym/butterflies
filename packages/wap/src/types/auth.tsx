@@ -1,14 +1,6 @@
-import type { Provider } from '@supabase/gotrue-js';
-
-export type AuthenticationProvider = Provider | 'email' | 'phone';
-
-export interface AuthenticationMethod {
-  provider: AuthenticationProvider;
-  nameOverride?: string;
-  icon?: any;
-  weight: number;
-}
+import type { Provider } from '@supabase/supabase-js';
+import type { ImageSourcePropType } from 'react-native';
 
 export type AuthIcons = {
-  [key in AuthenticationProvider]: string;
+  [key in Provider]: ImageSourcePropType;
 };
