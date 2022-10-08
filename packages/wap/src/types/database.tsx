@@ -3,7 +3,8 @@ export interface Message {
   matchID: string;
   userID: string;
   text: string;
-  createdAt: string;
+  created_at: string;
+  isDelivered: boolean;
 }
 
 export interface Match {
@@ -11,7 +12,7 @@ export interface Match {
   id: string;
   user1: string;
   user2: string;
-  createdAt: string;
+  created_at: string;
   user1Liked: boolean;
   user2Liked: boolean;
 }

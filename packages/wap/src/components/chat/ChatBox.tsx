@@ -54,16 +54,30 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
       <View
         style={{
           flex: 1,
-          padding: '10px',
         }}
       >
         {messages.map((message) => {
+          const isSender = message.userID === userID;
+
+          let isLead = false;
+
+          const messageIdx = messages.indexOf(message);
+          if (messageIdx === 0) {
+            isLead = true;
+          } else {
+            const prevMessage = messages[messageIdx - 1];
+            if (message.userID !== prevMessage.userID) {
+              isLead = true;
+            }
+            const timeDiff =
+              new Date(message.created_at).getTime() - new Date(prevMessage.created_at).getTime();
+            if (timeDiff > 1000 * 60 * 10) {
+              isLead = true;
+            }
+          }
+
           return (
-            <MessageBubble
-              key={message.id}
-              message={message}
-              isSender={message.userID === userID}
-            />
+            <MessageBubble key={message.id} message={message} isSender={isSender} isLead={isLead} />
           );
         })}
       </View>

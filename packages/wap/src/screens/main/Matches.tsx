@@ -36,27 +36,31 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           justifyContent: 'center',
         }}
       >
-        {matches.map((match) => {
-          return (
-            <TouchableOpacity
-              key={match.id}
-              onPress={() => {
-                navigation.navigate('Chat', {
-                  matchID: match.id,
-                  userID: userID,
-                });
-              }}
-              style={{
-                width: '100%',
-                height: 100,
-                backgroundColor: 'white',
-                marginBottom: 10,
-              }}
-            >
-              <MatchBox matchID={match.id} userID={userID} />
-            </TouchableOpacity>
-          );
-        })}
+        {matches ? (
+          matches.map((match) => {
+            return (
+              <TouchableOpacity
+                key={match.id}
+                onPress={() => {
+                  navigation.navigate('Chat', {
+                    matchID: match.id,
+                    userID: userID,
+                  });
+                }}
+                style={{
+                  width: '100%',
+                  height: 100,
+                  backgroundColor: 'white',
+                  marginBottom: 10,
+                }}
+              >
+                <MatchBox matchID={match.id} userID={userID} />
+              </TouchableOpacity>
+            );
+          })
+        ) : (
+          <Text style={{ textAlign: 'center' }}>No matches yet! Start swiping!</Text>
+        )}
       </View>
     </View>
   );
