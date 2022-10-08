@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, Button, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -23,18 +23,21 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           style={{ width: 200, height: 200, borderRadius: 100 }}
           source={{ uri: session?.user.user_metadata.avatar_url }}
         />
-        <Button
-          title="Return"
-          onPress={() => {
-            navigation.goBack();
+        <TouchableOpacity
+          style={{
+            width: 150,
+            height: 50,
+            borderRadius: 4,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 100,
           }}
-        />
-        <Button
-          title="Log out"
           onPress={() => {
             supabase.auth.signOut();
           }}
-        />
+        >
+          <Text>Sign Out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -1937,10 +1937,8 @@
   dependencies:
     cross-fetch "^3.1.5"
 
-"@supabase/gotrue-js@^2.0.0-rc.4":
+"@supabase/gotrue-js@^2.0.0-rc.4", "@supabase/gotrue-js@file:custom_modules/@supabase/gotrue-js":
   version "2.0.0-rc.10"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-2.0.0-rc.10.tgz#909b0ca24b7ddd27f86d80f19aabaa09b119479e"
-  integrity sha512-y4jxZlf6eFoz0EP3EeU2QZnwI2WfpvkzAhURAAkn36Abol5QQhHpCbTWBEZhqOUk0cDtKZzgjsc5UQeep72qHA==
   dependencies:
     cross-fetch "^3.1.5"
 
