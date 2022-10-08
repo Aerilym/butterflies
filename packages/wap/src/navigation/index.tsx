@@ -11,13 +11,11 @@ export default () => {
   const { hasAuth } = useContext(AuthContext);
 
   return (
-    <View style={styles.mobBox}>
-      <NavigationContainer>
-        {hasAuth == null && <Loading />}
-        {hasAuth == false && <Auth />}
-        {hasAuth == true && <Main />}
-      </NavigationContainer>
-    </View>
+    <NavigationContainer>
+      {hasAuth == null && <Loading />}
+      {hasAuth == false && <Auth />}
+      {hasAuth == true && <Main />}
+    </NavigationContainer>
   );
 };
 
@@ -27,6 +25,7 @@ const isWeb = Platform.OS === 'web';
 const paddingOffset = 7;
 const innerPadding = 4;
 
+//Removed mobile fake box for web but keeping the styles so we can use it later
 const styles = StyleSheet.create({
   mobBox: {
     flex: 1,

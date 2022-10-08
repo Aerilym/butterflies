@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -11,14 +11,7 @@ export default function ({
 }: NativeStackScreenProps<MainStackParamList, 'Chat'>) {
   const { matchID, userID } = route.params;
   return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        height: '100%',
-      }}
-    >
+    <View>
       <ChatBox matchID={matchID} userID={userID} />
     </View>
   );

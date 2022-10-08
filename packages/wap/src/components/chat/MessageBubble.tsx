@@ -52,7 +52,7 @@ export function MessageBubble({
       flexDirection: isSender ? 'row-reverse' : 'row',
     },
     bubble: {
-      maxWidth: '450px',
+      maxWidth: '65vw',
       padding: '15px',
       marginBottom: 2,
       borderRadius: 15,

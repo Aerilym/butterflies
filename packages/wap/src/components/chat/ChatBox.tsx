@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { useRef, useState } from 'react';
+import { View, TextInput, Button, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { supabase } from '../../provider/AuthProvider';
 import { Message } from '../../types/database';
 import { MessageBubble } from './MessageBubble';
@@ -39,6 +39,9 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
 
   fetchMessages();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const scrollViewRef = useRef<any>();
+
   return (
     <View
       style={{
@@ -51,10 +54,13 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
         height: '100%',
       }}
     >
-      <View
+      <ScrollView
         style={{
-          flex: 1,
+          height: '90vh',
         }}
+        showsVerticalScrollIndicator={false}
+        ref={scrollViewRef}
+        onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
       >
         {messages.map((message) => {
           const isSender = message.userID === userID;
@@ -80,21 +86,25 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
             <MessageBubble key={message.id} message={message} isSender={isSender} isLead={isLead} />
           );
         })}
-      </View>
+      </ScrollView>
       <View
         style={{
           display: 'flex',
           padding: '10px',
+          height: '10vh',
+          flexDirection: 'row',
         }}
       >
         <TextInput
           style={{
-            height: 40,
+            height: '100%',
+            width: '100%',
             borderColor: 'gray',
             borderWidth: 1,
             borderRadius: 10,
           }}
-          placeholder="Type here to translate!"
+          multiline
+          placeholder="Enter your message..."
           onChangeText={(newText) => setDraftMessage(newText)}
           value={draftMessage}
         ></TextInput>
