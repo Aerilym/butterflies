@@ -8,8 +8,9 @@ import Loading from '../screens/utility/Loading';
 import { AuthContext } from '../provider/AuthProvider';
 
 export default () => {
-  const { hasAuth } = useContext(AuthContext);
-
+  const { session } = useContext(AuthContext);
+  const userID = session?.user?.id;
+  const hasAuth = !!userID;
   return (
     <View style={styles.mobBox}>
       <NavigationContainer>
