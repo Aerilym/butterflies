@@ -5,7 +5,11 @@ export type MainStackParamList = {
   Profile: undefined;
   Swipe: undefined;
   Dashboard: undefined;
-  Chat: undefined;
+  Matches: undefined;
+  Chat: {
+    matchID: string;
+    userID: string;
+  };
 };
 
 export type AuthStackParamList = {
