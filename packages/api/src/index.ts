@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { SupabaseClientOptions } from '@supabase/supabase-js';
 import { SupabaseAPI } from './api';
 import { getPath } from './helper';
