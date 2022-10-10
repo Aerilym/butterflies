@@ -17,7 +17,6 @@ export const supabase = createClient(SB_URL, SB_KEY, {
 });
 
 type ContextProps = {
-  hasAuth: null | boolean;
   session: null | Session;
 };
 
@@ -28,72 +27,48 @@ interface Props {
 }
 
 const AuthProvider = (props: Props) => {
-  const [hasAuth, setHasAuthState] = useState<null | boolean>(null);
   const [session, setSessionState] = useState<null | Session>(null);
-
-  // Get current auth state from AsyncStorage
-  const getHasAuthState = async () => {
-    try {
-      const authDataString = await AsyncStorage.getItem('auth');
-      setHasAuthState(JSON.parse(authDataString ?? 'false'));
-    } catch (err) {
-      setHasAuthState(false);
-    }
-  };
-
-  // Update AsyncStorage & context state
-  const setHasAuth = async (hasAuth: null | boolean) => {
-    try {
-      await AsyncStorage.setItem('auth', JSON.stringify(hasAuth));
-      setHasAuthState(hasAuth);
-    } catch (error) {
-      Promise.reject(error);
-    }
-  };
 
   // Get current auth state from AsyncStorage
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getSessionState = async () => {
     try {
       const sessionString = await AsyncStorage.getItem('session');
-      setSessionState(JSON.parse(sessionString || '') as Session);
+      if (sessionString) {
+        setSessionState(JSON.parse(sessionString));
+      } else {
+        setSessionState(null);
+      }
     } catch (err) {
       setSessionState(null);
+      Promise.reject(err);
     }
   };
 
   // Update AsyncStorage & context state
   const setSession = async (session: null | Session) => {
     try {
-      await AsyncStorage.setItem('session', JSON.stringify(session));
       setSessionState(session);
+      await AsyncStorage.setItem('session', JSON.stringify(session));
     } catch (error) {
+      setSessionState(null);
       Promise.reject(error);
     }
   };
 
   useEffect(() => {
-    getHasAuthState();
+    getSessionState();
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(`Supabase auth event: ${event}`);
-
-      switch (event) {
-        case 'SIGNED_IN':
-          session ? await setHasAuth(true) : await setHasAuth(false);
-          session ? await setSession(session) : await setSession(null);
-          break;
-
-        case 'SIGNED_OUT':
-          await setHasAuth(false);
-          await setSession(null);
-          break;
-
-        default:
-          break;
+      if (event === 'SIGNED_IN') {
+        setSession(session);
+      } else if (event === 'SIGNED_OUT') {
+        setSession(null);
+      } else {
+        setSession(session);
       }
     });
     return () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion  
       authListener!.subscription.unsubscribe();
     };
   });
@@ -101,7 +76,6 @@ const AuthProvider = (props: Props) => {
   return (
     <AuthContext.Provider
       value={{
-        hasAuth,
         session,
       }}
     >

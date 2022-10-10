@@ -7,14 +7,10 @@ import { supabase } from '../../provider/AuthProvider';
 export function AuthButton({ provider, icon }: { provider: Provider; icon: ImageSourcePropType }) {
   async function handleLogin(provider: Provider) {
     if (Platform.OS === 'web') {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo: 'http://localhost:19006' },
       });
-      if (error) {
-        console.log(error);
-      }
-      console.log(data);
       return;
     }
 
@@ -26,19 +22,9 @@ export function AuthButton({ provider, icon }: { provider: Provider; icon: Image
       return;
     }
 
-    if (!response.params?.refresh_token) {
-      return;
-    }
-
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: 'exp://192.168.1.131:19000' },
-    });
-    if (error) {
-      console.log(error);
-    }
-    console.log(data);
-    return;
+    const refreshToken = response.params?.refresh_token;
+    if (!refreshToken) return;
+    await supabase.auth.setSessionFromToken(refreshToken);
   }
 
   return (

@@ -3,7 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Swipe from '../screens/main/Swipe';
 import Dashboard from '../screens/main/Dashboard';
-import Chat from '../screens/main/Chat';
+import Matches from '../screens/main/Matches';
+import Chat from '../screens/social/Chat';
 import TabBarText from '../components/utility/TabBarText';
 import TabBarIcon from '../components/utility/TabBarIcon';
 import type { MainStackParamList } from '../types/navigation';
@@ -26,10 +27,10 @@ export default function MainTabs() {
         }}
       />
       <Tabs.Screen
-        name="Chat"
-        component={Chat}
+        name="Matches"
+        component={Matches}
         options={{
-          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Chat" />,
+          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Matches" />,
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} icon={'chatbubble-ellipses-outline'} />
           ),
