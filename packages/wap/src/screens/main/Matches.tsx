@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Button, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -26,7 +26,10 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
     }
     setMatches(data as Match[]);
   }
-  fetchMatches();
+
+  useEffect(() => {
+    fetchMatches();
+  }, []);
   return (
     <View>
       <View

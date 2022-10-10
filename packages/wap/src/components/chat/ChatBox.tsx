@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View, TextInput, Button, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { supabase } from '../../provider/AuthProvider';
 import { Message } from '../../types/database';
@@ -8,37 +8,38 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
   const [messages, setMessages] = useState<Message[]>([]);
   const [draftMessage, setDraftMessage] = useState<string>('');
 
+  function newMessage(message: Message) {
+    setMessages((prev) => [...prev, message]);
+  }
+
   async function fetchMessages() {
     const { data, error } = await supabase
       .from('messages')
       .select('*')
       .eq('matchID', matchID)
-      .order('created_at', { ascending: true });
+      .order('createdAt', { ascending: true });
 
     if (error) {
       console.log('error', error);
       return;
     }
     setMessages(data as Message[]);
+    supabase
+      .channel(`public:messages:matchID=eq.${matchID}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages', filter: `matchID=eq.${matchID}` },
+        (message: Message) => {
+          console.log('message', message.messageID);
+          newMessage(message);
+        }
+      )
+      .subscribe();
   }
 
-  function newMessage(message: Message) {
-    setMessages((prev) => [...prev, message]);
-  }
-
-  supabase
-    .channel(`public:messages:id=eq.${matchID}`)
-    .on(
-      'postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'messages', filter: `id=eq.${matchID}` },
-      (message: Message) => {
-        newMessage(message);
-      }
-    )
-    .subscribe();
-
-  fetchMessages();
-
+  useEffect(() => {
+    fetchMessages();
+  }, []);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const scrollViewRef = useRef<any>();
 
@@ -63,7 +64,7 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
         onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
       >
         {messages.map((message) => {
-          const isSender = message.userID === userID;
+          const isSender = message.senderID === userID;
 
           let isLead = false;
 
@@ -72,18 +73,23 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
             isLead = true;
           } else {
             const prevMessage = messages[messageIdx - 1];
-            if (message.userID !== prevMessage.userID) {
+            if (message.senderID !== prevMessage.senderID) {
               isLead = true;
             }
             const timeDiff =
-              new Date(message.created_at).getTime() - new Date(prevMessage.created_at).getTime();
+              new Date(message.createdAt).getTime() - new Date(prevMessage.createdAt).getTime();
             if (timeDiff > 1000 * 60 * 10) {
               isLead = true;
             }
           }
 
           return (
-            <MessageBubble key={message.id} message={message} isSender={isSender} isLead={isLead} />
+            <MessageBubble
+              key={message.messageID}
+              message={message}
+              isSender={isSender}
+              isLead={isLead}
+            />
           );
         })}
       </ScrollView>
@@ -113,7 +119,7 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
           onPress={async () => {
             const { data, error } = await supabase
               .from('messages')
-              .insert({ matchID, userID, text: draftMessage })
+              .insert({ matchID, senderID: userID, text: draftMessage })
               .single();
             if (error) {
               console.log('error', error);

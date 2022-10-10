@@ -78,9 +78,9 @@ export function MessageBubble({
       <Text
         style={{ ...boxStyles.textWhen, display: isLead ? 'flex' : isPressed ? 'flex' : 'none' }}
       >
-        {parseMessageTime(message.created_at)}
+        {parseMessageTime(message.createdAt)}
       </Text>
-      <TouchableOpacity key={message.id} onPress={handleClick} style={boxStyles.button}>
+      <TouchableOpacity key={message.messageID} onPress={handleClick} style={boxStyles.button}>
         <View style={boxStyles.bubble}>
           <Text>{message.text}</Text>
         </View>

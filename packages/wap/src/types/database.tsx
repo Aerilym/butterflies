@@ -1,9 +1,9 @@
 export interface Message {
-  id: string;
+  messageID: string;
   matchID: string;
-  userID: string;
+  senderID: string;
   text: string;
-  created_at: string;
+  createdAt: string;
   isDelivered: boolean;
 }
 
