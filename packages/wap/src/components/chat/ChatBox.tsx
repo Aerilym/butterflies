@@ -29,9 +29,8 @@ export function ChatBox({ matchID, userID }: { matchID: string; userID: string }
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `matchID=eq.${matchID}` },
-        (message: Message) => {
-          console.log('message', message.messageID);
-          newMessage(message);
+        (response: any) => {
+          newMessage(response.new as Message);
         }
       )
       .subscribe();
