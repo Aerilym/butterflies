@@ -1,0 +1,1 @@
+cd ./packages/wap && yarn lint

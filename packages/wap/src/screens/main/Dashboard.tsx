@@ -10,35 +10,40 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   const name = session?.user.user_metadata.name ?? 'Guest';
 
   return (
-    <View>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Text style={{ textAlign: 'center' }}>Welcome, {name}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Profile');
         }}
       >
-        <Text style={{ textAlign: 'center' }}>Welcome, {name}</Text>
         <Image
           style={{ width: 200, height: 200, borderRadius: 100 }}
           source={{ uri: session?.user.user_metadata.avatar_url }}
         />
-        <TouchableOpacity
-          style={{
-            width: 150,
-            height: 50,
-            borderRadius: 4,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 100,
-          }}
-          onPress={() => {
-            supabase.auth.signOut();
-          }}
-        >
-          <Text>Sign Out</Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          width: 150,
+          height: 50,
+          borderRadius: 4,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 100,
+          backgroundColor: 'red',
+        }}
+        onPress={() => {
+          supabase.auth.signOut();
+        }}
+      >
+        <Text>Sign Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }

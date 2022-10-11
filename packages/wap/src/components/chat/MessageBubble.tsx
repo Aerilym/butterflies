@@ -78,15 +78,15 @@ export function MessageBubble({
       <Text
         style={{ ...boxStyles.textWhen, display: isLead ? 'flex' : isPressed ? 'flex' : 'none' }}
       >
-        {parseMessageTime(message.createdAt)}
+        {parseMessageTime(message.created_at)}
       </Text>
-      <TouchableOpacity key={message.messageID} onPress={handleClick} style={boxStyles.button}>
+      <TouchableOpacity key={message.message_id} onPress={handleClick} style={boxStyles.button}>
         <View style={boxStyles.bubble}>
           <Text>{message.text}</Text>
         </View>
       </TouchableOpacity>
       <Text style={{ ...boxStyles.textDelivered, display: isPressed ? 'flex' : 'none' }}>
-        {isSender ? (message.isDelivered ? 'Delivered' : 'Sent') : ''}
+        {isSender ? (message.is_delivered ? 'Delivered' : 'Sent') : ''}
       </Text>
     </View>
   );

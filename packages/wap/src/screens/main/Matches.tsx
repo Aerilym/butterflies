@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -14,16 +14,12 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   const [matches, setMatches] = useState<Match[]>([]);
 
   async function fetchMatches() {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('matches')
       .select('*')
-      .or('userID1.eq.' + userID + ',userID2.eq.' + userID)
+      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
       .order('created_at', { ascending: true });
 
-    if (error) {
-      console.log('error', error);
-      return;
-    }
     setMatches(data as Match[]);
   }
 
@@ -31,40 +27,38 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
     fetchMatches();
   }, []);
   return (
-    <View>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {matches ? (
-          matches.map((match) => {
-            return (
-              <TouchableOpacity
-                key={match.id}
-                onPress={() => {
-                  navigation.navigate('Chat', {
-                    matchID: match.id,
-                    userID: userID,
-                  });
-                }}
-                style={{
-                  width: '100%',
-                  height: 100,
-                  backgroundColor: 'white',
-                  marginBottom: 10,
-                }}
-              >
-                <MatchBox matchID={match.id} userID={userID} />
-              </TouchableOpacity>
-            );
-          })
-        ) : (
-          <Text style={{ textAlign: 'center' }}>No matches yet! Start swiping!</Text>
-        )}
-      </View>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {matches ? (
+        matches.map((match) => {
+          return (
+            <TouchableOpacity
+              key={match.match_id}
+              onPress={() => {
+                navigation.navigate('Chat', {
+                  matchID: match.match_id,
+                  userID: userID,
+                });
+              }}
+              style={{
+                width: '100%',
+                height: 100,
+                backgroundColor: 'white',
+                marginBottom: 10,
+              }}
+            >
+              <MatchBox matchID={match.match_id} userID={userID} />
+            </TouchableOpacity>
+          );
+        })
+      ) : (
+        <Text style={{ textAlign: 'center' }}>No matches yet! Start swiping!</Text>
+      )}
     </View>
   );
 }

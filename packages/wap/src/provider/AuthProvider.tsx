@@ -68,7 +68,7 @@ const AuthProvider = (props: Props) => {
       }
     });
     return () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion  
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       authListener!.subscription.unsubscribe();
     };
   });

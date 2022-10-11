@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Swipe from '../screens/main/Swipe';
 import Dashboard from '../screens/main/Dashboard';
 import Matches from '../screens/main/Matches';
-import Chat from '../screens/social/Chat';
 import TabBarText from '../components/utility/TabBarText';
 import TabBarIcon from '../components/utility/TabBarIcon';
 import type { MainStackParamList } from '../types/navigation';

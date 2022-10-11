@@ -6,7 +6,8 @@
   ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "prettier.enable": true
+    "prettier.enable": true,
+    "cSpell.words": ["Supabase"]
   },
   "extensions": {
     "recommendations": [
