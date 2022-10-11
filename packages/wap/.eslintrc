@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier","react","react-native"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -13,12 +13,8 @@
       "jsx": true
     }
   },
-  "env": {
-    "react-native/react-native": true
-  },
   "rules": {
     "prettier/prettier": 1,
-    "no-console": 1,
-    "react-native/no-raw-text": 2
+    "no-console": 1
   }
 }

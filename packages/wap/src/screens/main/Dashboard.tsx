@@ -23,6 +23,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           navigation.navigate('Profile');
         }}
       >
+        OWO
         <Image
           style={{ width: 200, height: 200, borderRadius: 100 }}
           source={{ uri: session?.user.user_metadata.avatar_url }}
