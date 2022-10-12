@@ -1,3 +1,5 @@
+import { Profile } from './database';
+
 export type MainStackParamList = {
   MainTabs: undefined;
   Filters: undefined;
@@ -9,6 +11,7 @@ export type MainStackParamList = {
   Chat: {
     matchID: string;
     userID: string;
+    matchProfile: Profile;
   };
 };
 

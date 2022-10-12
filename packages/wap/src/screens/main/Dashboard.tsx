@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
 import { AuthContext, supabase } from '../../provider/AuthProvider';
+import { FaceButton } from '../../components/profile/FaceButton';
+import { Profile } from '../../types/database';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Dashboard'>) {
   const { session } = useContext(AuthContext);
@@ -18,17 +20,11 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       }}
     >
       <Text style={{ textAlign: 'center' }}>Welcome, {name}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Profile');
-        }}
-      >
-        OWO
-        <Image
-          style={{ width: 200, height: 200, borderRadius: 100 }}
-          source={{ uri: session?.user.user_metadata.avatar_url }}
-        />
-      </TouchableOpacity>
+      <FaceButton
+        profile={{ avatar_url: session?.user.user_metadata.avatar_url } as Profile}
+        navigation={navigation}
+        size={300}
+      />
       <TouchableOpacity
         style={{
           width: 150,

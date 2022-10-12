@@ -2,6 +2,8 @@ export interface Profile {
   user_id: string;
   updated_at: string;
   username: string;
+  avatar_url: string;
+  display_name: string;
 }
 export interface Match {
   match_id: string;
