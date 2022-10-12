@@ -1,6 +1,33 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Message } from '../../types/database';
+
+import type { Message } from '../../types/database';
+
+function parseMessageTime(time: string): string {
+  const date = new Date(time);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  const hours12 = hours % 12 || 12;
+  const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
+  const timeString = `${hours12}:${minutesStr}${ampm}`;
+
+  const isToday = date.toDateString() === new Date().toDateString();
+
+  if (isToday) return timeString;
+
+  const isPastSixDays = date.getTime() > new Date().getTime() - 6 * 24 * 60 * 60 * 1000;
+
+  if (isPastSixDays)
+    return `${date.toLocaleString('en-US', { weekday: 'short' })} at ${timeString}`;
+
+  const dateStr = date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+  const isThisYear = date.getFullYear() === new Date().getFullYear();
+  if (isThisYear) return `${dateStr} at ${timeString}`;
+
+  const yearStr = date.toLocaleString('en-US', { year: 'numeric' });
+  return `${dateStr} ${yearStr} at ${timeString}`;
+}
 
 export function MessageBubble({
   message,
@@ -17,32 +44,6 @@ export function MessageBubble({
     setIsPressed((current) => !current);
   };
 
-  function parseMessageTime(time: string): string {
-    const date = new Date(time);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'pm' : 'am';
-    const hours12 = hours % 12 || 12;
-    const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
-    const timeString = `${hours12}:${minutesStr}${ampm}`;
-
-    const isToday = date.toDateString() === new Date().toDateString();
-
-    if (isToday) return timeString;
-
-    const isPastSixDays = date.getTime() > new Date().getTime() - 6 * 24 * 60 * 60 * 1000;
-
-    if (isPastSixDays)
-      return `${date.toLocaleString('en-US', { weekday: 'short' })} at ${timeString}`;
-
-    const dateStr = date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
-    const isThisYear = date.getFullYear() === new Date().getFullYear();
-    if (isThisYear) return `${dateStr} at ${timeString}`;
-
-    const yearStr = date.toLocaleString('en-US', { year: 'numeric' });
-    return `${dateStr} ${yearStr} at ${timeString}`;
-  }
-
   const boxStyles = StyleSheet.create({
     container: {
       marginTop: isLead ? 10 : 0,
@@ -52,8 +53,8 @@ export function MessageBubble({
       flexDirection: isSender ? 'row-reverse' : 'row',
     },
     bubble: {
-      maxWidth: '65vw',
-      padding: '15px',
+      paddingVertical: 10,
+      paddingHorizontal: 10,
       marginBottom: 2,
       borderRadius: 15,
       backgroundColor: isSender ? '#579ffb' : '#ececec',
@@ -63,14 +64,14 @@ export function MessageBubble({
       color: '#a0a0a0',
       marginTop: 5,
       marginHorizontal: 10,
-      flexDirection: isSender ? 'row-reverse' : 'row',
+      textAlign: 'center',
     },
     textDelivered: {
       fontSize: 12,
       color: '#a0a0a0',
       marginBottom: 5,
       marginHorizontal: 10,
-      flexDirection: isSender ? 'row-reverse' : 'row',
+      textAlign: isSender ? 'right' : 'left',
     },
   });
   return (

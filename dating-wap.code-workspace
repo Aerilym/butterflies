@@ -14,7 +14,8 @@
       "esbenp.prettier-vscode",
       "dbaeumer.vscode-eslint",
       "rvest.vs-code-prettier-eslint",
-      "msjsdiag.vscode-react-native"
+      "msjsdiag.vscode-react-native",
+      "Gruntfuggly.todo-tree"
     ]
   }
 }
