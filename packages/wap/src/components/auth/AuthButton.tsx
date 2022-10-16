@@ -9,7 +9,6 @@ export function AuthButton({ provider, icon }: { provider: Provider; icon: Image
     if (Platform.OS === 'web') {
       await supabase.auth.signInWithOAuth({
         provider,
-        options: { redirectTo: 'http://localhost:19006' },
       });
       return;
     }
