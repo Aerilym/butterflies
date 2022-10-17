@@ -11,11 +11,14 @@
   },
   "extensions": {
     "recommendations": [
-      "esbenp.prettier-vscode",
-      "dbaeumer.vscode-eslint",
+      "streetsidesoftware.code-spell-checker",
+      "gruntfuggly.todo-tree",
       "rvest.vs-code-prettier-eslint",
-      "msjsdiag.vscode-react-native",
-      "Gruntfuggly.todo-tree"
+      "esbenp.prettier-vscode",
+      "quicktype.quicktype",
+      "bierner.github-markdown-preview",
+      "dbaeumer.vscode-eslint",
+      "formulahendry.auto-rename-tag"
     ]
   }
 }
