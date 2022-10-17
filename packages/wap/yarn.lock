@@ -1937,9 +1937,9 @@
   dependencies:
     cross-fetch "^3.1.5"
 
-"@supabase/gotrue-js@^2.0.0-rc.4", "@supabase/gotrue-js@git+https://git@github.com/aerilym/gotrue-js.git#rc":
+"@supabase/gotrue-js@^2.0.0-rc.4", "@supabase/gotrue-js@git+https://git@github.com/aerilym/gotrue-js.git#custom":
   version "2.0.0-rc.10"
-  resolved "git+https://git@github.com/aerilym/gotrue-js.git#dd1875696b107dc689741ccb4ee61e8fcde83035"
+  resolved "git+https://git@github.com/aerilym/gotrue-js.git#b495d843c0d623257c3bc48893389b04f5baa2c3"
   dependencies:
     cross-fetch "^3.1.5"
 
