@@ -3,6 +3,7 @@ import { TouchableOpacity, Text, Image, Platform, ImageSourcePropType } from 're
 import { startAsync, makeRedirectUri } from 'expo-auth-session';
 
 import { supabase } from '../../provider/AuthProvider';
+import { SB_URL } from '@env';
 
 export function AuthButton({ provider, icon }: { provider: Provider; icon: ImageSourcePropType }) {
   async function handleLogin(provider: Provider) {
@@ -14,7 +15,7 @@ export function AuthButton({ provider, icon }: { provider: Provider; icon: Image
     }
 
     const returnUrl = makeRedirectUri({ useProxy: false });
-    const authUrl = `https://btueksreggheiyvqbbdx.supabase.co/auth/v1/authorize?provider=${provider}&redirect_to=${returnUrl}`;
+    const authUrl = `${SB_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${returnUrl}`;
     const response = await startAsync({ authUrl, returnUrl });
 
     if (response.type !== 'success') {
