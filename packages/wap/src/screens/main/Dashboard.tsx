@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { AuthContext, supabase } from '../../provider/AuthProvider';
+import { AuthContext, supabaseAPI } from '../../provider/AuthProvider';
 import { FaceButton } from '../../components/profile/FaceButton';
 import { Profile } from '../../types/database';
 
@@ -36,7 +36,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           backgroundColor: 'red',
         }}
         onPress={() => {
-          supabase.auth.signOut();
+          supabaseAPI.logout();
         }}
       >
         <Text>Sign Out</Text>

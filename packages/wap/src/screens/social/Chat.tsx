@@ -4,7 +4,7 @@ import type { MainStackParamList } from '../../types/navigation';
 import { View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { supabase } from '../../provider/AuthProvider';
+import { supabaseAPI } from '../../provider/AuthProvider';
 import type { Message, Profile } from '../../types/database';
 import { MessageBubble } from '../../components/chat/MessageBubble';
 import { FaceButton } from '../../components/profile/FaceButton';
@@ -27,32 +27,21 @@ export default function ({
   const [messages, setMessages] = useState<Message[]>([] as Message[]);
   const [draftMessage, setDraftMessage] = useState<string>('');
 
-  function newMessage(message: Message) {
-    setMessages((prev) => [...prev, message]);
-  }
-
-  async function fetchMessages() {
-    const { data } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('match_id', matchID)
-      .order('created_at', { ascending: true });
-
-    setMessages(data as Message[]);
-    supabase
+  useEffect(() => {
+    supabaseAPI.getMessages(matchID).then((data) => {
+      setMessages(data as Message[]);
+    });
+    supabaseAPI.supabase
       .channel(`public:messages:match_id=eq.${matchID}`)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `match_id=eq.${matchID}` },
         (response) => {
-          newMessage(response.new as Message);
+          // TODO: pull out the message from the response in a clearer way
+          setMessages((prev) => [...prev, response.new as Message]);
         }
       )
       .subscribe();
-  }
-
-  useEffect(() => {
-    fetchMessages();
   }, []);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const scrollViewRef = useRef<any>();
@@ -162,10 +151,7 @@ export default function ({
             onPress={async () => {
               const parsedMessage = parseMessage(draftMessage);
               if (parsedMessage === '') return;
-              await supabase
-                .from('messages')
-                .insert({ match_id: matchID, sender_id: userID, text: draftMessage })
-                .single();
+              supabaseAPI.sendMessage(matchID, userID, parsedMessage);
               setDraftMessage('');
             }}
           >

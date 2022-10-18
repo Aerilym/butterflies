@@ -4,27 +4,19 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
 import { Match } from '../../types/database';
-import { AuthContext, supabase } from '../../provider/AuthProvider';
+import { AuthContext, supabaseAPI } from '../../provider/AuthProvider';
 import { MatchRow } from '../../components/match/MatchRow';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Matches'>) {
   const { session } = useContext(AuthContext);
   const userID = session?.user.id ?? '';
 
-  const [matches, setMatches] = useState<Match[]>([]);
-
-  async function fetchMatches() {
-    const { data } = await supabase
-      .from('matches')
-      .select('*')
-      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
-      .order('created_at', { ascending: true });
-
-    setMatches(data as Match[]);
-  }
+  const [matches, setMatches] = useState<Match[]>([] as Match[]);
 
   useEffect(() => {
-    fetchMatches();
+    supabaseAPI.getMatches(userID).then((matches) => {
+      setMatches(matches);
+    });
   }, []);
   return (
     <View

@@ -1,13 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Session } from '@supabase/supabase-js';
 
 import { SupabaseAPI } from '../api/supabase';
 import { Profile } from '../types/database';
 
-const supabaseAPI = new SupabaseAPI();
-
-export const supabase = supabaseAPI.supabase;
+export const supabaseAPI = new SupabaseAPI();
 
 type ContextProps = {
   session: null | Session;
@@ -21,60 +19,33 @@ interface Props {
 }
 
 const AuthProvider = (props: Props) => {
-  const [session, setSessionState] = useState<null | Session>(null);
+  const [session, setSession] = useState<null | Session>(null);
   const [profile, setProfile] = useState<null | Profile>(null);
 
-  // Get current auth state from AsyncStorage
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getSessionState = async () => {
-    try {
-      const sessionString = await AsyncStorage.getItem('session');
-      if (sessionString) {
-        setSessionState(JSON.parse(sessionString));
-      } else {
-        setSessionState(null);
-      }
-    } catch (err) {
-      setSessionState(null);
-      Promise.reject(err);
-    }
-  };
-
-  // Update AsyncStorage & context state
-  const setSession = async (session: null | Session) => {
-    try {
-      setSessionState(session);
-      await AsyncStorage.setItem('session', JSON.stringify(session));
-    } catch (error) {
-      setSessionState(null);
-      Promise.reject(error);
-    }
-  };
+  //TODO: Reimplement AsyncStorage or storage or some kind (it was breaking the app)
 
   useEffect(() => {
-    getSessionState();
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      switch (event) {
-        case 'SIGNED_OUT':
-          setSession(null);
-          setProfile(null);
-          break;
+    const { data: authListener } = supabaseAPI.supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        const userID = session?.user.id ?? null;
+        switch (event) {
+          case 'SIGNED_OUT':
+            setSession(null);
+            setProfile(null);
+            break;
 
-        default:
-          setSession(session);
-          if (session?.user.id) {
-            supabase
-              .from('profiles')
-              .select('*')
-              .eq('user_id', session?.user.id)
-              .then(({ data }) => {
-                const userProfile = data ? data[0] : {};
-                setProfile(userProfile as Profile);
+          default:
+            setSession(session);
+            if (userID) {
+              supabaseAPI.getProfile(userID).then((profile) => {
+                setProfile(profile);
               });
-          }
-          break;
+            }
+
+            break;
+        }
       }
-    });
+    );
     return () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       authListener!.subscription.unsubscribe();
