@@ -57,11 +57,8 @@ export default function ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const scrollViewRef = useRef<any>();
   return (
-    <View>
+    <>
       <ScrollView
-        style={{
-          height: '92%',
-        }}
         showsVerticalScrollIndicator={false}
         ref={scrollViewRef}
         onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
@@ -176,6 +173,6 @@ export default function ({
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </>
   );
 }
