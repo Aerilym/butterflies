@@ -31,6 +31,7 @@ export default function ({
     supabaseAPI.getMessages(matchID).then((data) => {
       setMessages(data as Message[]);
     });
+    //TODO: Move subscribe events to supabaseAPI class.
     supabaseAPI.supabase
       .channel(`public:messages:match_id=eq.${matchID}`)
       .on(
