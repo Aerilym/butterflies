@@ -6,10 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { supabase } from '../../provider/AuthProvider';
 import type { Message, Profile } from '../../types/database';
-import type { SupabaseRealtimeResponse } from '../../types/supabase';
 import { MessageBubble } from '../../components/chat/MessageBubble';
 import { FaceButton } from '../../components/profile/FaceButton';
 
+// TODO: Create message parser
 function parseMessage(message: string) {
   return message;
 }
@@ -44,7 +44,7 @@ export default function ({
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `match_id=eq.${matchID}` },
-        (response: SupabaseRealtimeResponse) => {
+        (response) => {
           newMessage(response.new as Message);
         }
       )
