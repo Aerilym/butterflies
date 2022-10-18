@@ -1,5 +1,7 @@
 import type { Provider } from '@supabase/supabase-js';
+import { useEffect, useState } from 'react';
 import { ImageSourcePropType, View } from 'react-native';
+import { supabaseAPI } from '../../provider/AuthProvider';
 
 import type { AuthIcons } from '../../types/auth';
 import { AuthButton } from './AuthButton';
@@ -24,13 +26,13 @@ const icons: AuthIcons = {
 };
 
 export function SupabaseAuth() {
-  //TODO: Fetch enabled providers from supabase to populate this list
-  const enabledProviders: Provider[] = ['spotify', 'apple', 'facebook', 'google'];
+  const [enabledProviders, setEnabledProviders] = useState<Provider[]>([]);
 
-  const authButtons = enabledProviders.map((provider) => {
-    return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
-  });
-
+  useEffect(() => {
+    supabaseAPI.getEnabledAuthProviders().then((providers) => {
+      setEnabledProviders(providers);
+    });
+  }, []);
   return (
     <View
       style={{
@@ -40,7 +42,9 @@ export function SupabaseAuth() {
         width: '100%',
       }}
     >
-      {authButtons}
+      {enabledProviders.map((provider) => {
+        return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
+      })}
     </View>
   );
 }

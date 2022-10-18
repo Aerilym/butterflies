@@ -14,6 +14,7 @@ export default () => {
   const hasAuth = !!userID;
 
   const isMobileDevice = Platform.OS === 'ios' || Platform.OS === 'android';
+
   return (
     <NavigationContainer>
       <SafeAreaProvider

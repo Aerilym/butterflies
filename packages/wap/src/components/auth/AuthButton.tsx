@@ -1,36 +1,13 @@
 import type { Provider } from '@supabase/supabase-js';
-import { TouchableOpacity, Text, Image, Platform, ImageSourcePropType } from 'react-native';
-import { startAsync, makeRedirectUri } from 'expo-auth-session';
+import { TouchableOpacity, Text, Image, ImageSourcePropType } from 'react-native';
 
-import { supabase } from '../../provider/AuthProvider';
-import { SB_URL } from '@env';
+import { supabaseAPI } from '../../provider/AuthProvider';
 
 export function AuthButton({ provider, icon }: { provider: Provider; icon: ImageSourcePropType }) {
-  async function handleLogin(provider: Provider) {
-    if (Platform.OS === 'web') {
-      await supabase.auth.signInWithOAuth({
-        provider,
-      });
-      return;
-    }
-
-    const returnUrl = makeRedirectUri({ useProxy: false });
-    const authUrl = `${SB_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${returnUrl}`;
-    const response = await startAsync({ authUrl, returnUrl });
-
-    if (response.type !== 'success') {
-      return;
-    }
-
-    const refreshToken = response.params?.refresh_token;
-    if (!refreshToken) return;
-    await supabase.auth.setSessionFromToken(refreshToken);
-  }
-
   return (
     <TouchableOpacity
       key={provider}
-      onPress={() => handleLogin(provider)}
+      onPress={() => supabaseAPI.login(provider)}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
