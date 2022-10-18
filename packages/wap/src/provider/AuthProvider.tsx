@@ -1,20 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createClient, Session } from '@supabase/supabase-js';
-import { Platform } from 'react-native';
+import type { Session } from '@supabase/supabase-js';
+import { SupabaseAPI } from '../api/supabase';
 
-import { SB_URL, SB_KEY } from '@env';
+const supabaseAPI = new SupabaseAPI();
 
-const isWeb = Platform.OS === 'web';
-
-export const supabase = createClient(SB_URL, SB_KEY, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    storage: AsyncStorage,
-    detectSessionInUrl: isWeb ? true : false,
-  },
-});
+export const supabase = supabaseAPI.supabase;
 
 type ContextProps = {
   session: null | Session;
