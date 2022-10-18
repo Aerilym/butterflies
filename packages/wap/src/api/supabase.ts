@@ -109,7 +109,7 @@ export class SupabaseAPI {
    * @param message The message to send.
    */
   sendMessage = async (matchID: string, senderID: string, message: string): Promise<void> => {
-    this.supabase
+    await this.supabase
       .from('messages')
       .insert({ match_id: matchID, sender_id: senderID, text: message })
       .single();
