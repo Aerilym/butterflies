@@ -20,6 +20,11 @@ export class SupabaseAPI {
       },
     });
   }
+
+  /**
+   * Login to an auth provider using Supabase.
+   * @param provider A supabase auth provider
+   */
   login = async (provider: Provider): Promise<void> => {
     if (isWeb) {
       await this.supabase.auth.signInWithOAuth({
@@ -40,17 +45,38 @@ export class SupabaseAPI {
     if (!refreshToken) return;
     this.supabase.auth.setSessionFromToken(refreshToken);
   };
+
+  /**
+   * Logout of Supabase.
+   */
   logout = async (): Promise<void> => {
     this.supabase.auth.signOut();
   };
+
+  /**
+   * Get the current enabled authentication providers from Supabase.
+   * @returns A list of enabled providers
+   */
   getEnabledAuthProviders = async (): Promise<Provider[]> => {
     return ['spotify', 'apple', 'facebook', 'google'];
   };
+
+  /**
+   * Get a user's profile.
+   * @param userID The user ID to get the profile for.
+   * @returns The profile for the user.
+   */
   getProfile = async (userID: string): Promise<Profile> => {
     const { data } = await this.supabase.from('profiles').select('*').eq('user_id', userID);
     const userProfile = data ? data[0] : {};
     return userProfile as Profile;
   };
+
+  /**
+   * Get a user's matches.
+   * @param userID The user ID to get the matches for.
+   * @returns A list of matches for the user.
+   */
   getMatches = async (userID: string): Promise<Match[]> => {
     const { data } = await this.supabase
       .from('matches')
@@ -60,6 +86,12 @@ export class SupabaseAPI {
     const matches = data ? data : [];
     return matches as Match[];
   };
+
+  /**
+   * Get a match's messages.
+   * @param matchID The match ID to get the messages for.
+   * @returns A list of messages for the match.
+   */
   getMessages = async (matchID: string): Promise<Message[]> => {
     const { data } = await this.supabase
       .from('messages')
@@ -69,6 +101,13 @@ export class SupabaseAPI {
     const messages = data ? data : [];
     return messages as Message[];
   };
+
+  /**
+   * Send a message to a match.
+   * @param matchID The match ID to send the message to.
+   * @param senderID The user ID of the sender.
+   * @param message The message to send.
+   */
   sendMessage = async (matchID: string, senderID: string, message: string): Promise<void> => {
     this.supabase
       .from('messages')
