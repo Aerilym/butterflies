@@ -24,6 +24,7 @@ const icons: AuthIcons = {
 };
 
 export function SupabaseAuth() {
+  //TODO: Fetch enabled providers from supabase to populate this list
   const enabledProviders: Provider[] = ['spotify', 'apple', 'facebook', 'google'];
 
   const authButtons = enabledProviders.map((provider) => {
