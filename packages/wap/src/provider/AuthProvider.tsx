@@ -4,6 +4,7 @@ import { createClient, Session } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
 
 import { SB_URL, SB_KEY } from '@env';
+import { Profile } from '../types/database';
 
 const isWeb = Platform.OS === 'web';
 
@@ -18,6 +19,7 @@ export const supabase = createClient(SB_URL, SB_KEY, {
 
 type ContextProps = {
   session: null | Session;
+  profile: null | Profile;
 };
 
 const AuthContext = createContext<Partial<ContextProps>>({});
@@ -28,6 +30,7 @@ interface Props {
 
 const AuthProvider = (props: Props) => {
   const [session, setSessionState] = useState<null | Session>(null);
+  const [profile, setProfile] = useState<null | Profile>(null);
 
   // Get current auth state from AsyncStorage
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,12 +62,25 @@ const AuthProvider = (props: Props) => {
   useEffect(() => {
     getSessionState();
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN') {
-        setSession(session);
-      } else if (event === 'SIGNED_OUT') {
-        setSession(null);
-      } else {
-        setSession(session);
+      switch (event) {
+        case 'SIGNED_OUT':
+          setSession(null);
+          setProfile(null);
+          break;
+
+        default:
+          setSession(session);
+          if (session?.user.id) {
+            supabase
+              .from('profiles')
+              .select('*')
+              .eq('user_id', session?.user.id)
+              .then(({ data }) => {
+                const userProfile = data ? data[0] : {};
+                setProfile(userProfile as Profile);
+              });
+          }
+          break;
       }
     });
     return () => {
@@ -77,6 +93,7 @@ const AuthProvider = (props: Props) => {
     <AuthContext.Provider
       value={{
         session,
+        profile,
       }}
     >
       {props.children}
