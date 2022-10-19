@@ -5,6 +5,7 @@ import { startAsync, makeRedirectUri } from 'expo-auth-session';
 
 import { SB_URL, SB_KEY } from '@env';
 import { Match, Message, Profile } from '../types/database';
+import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
 
 const isWeb = Platform.OS === 'web';
 
@@ -110,24 +111,15 @@ export class SupabaseAPI {
    * @param userID The user ID to get a match queue for.
    * @returns A list of profiles that the user can match with.
    */
-  getMatchQueue = async (userID: string): Promise<Profile[]> => {
+  getMatchQueue = async (userID: string): Promise<Match[]> => {
     //TODO: Create a match queue solution to replace this profile getting method.
-    const { data: profiles } = await this.supabase.from('profiles').select('*').limit(10);
-
-    if (!profiles) return [] as Profile[];
-
-    const matches = await this.getMatches(userID);
-
-    const newProfiles = profiles.filter((profile) => {
-      return (
-        profile.user_id !== userID &&
-        !matches.some(
-          (match) => match.user_id1 === profile.user_id || match.user_id2 === profile.user_id
-        )
-      );
-    });
-
-    return newProfiles as Profile[];
+    const { data: matchQueue } = await this.supabase
+      .from('matches')
+      .select('*')
+      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
+      .neq('user1_liked', false)
+      .neq('user2_liked', false);
+    return matchQueue as Match[];
   };
 
   /**
@@ -136,10 +128,22 @@ export class SupabaseAPI {
    * @param senderID The user ID of the sender.
    * @param message The message to send.
    */
-  sendMessage = async (matchID: string, senderID: string, message: string): Promise<void> => {
+  sendMessage = async ({ matchID, senderID, message }: sendMessageParams): Promise<void> => {
     await this.supabase
       .from('messages')
       .insert({ match_id: matchID, sender_id: senderID, text: message })
       .single();
+  };
+
+  updateMatchLike = async ({
+    matchID,
+    userPosition,
+    like,
+  }: updateMatchLikeParams): Promise<void> => {
+    const userLiked = userPosition === 1 ? 'user1_liked' : 'user2_liked';
+    await this.supabase
+      .from('matches')
+      .update({ name: 'Australia', [userLiked]: like })
+      .eq('match_id', matchID);
   };
 }
