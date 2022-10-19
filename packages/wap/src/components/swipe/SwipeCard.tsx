@@ -40,7 +40,7 @@ export function SwipeCard({
       }}
     >
       <ImageBackground
-        source={{ uri: profile?.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg' }}
+        source={{ uri: profile?.avatar_url }}
         resizeMode="cover"
         style={{
           flex: 1,
