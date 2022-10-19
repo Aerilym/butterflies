@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Swipe from '../screens/main/Swipe';
 import Dashboard from '../screens/main/Dashboard';
 import Matches from '../screens/main/Matches';
-import TabBarText from '../components/utility/TabBarText';
 import TabBarIcon from '../components/utility/TabBarIcon';
 import type { MainStackParamList } from '../types/navigation';
 
@@ -21,26 +20,24 @@ export default function MainTabs() {
         name="Swipe"
         component={Swipe}
         options={{
-          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Swipe" />,
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'albums-outline'} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'albums'} />,
+          tabBarShowLabel: false,
         }}
       />
       <Tabs.Screen
         name="Matches"
         component={Matches}
         options={{
-          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Matches" />,
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={'chatbubble-ellipses-outline'} />
-          ),
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'chatbubble'} />,
+          tabBarShowLabel: false,
         }}
       />
       <Tabs.Screen
         name="Dashboard"
         component={Dashboard}
         options={{
-          tabBarLabel: ({ focused }) => <TabBarText focused={focused} title="Dashboard" />,
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'person'} />,
+          tabBarShowLabel: false,
         }}
       />
     </Tabs.Navigator>
