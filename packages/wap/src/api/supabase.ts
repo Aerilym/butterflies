@@ -106,6 +106,31 @@ export class SupabaseAPI {
   };
 
   /**
+   * Get a user's match queue.
+   * @param userID The user ID to get a match queue for.
+   * @returns A list of profiles that the user can match with.
+   */
+  getMatchQueue = async (userID: string): Promise<Profile[]> => {
+    //TODO: Create a match queue solution to replace this profile getting method.
+    const { data: profiles } = await this.supabase.from('profiles').select('*').limit(10);
+
+    if (!profiles) return [] as Profile[];
+
+    const matches = await this.getMatches(userID);
+
+    const newProfiles = profiles.filter((profile) => {
+      return (
+        profile.user_id !== userID &&
+        !matches.some(
+          (match) => match.user_id1 === profile.user_id || match.user_id2 === profile.user_id
+        )
+      );
+    });
+
+    return newProfiles as Profile[];
+  };
+
+  /**
    * Send a message to a match.
    * @param matchID The match ID to send the message to.
    * @param senderID The user ID of the sender.
