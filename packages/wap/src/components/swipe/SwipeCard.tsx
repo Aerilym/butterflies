@@ -98,7 +98,7 @@ export function SwipeCard({
                 supabaseAPI.updateMatchLike({
                   matchID: match.match_id,
                   userPosition,
-                  like: true,
+                  like: false,
                 });
               }}
             >

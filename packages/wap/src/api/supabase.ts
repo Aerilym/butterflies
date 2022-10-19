@@ -135,6 +135,12 @@ export class SupabaseAPI {
       .single();
   };
 
+  /**
+   * Update a match's like status.
+   * @param matchID The match ID to update the like for.
+   * @param userPosition The position of the user in the match.
+   * @param like Whether the user liked the match.
+   */
   updateMatchLike = async ({
     matchID,
     userPosition,
@@ -143,7 +149,7 @@ export class SupabaseAPI {
     const userLiked = userPosition === 1 ? 'user1_liked' : 'user2_liked';
     await this.supabase
       .from('matches')
-      .update({ name: 'Australia', [userLiked]: like })
+      .update({ match_id: matchID, [userLiked]: like })
       .eq('match_id', matchID);
   };
 }
