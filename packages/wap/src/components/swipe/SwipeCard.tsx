@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, Text, View, ImageBackground } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
 import type { Match, Profile } from '../../types/database';
@@ -75,57 +74,6 @@ export function SwipeCard({
           >
             this is some bio info
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: 20,
-              marginBottom: 10,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                backgroundColor: 'red',
-                alignSelf: 'center',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 64,
-                height: 80,
-                width: 80,
-                marginHorizontal: 5,
-              }}
-              onPress={async () => {
-                supabaseAPI.updateMatchLike({
-                  matchID: match.match_id,
-                  userPosition,
-                  like: false,
-                });
-              }}
-            >
-              <Ionicons name={'heart-dislike'} size={44} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: 'green',
-                alignSelf: 'center',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 64,
-                height: 80,
-                width: 80,
-                marginHorizontal: 5,
-              }}
-              onPress={async () => {
-                supabaseAPI.updateMatchLike({
-                  matchID: match.match_id,
-                  userPosition,
-                  like: true,
-                });
-              }}
-            >
-              <Ionicons name={'heart'} size={44} />
-            </TouchableOpacity>
-          </View>
         </View>
       </ImageBackground>
     </TouchableOpacity>

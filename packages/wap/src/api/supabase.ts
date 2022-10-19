@@ -116,9 +116,7 @@ export class SupabaseAPI {
     const { data: matchQueue } = await this.supabase
       .from('matches')
       .select('*')
-      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
-      .neq('user1_liked', false)
-      .neq('user2_liked', false);
+      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID);
     return matchQueue as Match[];
   };
 
