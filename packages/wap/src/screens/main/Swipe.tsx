@@ -58,7 +58,8 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginVertical: 10,
+              marginBottom: 10,
+              marginHorizontal: 20,
             }}
           >
             <TouchableOpacity

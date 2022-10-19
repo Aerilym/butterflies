@@ -113,6 +113,18 @@ export class SupabaseAPI {
    */
   getMatchQueue = async (userID: string): Promise<Match[]> => {
     //TODO: Create a match queue solution to replace this profile getting method.
+    /**
+     * The following conditions must be met for a match row to be returned:
+     * user_id1 === userID || user_id2 === userID
+     *  AND
+     * (
+     *    user1_liked === null && user2_liked === null
+     *      OR
+     *    user1_liked === null && user2_liked === true
+     *      OR
+     *    user1_liked === true && user2_liked === null
+     * )
+     */
     const { data: matchQueue } = await this.supabase
       .from('matches')
       .select('*')
