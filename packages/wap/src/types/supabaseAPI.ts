@@ -1,5 +1,3 @@
-import { Match, Profile } from './database';
-
 export interface sendMessageParams {
   matchID: string;
   senderID: string;
