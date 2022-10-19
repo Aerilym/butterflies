@@ -68,9 +68,13 @@ export class SupabaseAPI {
    * @returns The profile for the user.
    */
   getProfile = async (userID: string): Promise<Profile> => {
-    const { data } = await this.supabase.from('profiles').select('*').eq('user_id', userID);
-    const userProfile = data ? data[0] : {};
-    return userProfile as Profile;
+    const { data: profile } = await this.supabase
+      .from('profiles')
+      .select('*')
+      .eq('user_id', userID)
+      .limit(1)
+      .single();
+    return (profile ?? {}) as Profile;
   };
 
   /**
@@ -79,13 +83,12 @@ export class SupabaseAPI {
    * @returns A list of matches for the user.
    */
   getMatches = async (userID: string): Promise<Match[]> => {
-    const { data } = await this.supabase
+    const { data: matches } = await this.supabase
       .from('matches')
       .select('*')
       .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
       .order('created_at', { ascending: true });
-    const matches = data ? data : [];
-    return matches as Match[];
+    return (matches ?? []) as Match[];
   };
 
   /**
@@ -94,13 +97,12 @@ export class SupabaseAPI {
    * @returns A list of messages for the match.
    */
   getMessages = async (matchID: string): Promise<Message[]> => {
-    const { data } = await this.supabase
+    const { data: messages } = await this.supabase
       .from('messages')
       .select('*')
       .eq('match_id', matchID)
       .order('created_at', { ascending: true });
-    const messages = data ? data : [];
-    return messages as Message[];
+    return (messages ?? []) as Message[];
   };
 
   /**
