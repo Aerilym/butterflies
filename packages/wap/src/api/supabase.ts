@@ -107,6 +107,22 @@ export class SupabaseAPI {
   };
 
   /**
+   * Get the last message sent in a match.
+   * @param matchID The match ID to get the messages for.
+   * @returns The last message in the match or null if there is none.
+   */
+  getLastMessage = async (matchID: string): Promise<Message | null> => {
+    const { data: message } = await this.supabase
+      .from('messages')
+      .select('*')
+      .eq('match_id', matchID)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    return message as Message;
+  };
+
+  /**
    * Get a user's match queue.
    * @param userID The user ID to get a match queue for.
    * @returns A list of profiles that the user can match with.
