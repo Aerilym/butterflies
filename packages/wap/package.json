@@ -18,7 +18,6 @@
     "@react-navigation/native": "6.0.13",
     "@react-navigation/native-stack": "6.9.0",
     "@supabase/auth-ui-react": "^0.2.1",
-    "@supabase/gotrue-js": "git+https://git@github.com/aerilym/gotrue-js.git#custom",
     "@supabase/supabase-js": "2.0.0",
     "expo": "46.0.14",
     "expo-auth-session": "~3.7.1",
