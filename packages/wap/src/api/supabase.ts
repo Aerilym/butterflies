@@ -144,7 +144,9 @@ export class SupabaseAPI {
     const { data: matchQueue } = await this.supabase
       .from('matches')
       .select('*')
-      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID);
+      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
+      .not('user1_liked', 'is', false)
+      .not('user2_liked', 'is', false);
     return matchQueue as Match[];
   };
 
