@@ -5,6 +5,7 @@
   "scripts": {
     "start": "expo start",
     "build:web": "expo export:web",
+    "build:android": "eas build -p android --profile preview",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -39,6 +40,7 @@
     "@types/react-native": "0.70.4",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
+    "eas-cli": "^2.4.1",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
