@@ -43,12 +43,8 @@ export class SupabaseAPI {
     }
 
     const refreshToken = response.params?.refresh_token;
-    const accessToken = response.params?.access_token;
     if (!refreshToken) return;
-    this.supabase.auth.setSession({
-      refresh_token: refreshToken,
-      access_token: accessToken,
-    });
+    this.supabase.auth.setSessionFromToken(refreshToken);
   };
 
   /**
