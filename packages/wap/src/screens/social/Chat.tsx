@@ -152,7 +152,7 @@ export default function ({
             onPress={async () => {
               const parsedMessage = parseMessage(draftMessage);
               if (parsedMessage === '') return;
-              supabaseAPI.sendMessage(matchID, userID, parsedMessage);
+              supabaseAPI.sendMessage({ matchID, senderID: userID, message: parsedMessage });
               setDraftMessage('');
             }}
           >

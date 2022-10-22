@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Image, StyleProp, ViewStyle } from 'react-native';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
-import { FaceButton } from '../profile/FaceButton';
-import type { Match, Message, Profile } from '../../types/database';
+import type { Match, Profile } from '../../types/database';
 
-export function MatchRow({
+export function MatchCircle({
   navigation,
   match,
-  message,
   userID,
+  size,
+  style,
 }: {
   // TODO: Add types for navigation and route
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
   match: Match;
-  message: Message;
   userID: string;
+  size: number;
+  style?: StyleProp<ViewStyle>;
 }) {
   const [profile, setProfile] = useState<Profile>({} as Profile);
 
@@ -36,28 +37,12 @@ export function MatchRow({
           matchProfile: profile,
         });
       }}
-      style={{
-        flexDirection: 'row',
-        marginVertical: 10,
-      }}
+      style={style}
     >
-      <FaceButton
-        profile={profile}
-        navigation={navigation}
-        size={80}
-        style={{ marginHorizontal: 10 }}
+      <Image
+        style={{ width: size, height: size, borderRadius: size, backgroundColor: 'gray' }}
+        source={{ uri: profile?.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg' }}
       />
-      <View>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 18,
-          }}
-        >
-          {profile?.display_name ?? ''}
-        </Text>
-        <Text>{message.text.length < 32 ? message.text : message.text.substring(32)}</Text>
-      </View>
     </TouchableOpacity>
   );
 }
