@@ -9,7 +9,7 @@
 
 ## Description
 
-Please include a summary of the changes and the related issue(s). Please also include relevant motivation and context.
+Please include a summary of the changes and the related issue(s). Commit messages work well here.
 
 Fixes # (issue)
 
