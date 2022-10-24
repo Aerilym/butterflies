@@ -16,5 +16,8 @@
   "rules": {
     "prettier/prettier": 1,
     "no-console": 1
+  },
+  "env": {
+    "node": true
   }
 }
