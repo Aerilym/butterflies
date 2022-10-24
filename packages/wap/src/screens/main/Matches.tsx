@@ -22,7 +22,6 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
 
   useEffect(() => {
     supabaseAPI.getMatches(userID).then((matches) => {
-      matches = [...matches, ...matches, ...matches, ...matches, ...matches, ...matches];
       const lastMessagePromises = matches.map((match) => {
         return supabaseAPI.getLastMessage(match.match_id);
       });
