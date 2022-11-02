@@ -1,7 +1,9 @@
-import type { Provider } from '@supabase/supabase-js';
-import { TouchableOpacity, Text, Image, ImageSourcePropType } from 'react-native';
+import { Image, Text, TouchableOpacity } from 'react-native-ui-lib';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
+
+import type { Provider } from '@supabase/supabase-js';
+import type { ImageSourcePropType } from 'react-native';
 
 export function AuthButton({ provider, icon }: { provider: Provider; icon: ImageSourcePropType }) {
   return (
