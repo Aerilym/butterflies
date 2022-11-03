@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-//import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Session } from '@supabase/supabase-js';
 
 import { SupabaseAPI } from '../api/supabase';
@@ -10,6 +10,7 @@ export const supabaseAPI = new SupabaseAPI();
 type ContextProps = {
   session: null | Session;
   profile: null | Profile;
+  sessionChecked: boolean;
 };
 
 const AuthContext = createContext<Partial<ContextProps>>({});
@@ -21,8 +22,7 @@ interface Props {
 const AuthProvider = (props: Props) => {
   const [session, setSession] = useState<null | Session>(null);
   const [profile, setProfile] = useState<null | Profile>(null);
-
-  //TODO: Reimplement AsyncStorage or storage or some kind (it was breaking the app)
+  const [sessionChecked, setSessionChecked] = useState<boolean>(false);
 
   useEffect(() => {
     const { data: authListener } = supabaseAPI.supabase.auth.onAuthStateChange(
@@ -32,13 +32,21 @@ const AuthProvider = (props: Props) => {
           case 'SIGNED_OUT':
             setSession(null);
             setProfile(null);
+            async () => {
+              await AsyncStorage.setItem('@profile', JSON.stringify(null));
+              await AsyncStorage.setItem('@session', JSON.stringify(null));
+            };
             break;
 
           default:
             setSession(session);
+            async () => {
+              await AsyncStorage.setItem('@session', JSON.stringify(session));
+            };
             if (userID) {
-              supabaseAPI.getProfile(userID).then((profile) => {
+              supabaseAPI.getProfile(userID).then(async (profile) => {
                 setProfile(profile);
+                await AsyncStorage.setItem('@profile', JSON.stringify(profile));
               });
             }
 
@@ -52,11 +60,29 @@ const AuthProvider = (props: Props) => {
     };
   });
 
+  /**
+   * Check if the user is logged in by checking that a valid refresh token exists
+   * in a supabase session, then use the token to set the session. This is run
+   * once, when the auth provider is activated. (When the app is launched)
+   */
+  useEffect(() => {
+    supabaseAPI.supabase.auth.getSession().then((res) => {
+      if (res.data.session?.refresh_token) {
+        supabaseAPI.supabase.auth.setSessionFromToken(res.data.session?.refresh_token).then(() => {
+          setSessionChecked(true);
+        });
+      } else {
+        setSessionChecked(true);
+      }
+    });
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
         session,
         profile,
+        sessionChecked,
       }}
     >
       {props.children}
