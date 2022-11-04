@@ -4,8 +4,10 @@ import type { Session } from '@supabase/supabase-js';
 
 import { SupabaseAPI } from '../api/supabase';
 import { Profile } from '../types/database';
+import { UserStore } from '../api/UserStore';
 
 export const supabaseAPI = new SupabaseAPI();
+export const userStore = new UserStore();
 
 type ContextProps = {
   session: null | Session;
@@ -44,10 +46,13 @@ const AuthProvider = (props: Props) => {
               await AsyncStorage.setItem('@session', JSON.stringify(session));
             };
             if (userID) {
+              supabaseAPI.userID = userID;
               supabaseAPI.getProfile(userID).then(async (profile) => {
                 setProfile(profile);
                 await AsyncStorage.setItem('@profile', JSON.stringify(profile));
               });
+              userStore.getSocials();
+              userStore.getMatchQueue();
             }
 
             break;

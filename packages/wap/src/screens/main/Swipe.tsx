@@ -4,7 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { AuthContext, supabaseAPI } from '../../provider/AuthProvider';
+import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
 import { Match } from '../../types/database';
 import { SwipeCard } from '../../components/swipe/SwipeCard';
 
@@ -29,14 +29,17 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   ));
 
   useEffect(() => {
-    supabaseAPI.getMatchQueue(userID).then((matches) => {
-      const matchQueue = matches.map((match) => {
-        return {
-          match,
-          userPosition: match.user_id1 === userID ? 1 : 2,
-        } as MatchQueueItem;
-      });
-      setMatchQueue(matchQueue);
+    userStore.refreshMatchQueue().then(() => {
+      const people = userStore.matchQueue;
+      if (people) {
+        const matchQueue = people.map((person) => {
+          return {
+            match: person.match,
+            userPosition: person.match.user_id1 === userID ? 1 : 2,
+          } as MatchQueueItem;
+        });
+        setMatchQueue(matchQueue);
+      }
     });
   }, []);
   //TODO: Surely there's a better way to do the swipe card queue https://imgur.com/a/gCJygAt

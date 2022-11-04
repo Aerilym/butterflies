@@ -4,7 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
 import { Match, Message } from '../../types/database';
-import { AuthContext, supabaseAPI } from '../../provider/AuthProvider';
+import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
 import { MatchRow } from '../../components/match/MatchRow';
 import { MatchCircle } from '../../components/match/MatchCircle';
 
@@ -21,27 +21,28 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   const [newMatches, setNewMatches] = useState<MatchSocial[]>([] as MatchSocial[]);
 
   useEffect(() => {
-    supabaseAPI.getMatches(userID).then((matches) => {
-      matches = [...matches, ...matches, ...matches, ...matches, ...matches, ...matches];
-      const lastMessagePromises = matches.map((match) => {
-        return supabaseAPI.getLastMessage(match.match_id);
-      });
-      Promise.all(lastMessagePromises).then((lastMessages) => {
-        const matchSocials = matches.map((match, index) => {
-          return { match, lastMessage: lastMessages[index] } as MatchSocial;
+    userStore.refreshSocials().then(() => {
+      if (userStore.socials) {
+        const matchSocials = userStore.socials?.map((social) => {
+          const matchSocial: Partial<MatchSocial> = { match: social.match };
+          if (social.messages && social.messages.length > 0) {
+            matchSocial.lastMessage = social.messages[social.messages.length - 1];
+          }
+          return matchSocial as MatchSocial;
         });
 
-        const newMatches = matchSocials.filter((matchSocial) => matchSocial.lastMessage === null);
-        const messagedMatches = matchSocials
-          .filter((matchSocial) => matchSocial.lastMessage !== null)
-          .sort(
-            (a, b) =>
-              new Date(b.lastMessage.created_at || '').getTime() -
-              new Date(a.lastMessage.created_at || '').getTime()
-          );
+        const newMatches = matchSocials.filter((matchSocial) => !matchSocial.lastMessage);
+        const messagedMatches = matchSocials.filter((matchSocial) => matchSocial.lastMessage);
+
+        messagedMatches.sort(
+          (a, b) =>
+            new Date(b.lastMessage.created_at || '').getTime() -
+            new Date(a.lastMessage.created_at || '').getTime()
+        );
+
         setNewMatches(newMatches);
         setMatches(messagedMatches);
-      });
+      }
     });
   }, []);
   return (
