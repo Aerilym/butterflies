@@ -4,7 +4,7 @@ import type { MainStackParamList } from '../../types/navigation';
 import { View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { supabaseAPI } from '../../provider/AuthProvider';
+import { supabaseAPI, userStore } from '../../provider/AuthProvider';
 import type { Message, Profile } from '../../types/database';
 import { MessageBubble } from '../../components/chat/MessageBubble';
 import { FaceButton } from '../../components/profile/FaceButton';
@@ -28,9 +28,9 @@ export default function ({
   const [draftMessage, setDraftMessage] = useState<string>('');
 
   useEffect(() => {
-    supabaseAPI.getMessages(matchID).then((data) => {
-      setMessages(data as Message[]);
-    });
+    const messages =
+      userStore.socials?.find((social) => social.match.match_id === matchID)?.messages ?? [];
+    setMessages(messages);
     //TODO: Move subscribe events to supabaseAPI class.
     supabaseAPI.supabase
       .channel(`public:messages:match_id=eq.${matchID}`)
