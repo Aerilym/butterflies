@@ -61,7 +61,10 @@ export class SupabaseAPI {
    */
   getEnabledAuthProviders = async (): Promise<Provider[]> => {
     //TODO: Replace mock function with method to get enabled providers from Supabase or somewhere.
-    return ['spotify', 'apple', 'facebook', 'google'];
+
+    const { data } = await this.supabase.from('providers').select('provider').is('enabled', true);
+
+    return data?.map((provider) => provider.provider) ?? [];
   };
 
   /**
