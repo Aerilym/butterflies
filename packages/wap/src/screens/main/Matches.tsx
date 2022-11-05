@@ -1,16 +1,43 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, Button } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
 import { Match, Message } from '../../types/database';
-import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
+import { AuthContext, userStore } from '../../provider/AuthProvider';
 import { MatchRow } from '../../components/match/MatchRow';
 import { MatchCircle } from '../../components/match/MatchCircle';
+import { Person } from '../../types/userstore';
 
 interface MatchSocial {
   match: Match;
   lastMessage: Message;
+}
+
+function formatMatches(socials: Person[] | undefined): {
+  newMatchList: MatchSocial[];
+  messagedMatchList: MatchSocial[];
+} {
+  if (!socials || socials.length === 0) return { newMatchList: [], messagedMatchList: [] };
+
+  const matchSocials = socials.map((social) => {
+    const matchSocial: Partial<MatchSocial> = { match: social.match };
+    if (social.messages && social.messages.length > 0) {
+      matchSocial.lastMessage = social.messages[social.messages.length - 1];
+    }
+    return matchSocial as MatchSocial;
+  });
+
+  const newMatchList = matchSocials.filter((matchSocial) => !matchSocial.lastMessage);
+  const messagedMatchList = matchSocials.filter((matchSocial) => matchSocial.lastMessage);
+
+  messagedMatchList.sort(
+    (a, b) =>
+      new Date(b.lastMessage.created_at || '').getTime() -
+      new Date(a.lastMessage.created_at || '').getTime()
+  );
+
+  return { newMatchList, messagedMatchList };
 }
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Matches'>) {
@@ -21,29 +48,9 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   const [newMatches, setNewMatches] = useState<MatchSocial[]>([] as MatchSocial[]);
 
   useEffect(() => {
-    userStore.refreshSocials().then(() => {
-      if (userStore.socials) {
-        const matchSocials = userStore.socials?.map((social) => {
-          const matchSocial: Partial<MatchSocial> = { match: social.match };
-          if (social.messages && social.messages.length > 0) {
-            matchSocial.lastMessage = social.messages[social.messages.length - 1];
-          }
-          return matchSocial as MatchSocial;
-        });
-
-        const newMatches = matchSocials.filter((matchSocial) => !matchSocial.lastMessage);
-        const messagedMatches = matchSocials.filter((matchSocial) => matchSocial.lastMessage);
-
-        messagedMatches.sort(
-          (a, b) =>
-            new Date(b.lastMessage.created_at || '').getTime() -
-            new Date(a.lastMessage.created_at || '').getTime()
-        );
-
-        setNewMatches(newMatches);
-        setMatches(messagedMatches);
-      }
-    });
+    const { newMatchList, messagedMatchList } = formatMatches(userStore.socials);
+    setNewMatches(newMatchList);
+    setMatches(messagedMatchList);
   }, []);
   return (
     <>
@@ -79,6 +86,15 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           )}
         </ScrollView>
       </View>
+      <Button
+        title="Refresh"
+        onPress={async () => {
+          await userStore.refreshSocials();
+          const { newMatchList, messagedMatchList } = formatMatches(userStore.socials);
+          setNewMatches(newMatchList);
+          setMatches(messagedMatchList);
+        }}
+      />
       <ScrollView>
         {matches ? (
           matches.map((matchSocial) => {
