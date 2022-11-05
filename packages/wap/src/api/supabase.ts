@@ -92,6 +92,8 @@ export class SupabaseAPI {
       .from('matches')
       .select('*')
       .or('user_id1.eq.' + this.userID + ',user_id2.eq.' + this.userID)
+      .eq('user1_liked', true)
+      .eq('user2_liked', true)
       .order('created_at', { ascending: true });
     return (matches ?? []) as Match[];
   };
@@ -128,29 +130,21 @@ export class SupabaseAPI {
 
   /**
    * Get a user's match queue.
-   * @param userID The user ID to get a match queue for.
    * @returns A list of profiles that the user can match with.
    */
   getMatchQueue = async (): Promise<Match[]> => {
     //TODO: Create a match queue solution to replace this profile getting method.
     /**
-     * The following conditions must be met for a match row to be returned:
-     * user_id1 === userID || user_id2 === userID
-     *  AND
-     * (
-     *    user1_liked === null && user2_liked === null
-     *      OR
-     *    user1_liked === null && user2_liked === true
-     *      OR
-     *    user1_liked === true && user2_liked === null
-     * )
+     * The select logic in JS is:
+     * (user_id1 === userID && user1_liked === null && user2_likes !== false) ||
+     * (user_id2 === userID && user2_liked === null && user1_likes !== false);
      */
     const { data: matchQueue } = await this.supabase
       .from('matches')
       .select('*')
-      .or('user_id1.eq.' + this.userID + ',user_id2.eq.' + this.userID)
-      .not('user1_liked', 'is', false)
-      .not('user2_liked', 'is', false);
+      .or(
+        `and(user_id1.eq.${this.userID},user1_liked.is.null,user2_liked.not.is.false),and(user_id2.eq.${this.userID},user2_liked.is.null,user1_liked.not.is.false)`
+      );
     return matchQueue as Match[];
   };
 
