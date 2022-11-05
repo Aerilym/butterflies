@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, View, ImageBackground } from 'react-native';
+import { ImageBackground } from 'react-native';
+import { Card, Text, View } from 'react-native-ui-lib';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
 import type { Match, Profile } from '../../types/database';
@@ -25,8 +26,7 @@ export function SwipeCard({
     });
   }, []);
   return (
-    <TouchableOpacity
-      key={profile.user_id}
+    <Card
       onPress={() => {
         navigation.navigate('Profile', {
           profile,
@@ -38,6 +38,7 @@ export function SwipeCard({
         flex: 1,
         borderRadius: 12,
       }}
+      enableShadow={true}
     >
       <ImageBackground
         source={{ uri: profile?.avatar_url }}
@@ -76,6 +77,6 @@ export function SwipeCard({
           </Text>
         </View>
       </ImageBackground>
-    </TouchableOpacity>
+    </Card>
   );
 }

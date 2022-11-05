@@ -1,6 +1,7 @@
 import type { Provider } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
-import { ImageSourcePropType, View } from 'react-native';
+import type { ImageSourcePropType } from 'react-native';
+import { View } from 'react-native-ui-lib';
 import { supabaseAPI } from '../../provider/AuthProvider';
 
 import type { AuthIcons } from '../../types/auth';

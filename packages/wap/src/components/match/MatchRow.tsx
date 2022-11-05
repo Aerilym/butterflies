@@ -1,8 +1,9 @@
+import { formatDistanceToNow } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { Avatar, Text, TouchableOpacity, View } from 'react-native-ui-lib';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
-import { FaceButton } from '../profile/FaceButton';
+
 import type { Match, Message, Profile } from '../../types/database';
 
 export function MatchRow({
@@ -26,9 +27,9 @@ export function MatchRow({
       setProfile(profile);
     });
   }, []);
+
   return (
     <TouchableOpacity
-      key={match.match_id}
       onPress={() => {
         navigation.navigate('Chat', {
           matchID: match.match_id,
@@ -37,17 +38,28 @@ export function MatchRow({
         });
       }}
       style={{
+        display: 'flex',
         flexDirection: 'row',
-        marginVertical: 10,
       }}
+      margin-s2
     >
-      <FaceButton
-        profile={profile}
-        navigation={navigation}
+      <Avatar
+        source={{
+          uri: profile?.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg',
+        }}
         size={80}
-        style={{ marginHorizontal: 10 }}
+        onPress={() =>
+          navigation.navigate('Profile', {
+            profile,
+          })
+        }
+        containerStyle={{
+          marginHorizontal: 10,
+          flexGrow: 0,
+        }}
       />
-      <View>
+
+      <View style={{ flexGrow: 0 }}>
         <Text
           style={{
             fontWeight: 'bold',
@@ -57,6 +69,18 @@ export function MatchRow({
           {profile?.display_name ?? ''}
         </Text>
         <Text>{message.text.length < 32 ? message.text : message.text.substring(32)}</Text>
+      </View>
+
+      <View
+        style={{
+          flexGrow: 1,
+          display: 'flex',
+          alignItems: 'flex-end',
+          flexWrap: 'nowrap',
+          overflow: 'hidden',
+        }}
+      >
+        <Text>{formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}</Text>
       </View>
     </TouchableOpacity>
   );

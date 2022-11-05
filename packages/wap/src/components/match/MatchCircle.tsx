@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { TouchableOpacity, Image, StyleProp, ViewStyle } from 'react-native';
+import { TouchableOpacity, Image } from 'react-native-ui-lib';
+import { StyleProp, ViewStyle } from 'react-native';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
 import type { Match, Profile } from '../../types/database';

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, Text } from 'react-native-ui-lib';
+import { ScrollView } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -22,7 +23,6 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
 
   useEffect(() => {
     supabaseAPI.getMatches(userID).then((matches) => {
-      matches = [...matches, ...matches, ...matches, ...matches, ...matches, ...matches];
       const lastMessagePromises = matches.map((match) => {
         return supabaseAPI.getLastMessage(match.match_id);
       });

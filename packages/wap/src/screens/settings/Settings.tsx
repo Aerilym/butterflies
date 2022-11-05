@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button } from 'react-native-ui-lib';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
