@@ -51,13 +51,16 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       }}
     >
       <Button
-        title="Refresh"
+        label={'Refresh'}
+        size={Button.sizes.small}
         onPress={async () => {
           await userStore.refreshMatchQueue();
           const queue = formatMatchQueue(userStore.matchQueue, userID);
           setMatchQueue(queue);
         }}
-      />
+      >
+        <Text style={{ color: 'white' }}>Refresh</Text>
+      </Button>
       {matchQueue && matchQueue.length > 0 ? (
         <View
           style={{
