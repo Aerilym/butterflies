@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Button } from 'react-native-ui-lib';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -51,13 +51,16 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       }}
     >
       <Button
-        title="Refresh"
+        label={'Refresh'}
+        size={Button.sizes.small}
         onPress={async () => {
           await userStore.refreshMatchQueue();
           const queue = formatMatchQueue(userStore.matchQueue, userID);
           setMatchQueue(queue);
         }}
-      />
+      >
+        <Text style={{ color: 'white' }}>Refresh</Text>
+      </Button>
       {matchQueue && matchQueue.length > 0 ? (
         <View
           style={{

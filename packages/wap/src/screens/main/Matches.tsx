@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text } from 'react-native-ui-lib';
-import { ScrollView, Button } from 'react-native';
+import { View, Text, Button } from 'react-native-ui-lib';
+import { ScrollView } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -84,14 +84,16 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         </ScrollView>
       </View>
       <Button
-        title="Refresh"
+        title={'Refresh'}
         onPress={async () => {
           await userStore.refreshSocials();
           const { newMatchList, messagedMatchList } = formatMatches(userStore.socials);
           setNewMatches(newMatchList);
           setMatches(messagedMatchList);
         }}
-      />
+      >
+        <Text style={{ color: 'white' }}>Refresh</Text>
+      </Button>
       <ScrollView>
         {matches ? (
           matches.map((matchSocial) => {

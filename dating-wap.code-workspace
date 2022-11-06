@@ -7,7 +7,7 @@
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "prettier.enable": true,
-    "cSpell.words": ["Supabase"]
+    "cSpell.words": ["aerilym", "gotrue", "Ionicons", "Supabase", "userstore"]
   },
   "extensions": {
     "recommendations": [

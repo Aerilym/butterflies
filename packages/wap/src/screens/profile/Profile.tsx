@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, Button } from 'react-native-ui-lib';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -21,11 +20,14 @@ export default function ({
     >
       <Text style={{ textAlign: 'center' }}>Play with your profile Here!</Text>
       <Button
-        title="Return"
+        label={'Return'}
+        size={Button.sizes.medium}
         onPress={() => {
           navigation.goBack();
         }}
-      />
+      >
+        <Text>Return</Text>
+      </Button>
       <FaceButton
         profile={{ avatar_url: profile.avatar_url } as Profile}
         navigation={navigation}

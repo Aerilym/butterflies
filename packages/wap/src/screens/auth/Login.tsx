@@ -1,4 +1,3 @@
-import React from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 
 import { SupabaseAuth } from '../../components/auth/SupabaseAuth';
