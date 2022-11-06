@@ -5,6 +5,5 @@ export interface Person {
   profile: Profile;
   match: Match;
   matched: boolean;
-  messages?: Message[] | null;
-  lastMessage?: Message | null;
+  messages: Message[];
 }

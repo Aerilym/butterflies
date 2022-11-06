@@ -1,18 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, ScrollView, Text, Button } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { Match, Message } from '../../types/database';
-import { AuthContext, userStore } from '../../provider/AuthProvider';
+import { userStore } from '../../provider/AuthProvider';
 import { MatchRow } from '../../components/match/MatchRow';
 import { MatchCircle } from '../../components/match/MatchCircle';
 import { Person } from '../../types/userstore';
-
-interface MatchSocial {
-  match: Match;
-  lastMessage: Message;
-}
+import { MatchSocial } from '../../types/social';
 
 function formatMatches(socials: Person[] | undefined): {
   newMatchList: MatchSocial[];
@@ -21,29 +16,31 @@ function formatMatches(socials: Person[] | undefined): {
   if (!socials || socials.length === 0) return { newMatchList: [], messagedMatchList: [] };
 
   const matchSocials = socials.map((social) => {
-    const matchSocial: Partial<MatchSocial> = { match: social.match };
+    const matchSocial: MatchSocial = {
+      match: social.match,
+      profile: social.profile,
+      messages: social.messages ?? [],
+    };
     if (social.messages && social.messages.length > 0) {
-      matchSocial.lastMessage = social.messages[social.messages.length - 1];
+      matchSocial.messages = social.messages;
     }
     return matchSocial as MatchSocial;
   });
 
-  const newMatchList = matchSocials.filter((matchSocial) => !matchSocial.lastMessage);
-  const messagedMatchList = matchSocials.filter((matchSocial) => matchSocial.lastMessage);
+  const newMatchList = matchSocials.filter((matchSocial) => matchSocial.messages.length === 0);
+  const messagedMatchList = matchSocials.filter((matchSocial) => matchSocial.messages.length > 0);
 
   messagedMatchList.sort(
     (a, b) =>
-      new Date(b.lastMessage.created_at || '').getTime() -
-      new Date(a.lastMessage.created_at || '').getTime()
+      new Date(b.messages[b.messages.length - 1].created_at || '').getTime() -
+      new Date(a.messages[a.messages.length - 1].created_at || '').getTime()
   );
 
   return { newMatchList, messagedMatchList };
 }
 
+// TODO: Have last message update without needing to refresh the page.
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Matches'>) {
-  const { session } = useContext(AuthContext);
-  const userID = session?.user.id ?? '';
-
   const [matches, setMatches] = useState<MatchSocial[]>([] as MatchSocial[]);
   const [newMatches, setNewMatches] = useState<MatchSocial[]>([] as MatchSocial[]);
 
@@ -72,8 +69,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
                 <MatchCircle
                   key={matchSocial.match.match_id}
                   navigation={navigation}
-                  match={matchSocial.match}
-                  userID={userID}
+                  matchSocial={matchSocial}
                   size={69}
                   style={{
                     marginHorizontal: 4,
@@ -102,9 +98,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
               <MatchRow
                 key={matchSocial.match.match_id}
                 navigation={navigation}
-                match={matchSocial.match}
-                message={matchSocial.lastMessage}
-                userID={userID}
+                matchSocial={matchSocial}
               />
             );
           })

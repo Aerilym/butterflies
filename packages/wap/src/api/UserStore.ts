@@ -1,6 +1,6 @@
 import { Person } from '../types/userstore';
 import { supabaseAPI } from '../provider/AuthProvider';
-import { Match } from '../types/database';
+import { Match, Message } from '../types/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class UserStore {
@@ -82,17 +82,23 @@ export class UserStore {
         profile,
         match,
         matched,
+        messages: [],
       };
       if (!matched) return person;
-      const messages = await supabaseAPI.getMessages(match.match_id);
-      const lastMessage = messages.length > 0 ? messages[-1] : null;
-      return {
-        ...person,
-        messages,
-        lastMessage,
-      };
+      person.messages = await supabaseAPI.getMessages(match.match_id);
+      return person;
     });
     const people = await Promise.all(peopleGets);
     return people;
+  };
+
+  addMessage = async (matchID: string, message: Message): Promise<void> => {
+    if (!this.socials) return;
+    const social = this.socials.find((social) => social.match.match_id === matchID);
+    const socialIdx = this.socials.findIndex((social) => social.match.match_id === matchID);
+    if (!social) return;
+    social.messages.push(message);
+    this.socials[socialIdx] = social;
+    await this.storeSocials(this.socials);
   };
 }

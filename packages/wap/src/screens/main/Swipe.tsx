@@ -5,14 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 import type { MainStackParamList } from '../../types/navigation';
 import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
-import { Match } from '../../types/database';
 import { SwipeCard } from '../../components/swipe/SwipeCard';
 import { Person } from '../../types/userstore';
-
-interface MatchQueueItem {
-  match: Match;
-  userPosition: 1 | 2;
-}
+import { MatchQueueItem } from '../../types/social';
 
 function formatMatchQueue(
   matchQueue: Person[] | undefined,
@@ -23,6 +18,7 @@ function formatMatchQueue(
     return {
       match: person.match,
       userPosition: person.match.user_id1 === currentUserID ? 1 : 2,
+      profile: person.profile,
     } as MatchQueueItem;
   });
   return queue;
@@ -38,8 +34,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
     <SwipeCard
       key={matchQueueItem.match.match_id}
       navigation={navigation}
-      userID={userID}
-      match={matchQueueItem.match}
+      matchQueueItem={matchQueueItem}
     />
   ));
 
