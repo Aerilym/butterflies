@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, Text, View, ImageBackground } from 'react-native';
 
 import { MatchQueueItem } from '../../types/social';
