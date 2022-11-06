@@ -12,11 +12,3 @@
 Please include a summary of the changes and the related issue(s). Commit messages work well here.
 
 Fixes # (issue)
-
-## Checklist
-
-- [ ] I have added the relevant label(s) to the PR
-- [ ] My code follows the style guidelines
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code
-- [ ] My changes generate no new warnings

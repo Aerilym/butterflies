@@ -1,16 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Button } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { AuthContext, supabaseAPI } from '../../provider/AuthProvider';
-import { Match } from '../../types/database';
+import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
 import { SwipeCard } from '../../components/swipe/SwipeCard';
+import { Person } from '../../types/userstore';
+import { MatchQueueItem } from '../../types/social';
 
-interface MatchQueueItem {
-  match: Match;
-  userPosition: 1 | 2;
+function formatMatchQueue(
+  matchQueue: Person[] | undefined,
+  currentUserID: string
+): MatchQueueItem[] {
+  if (!matchQueue || matchQueue.length === 0) return [];
+  const queue = matchQueue.map((person) => {
+    return {
+      match: person.match,
+      userPosition: person.match.user_id1 === currentUserID ? 1 : 2,
+      profile: person.profile,
+    } as MatchQueueItem;
+  });
+  return queue;
 }
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Swipe'>) {
@@ -23,21 +34,13 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
     <SwipeCard
       key={matchQueueItem.match.match_id}
       navigation={navigation}
-      userID={userID}
-      match={matchQueueItem.match}
+      matchQueueItem={matchQueueItem}
     />
   ));
 
   useEffect(() => {
-    supabaseAPI.getMatchQueue(userID).then((matches) => {
-      const matchQueue = matches.map((match) => {
-        return {
-          match,
-          userPosition: match.user_id1 === userID ? 1 : 2,
-        } as MatchQueueItem;
-      });
-      setMatchQueue(matchQueue);
-    });
+    const queue = formatMatchQueue(userStore.matchQueue, userID);
+    setMatchQueue(queue);
   }, []);
   //TODO: Surely there's a better way to do the swipe card queue https://imgur.com/a/gCJygAt
   return (
@@ -47,6 +50,14 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         justifyContent: 'center',
       }}
     >
+      <Button
+        title="Refresh"
+        onPress={async () => {
+          await userStore.refreshMatchQueue();
+          const queue = formatMatchQueue(userStore.matchQueue, userID);
+          setMatchQueue(queue);
+        }}
+      />
       {matchQueue && matchQueue.length > 0 ? (
         <View
           style={{

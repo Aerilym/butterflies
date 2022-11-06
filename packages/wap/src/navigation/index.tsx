@@ -9,9 +9,11 @@ import Loading from '../screens/utility/Loading';
 import { AuthContext } from '../provider/AuthProvider';
 
 export default () => {
-  const { session } = useContext(AuthContext);
+  const { session, sessionChecked } = useContext(AuthContext);
   const userID = session?.user?.id;
   const hasAuth = !!userID;
+
+  const isReady = sessionChecked;
 
   const isMobileDevice = Platform.OS === 'ios' || Platform.OS === 'android';
 
@@ -24,9 +26,7 @@ export default () => {
           maxHeight: isMobileDevice ? '100%' : 915,
         }}
       >
-        {hasAuth == null && <Loading />}
-        {hasAuth == false && <Auth />}
-        {hasAuth == true && <Main />}
+        {!isReady ? <Loading /> : hasAuth ? <Main /> : <Auth />}
       </SafeAreaProvider>
     </NavigationContainer>
   );
