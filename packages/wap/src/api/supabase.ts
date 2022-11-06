@@ -11,6 +11,7 @@ const isWeb = Platform.OS === 'web';
 
 export class SupabaseAPI {
   supabase: SupabaseClient;
+  userID?: string;
   constructor() {
     this.supabase = createClient(SB_URL, SB_KEY, {
       auth: {
@@ -60,7 +61,10 @@ export class SupabaseAPI {
    */
   getEnabledAuthProviders = async (): Promise<Provider[]> => {
     //TODO: Replace mock function with method to get enabled providers from Supabase or somewhere.
-    return ['spotify', 'apple', 'facebook', 'google'];
+
+    const { data } = await this.supabase.from('providers').select('provider').is('enabled', true);
+
+    return data?.map((provider) => provider.provider) ?? [];
   };
 
   /**
@@ -68,11 +72,11 @@ export class SupabaseAPI {
    * @param userID The user ID to get the profile for.
    * @returns The profile for the user.
    */
-  getProfile = async (userID: string): Promise<Profile> => {
+  getProfile = async (userID?: string): Promise<Profile> => {
     const { data: profile } = await this.supabase
       .from('profiles')
       .select('*')
-      .eq('user_id', userID)
+      .eq('user_id', userID ?? this.userID)
       .limit(1)
       .single();
     return (profile ?? {}) as Profile;
@@ -83,11 +87,13 @@ export class SupabaseAPI {
    * @param userID The user ID to get the matches for.
    * @returns A list of matches for the user.
    */
-  getMatches = async (userID: string): Promise<Match[]> => {
+  getMatches = async (): Promise<Match[]> => {
     const { data: matches } = await this.supabase
       .from('matches')
       .select('*')
-      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
+      .or('user_id1.eq.' + this.userID + ',user_id2.eq.' + this.userID)
+      .eq('user1_liked', true)
+      .eq('user2_liked', true)
       .order('created_at', { ascending: true });
     return (matches ?? []) as Match[];
   };
@@ -124,29 +130,21 @@ export class SupabaseAPI {
 
   /**
    * Get a user's match queue.
-   * @param userID The user ID to get a match queue for.
    * @returns A list of profiles that the user can match with.
    */
-  getMatchQueue = async (userID: string): Promise<Match[]> => {
+  getMatchQueue = async (): Promise<Match[]> => {
     //TODO: Create a match queue solution to replace this profile getting method.
     /**
-     * The following conditions must be met for a match row to be returned:
-     * user_id1 === userID || user_id2 === userID
-     *  AND
-     * (
-     *    user1_liked === null && user2_liked === null
-     *      OR
-     *    user1_liked === null && user2_liked === true
-     *      OR
-     *    user1_liked === true && user2_liked === null
-     * )
+     * The select logic in JS is:
+     * (user_id1 === userID && user1_liked === null && user2_likes !== false) ||
+     * (user_id2 === userID && user2_liked === null && user1_likes !== false);
      */
     const { data: matchQueue } = await this.supabase
       .from('matches')
       .select('*')
-      .or('user_id1.eq.' + userID + ',user_id2.eq.' + userID)
-      .not('user1_liked', 'is', false)
-      .not('user2_liked', 'is', false);
+      .or(
+        `and(user_id1.eq.${this.userID},user1_liked.is.null,user2_liked.not.is.false),and(user_id2.eq.${this.userID},user2_liked.is.null,user1_liked.not.is.false)`
+      );
     return matchQueue as Match[];
   };
 

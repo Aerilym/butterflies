@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { MainStackParamList } from '../../types/navigation';
 import { View, TouchableOpacity } from 'react-native-ui-lib';
 import { TextInput, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { supabaseAPI } from '../../provider/AuthProvider';
+import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
 import type { Message, Profile } from '../../types/database';
 import { MessageBubble } from '../../components/chat/MessageBubble';
 import { FaceButton } from '../../components/profile/FaceButton';
@@ -19,19 +19,23 @@ export default function ({
   navigation,
   route,
 }: NativeStackScreenProps<MainStackParamList, 'Chat'>) {
-  const { matchID, userID, matchProfile } = route.params ?? {
+  const {
+    matchID,
+    matchProfile,
+    messages: socialMessages,
+  } = route.params ?? {
     matchID: '',
-    userID: '',
     matchProfile: {} as Profile,
+    messages: [] as Message[],
   };
 
-  const [messages, setMessages] = useState<Message[]>([] as Message[]);
+  const { session } = useContext(AuthContext);
+  const userID = session?.user.id ?? '';
+
+  const [messages, setMessages] = useState<Message[]>(socialMessages);
   const [draftMessage, setDraftMessage] = useState<string>('');
 
   useEffect(() => {
-    supabaseAPI.getMessages(matchID).then((data) => {
-      setMessages(data as Message[]);
-    });
     //TODO: Move subscribe events to supabaseAPI class.
     supabaseAPI.supabase
       .channel(`public:messages:match_id=eq.${matchID}`)
@@ -40,7 +44,9 @@ export default function ({
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `match_id=eq.${matchID}` },
         (response) => {
           // TODO: pull out the message from the response in a clearer way
-          setMessages((prev) => [...prev, response.new as Message]);
+          const message = response.new as Message;
+          setMessages((prev) => [...prev, message]);
+          userStore.addMessage(matchID, message);
         }
       )
       .subscribe();

@@ -1,35 +1,22 @@
-import React, { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
 import { Card, Text, View } from 'react-native-ui-lib';
 
-import { supabaseAPI } from '../../provider/AuthProvider';
-import type { Match, Profile } from '../../types/database';
+import { MatchQueueItem } from '../../types/social';
 
 export function SwipeCard({
   navigation,
-  userID,
-  match,
+  matchQueueItem,
 }: {
   // TODO: Add types for navigation and route
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
-  userID: string;
-  match: Match;
+  matchQueueItem: MatchQueueItem;
 }) {
-  const [profile, setProfile] = useState<Profile>({} as Profile);
-  const userPosition = match.user_id1 === userID ? 1 : 2;
-
-  useEffect(() => {
-    const profileID = userPosition === 1 ? match.user_id2 : match.user_id1;
-    supabaseAPI.getProfile(profileID).then((profile) => {
-      setProfile(profile);
-    });
-  }, []);
   return (
     <Card
       onPress={() => {
         navigation.navigate('Profile', {
-          profile,
+          profile: matchQueueItem.profile,
         });
       }}
       style={{
@@ -41,7 +28,7 @@ export function SwipeCard({
       enableShadow={true}
     >
       <ImageBackground
-        source={{ uri: profile?.avatar_url }}
+        source={{ uri: matchQueueItem.profile.avatar_url }}
         resizeMode="cover"
         style={{
           flex: 1,
@@ -65,7 +52,7 @@ export function SwipeCard({
               fontSize: 32,
             }}
           >
-            {profile?.display_name ?? ''}
+            {matchQueueItem.profile.display_name ?? ''}
           </Text>
           <Text
             style={{

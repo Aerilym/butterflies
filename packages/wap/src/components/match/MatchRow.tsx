@@ -1,40 +1,24 @@
 import { formatDistanceToNow } from 'date-fns';
-import { useEffect, useState } from 'react';
 import { Avatar, Text, TouchableOpacity, View } from 'react-native-ui-lib';
 
-import { supabaseAPI } from '../../provider/AuthProvider';
-
-import type { Match, Message, Profile } from '../../types/database';
+import { MatchSocial } from '../../types/social';
 
 export function MatchRow({
   navigation,
-  match,
-  message,
-  userID,
+  matchSocial,
 }: {
   // TODO: Add types for navigation and route
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
-  match: Match;
-  message: Message;
-  userID: string;
+  matchSocial: MatchSocial;
 }) {
-  const [profile, setProfile] = useState<Profile>({} as Profile);
-
-  useEffect(() => {
-    const profileID = match.user_id1 === userID ? match.user_id2 : match.user_id1;
-    supabaseAPI.getProfile(profileID).then((profile) => {
-      setProfile(profile);
-    });
-  }, []);
-
   return (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate('Chat', {
-          matchID: match.match_id,
-          userID,
-          matchProfile: profile,
+          matchID: matchSocial.match.match_id,
+          matchProfile: matchSocial.profile,
+          messages: matchSocial.messages,
         });
       }}
       style={{
@@ -45,12 +29,12 @@ export function MatchRow({
     >
       <Avatar
         source={{
-          uri: profile?.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg',
+          uri: matchSocial.profile?.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg',
         }}
         size={80}
         onPress={() =>
           navigation.navigate('Profile', {
-            profile,
+            profile: matchSocial.profile,
           })
         }
         containerStyle={{
@@ -66,9 +50,13 @@ export function MatchRow({
             fontSize: 18,
           }}
         >
-          {profile?.display_name ?? ''}
+          {matchSocial.profile.display_name ?? ''}
         </Text>
-        <Text>{message.text.length < 32 ? message.text : message.text.substring(32)}</Text>
+        <Text>
+          {matchSocial.messages[matchSocial.messages.length - 1].text.length < 32
+            ? matchSocial.messages[matchSocial.messages.length - 1].text
+            : matchSocial.messages[matchSocial.messages.length - 1].text.substring(32)}
+        </Text>
       </View>
 
       <View
@@ -80,7 +68,12 @@ export function MatchRow({
           overflow: 'hidden',
         }}
       >
-        <Text>{formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}</Text>
+        <Text>
+          {formatDistanceToNow(
+            new Date(matchSocial.messages[matchSocial.messages.length - 1].created_at),
+            { addSuffix: true }
+          )}
+        </Text>
       </View>
     </TouchableOpacity>
   );

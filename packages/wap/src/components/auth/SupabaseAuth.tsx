@@ -1,7 +1,7 @@
 import type { Provider } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 import type { ImageSourcePropType } from 'react-native';
-import { View } from 'react-native-ui-lib';
+import { View, Image, Text, Linking } from 'react-native-ui-lib';
 import { supabaseAPI } from '../../provider/AuthProvider';
 
 import type { AuthIcons } from '../../types/auth';
@@ -43,9 +43,36 @@ export function SupabaseAuth() {
         width: '100%',
       }}
     >
-      {enabledProviders.map((provider) => {
-        return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
-      })}
+      {enabledProviders.length > 0 ? (
+        enabledProviders.map((provider) => {
+          return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
+        })
+      ) : (
+        <>
+          <Image
+            style={{
+              width: 300,
+              height: 200,
+            }}
+            source={{ uri: 'https://media.tenor.com/MYZgsN2TDJAAAAAC/this-is.gif' }}
+          />
+          <Text>There are no enabled login providers!</Text>
+          <Text>
+            If you're a dev enable some{' '}
+            <Text
+              style={{ color: 'blue' }}
+              onPress={() =>
+                Linking.openURL(
+                  'https://app.supabase.com/project/btueksreggheiyvqbbdx/editor/18198'
+                )
+              }
+            >
+              HERE
+            </Text>
+            !
+          </Text>
+        </>
+      )}
     </View>
   );
 }
