@@ -1,4 +1,4 @@
-import { Match, Message, Profile } from './database';
+import type { Match, Message, Profile } from './database';
 
 export interface MatchQueueItem {
   match: Match;

@@ -1,7 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { Person } from '../types/userstore';
 import { supabaseAPI } from '../provider/AuthProvider';
 import { Match, Message } from '../types/database';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class UserStore {
   public socials?: Person[] | undefined;
@@ -13,7 +14,6 @@ export class UserStore {
 
   async getSocials(): Promise<void> {
     const storedSocials = await this.getItem('@socials');
-    console.log('storedSocials', storedSocials);
     if (storedSocials) {
       this.socials = storedSocials;
     } else {
@@ -25,7 +25,6 @@ export class UserStore {
 
   async getMatchQueue(): Promise<void> {
     const storedMatchQueue = await this.getItem('@matchQueue');
-    console.log('storedMatchQueue', storedMatchQueue);
     if (storedMatchQueue) {
       this.matchQueue = storedMatchQueue;
     } else {
@@ -59,7 +58,7 @@ export class UserStore {
     try {
       await AsyncStorage.setItem(key, JSON.stringify(item));
     } catch (e) {
-      console.log(e);
+      return;
     }
   };
 
@@ -68,7 +67,6 @@ export class UserStore {
       const item = await AsyncStorage.getItem(key);
       return item ? JSON.parse(item) : null;
     } catch (e) {
-      console.log(e);
       return null;
     }
   };

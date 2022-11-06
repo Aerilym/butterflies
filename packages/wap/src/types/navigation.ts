@@ -1,4 +1,4 @@
-import { Message, Profile } from './database';
+import type { Message, Profile } from './database';
 
 export type MainStackParamList = {
   MainTabs: undefined;

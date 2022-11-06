@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { MainStackParamList } from '../../types/navigation';
 import { View, TouchableOpacity } from 'react-native-ui-lib';
 import { TextInput, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
+import type { MainStackParamList } from '../../types/navigation';
 import type { Message, Profile } from '../../types/database';
 import { MessageBubble } from '../../components/chat/MessageBubble';
 import { FaceButton } from '../../components/profile/FaceButton';
