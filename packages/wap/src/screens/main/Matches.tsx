@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, ScrollView, Text, Button } from 'react-native';
+import { View, Text } from 'react-native-ui-lib';
+import { ScrollView, Button } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';

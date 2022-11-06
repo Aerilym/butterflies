@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native-ui-lib';
 
 import type { Message } from '../../types/database';
 

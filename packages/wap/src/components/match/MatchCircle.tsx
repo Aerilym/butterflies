@@ -1,4 +1,5 @@
-import { TouchableOpacity, Image, StyleProp, ViewStyle } from 'react-native';
+import { TouchableOpacity, Image } from 'react-native-ui-lib';
+import { StyleProp, ViewStyle } from 'react-native';
 
 import { MatchSocial } from '../../types/social';
 

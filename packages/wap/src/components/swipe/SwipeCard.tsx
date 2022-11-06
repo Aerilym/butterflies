@@ -1,4 +1,5 @@
-import { TouchableOpacity, Text, View, ImageBackground } from 'react-native';
+import { ImageBackground } from 'react-native';
+import { Card, Text, View } from 'react-native-ui-lib';
 
 import { MatchQueueItem } from '../../types/social';
 
@@ -12,8 +13,7 @@ export function SwipeCard({
   matchQueueItem: MatchQueueItem;
 }) {
   return (
-    <TouchableOpacity
-      key={matchQueueItem.profile.user_id}
+    <Card
       onPress={() => {
         navigation.navigate('Profile', {
           profile: matchQueueItem.profile,
@@ -25,6 +25,7 @@ export function SwipeCard({
         flex: 1,
         borderRadius: 12,
       }}
+      enableShadow={true}
     >
       <ImageBackground
         source={{ uri: matchQueueItem.profile.avatar_url }}
@@ -63,6 +64,6 @@ export function SwipeCard({
           </Text>
         </View>
       </ImageBackground>
-    </TouchableOpacity>
+    </Card>
   );
 }
