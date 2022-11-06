@@ -8,10 +8,10 @@ function parseMessageTime(time: string): string {
   const date = new Date(time);
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  const ampm = hours >= 12 ? 'pm' : 'am';
+  const suffix = hours >= 12 ? 'pm' : 'am';
   const hours12 = hours % 12 || 12;
   const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
-  const timeString = `${hours12}:${minutesStr}${ampm}`;
+  const timeString = `${hours12}:${minutesStr}${suffix}`;
 
   const isToday = date.toDateString() === new Date().toDateString();
 
