@@ -6,7 +6,6 @@ import { startAsync, makeRedirectUri } from 'expo-auth-session';
 import { SB_URL, SB_KEY } from '@env';
 import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
-import { OnboardingPayload } from '../types/auth';
 
 const isWeb = Platform.OS === 'web';
 
@@ -197,6 +196,10 @@ export class SupabaseAPI {
 
   completeOnboarding = async (): Promise<void> => {
     await this.supabase.from('profiles').update({ onboarded: true }).eq('user_id', this.userID);
+  };
+
+  restartOnboarding = async (): Promise<void> => {
+    await this.supabase.from('profiles').update({ onboarded: false }).eq('user_id', this.userID);
   };
 
   /**

@@ -3,9 +3,10 @@ import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { AuthContext, supabaseAPI } from '../../provider/AuthProvider';
+import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
 import { FaceButton } from '../../components/profile/FaceButton';
 import { Profile } from '../../types/database';
+import { Button } from 'native-base';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Dashboard'>) {
   const { session } = useContext(AuthContext);
@@ -25,6 +26,13 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         navigation={navigation}
         size={300}
       />
+      <Button
+        onPress={() => {
+          supabaseAPI.restartOnboarding();
+        }}
+      >
+        Redo Onboarding
+      </Button>
       <TouchableOpacity
         style={{
           width: 150,

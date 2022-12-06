@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
@@ -10,11 +10,11 @@ import { AuthContext, userStore } from '../provider/AuthProvider';
 import Onboarding from '../screens/auth/Onboarding';
 
 export default () => {
-  const { session, sessionChecked } = useContext(AuthContext);
+  const { session, sessionChecked, profile } = useContext(AuthContext);
   const userID = session?.user?.id;
   const hasAuth = !!userID;
 
-  const onboardingComplete = userStore.profile?.onboarded;
+  const onboardingComplete = profile?.onboarded;
 
   const isReady = sessionChecked;
 
