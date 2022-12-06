@@ -6,12 +6,15 @@ import { Platform } from 'react-native';
 import Main from './MainStack';
 import Auth from './AuthStack';
 import Loading from '../screens/utility/Loading';
-import { AuthContext } from '../provider/AuthProvider';
+import { AuthContext, userStore } from '../provider/AuthProvider';
+import Onboarding from '../screens/auth/Onboarding';
 
 export default () => {
   const { session, sessionChecked } = useContext(AuthContext);
   const userID = session?.user?.id;
   const hasAuth = !!userID;
+
+  const onboardingComplete = userStore.profile?.onboarded;
 
   const isReady = sessionChecked;
 
@@ -21,12 +24,23 @@ export default () => {
     <NavigationContainer>
       <SafeAreaProvider
         style={{
+          paddingTop: isMobileDevice ? 25 : 0,
           shadowRadius: isMobileDevice ? undefined : 10,
           maxWidth: isMobileDevice ? '100%' : 412,
           maxHeight: isMobileDevice ? '100%' : 915,
         }}
       >
-        {!isReady ? <Loading /> : hasAuth ? <Main /> : <Auth />}
+        {!isReady ? (
+          <Loading />
+        ) : hasAuth ? (
+          onboardingComplete ? (
+            <Main />
+          ) : (
+            <Onboarding />
+          )
+        ) : (
+          <Auth />
+        )}
       </SafeAreaProvider>
     </NavigationContainer>
   );
