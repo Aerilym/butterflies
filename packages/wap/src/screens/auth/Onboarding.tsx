@@ -24,7 +24,11 @@ export default function () {
           if (stepNumber === steps.length - 1) {
             await userStore.storeProfile();
             await userStore.storePreferences();
-            await supabaseAPI.completeOnboarding(userStore.profile, userStore.preferences);
+            await supabaseAPI.onboard({
+              profile: userStore.profile,
+              preferences: userStore.preferences,
+            });
+            await supabaseAPI.completeOnboarding();
             await userStore.refreshProfile();
           } else {
             setStepNumber(stepNumber + 1);
