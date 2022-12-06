@@ -84,6 +84,21 @@ export class SupabaseAPI {
   };
 
   /**
+   * Get a user's preferences.
+   * @param userID The user ID to get the profile for.
+   * @returns The profile for the user.
+   */
+  getPreferences = async (userID?: string): Promise<Preferences> => {
+    const { data: preferences } = await this.supabase
+      .from('preferences')
+      .select('*')
+      .eq('user_id', userID ?? this.userID)
+      .limit(1)
+      .single();
+    return (preferences ?? {}) as Preferences;
+  };
+
+  /**
    * Get a user's matches.
    * @param userID The user ID to get the matches for.
    * @returns A list of matches for the user.
@@ -180,20 +195,26 @@ export class SupabaseAPI {
       .eq('match_id', matchID);
   };
 
-  completeOnboarding = async (profile: Profile, preferences: Preferences): Promise<void> => {
-    await this.supabase
-      .from('profiles')
-      .update({ ...profile, onboarded: true })
-      .eq('user_id', this.userID);
-    await this.supabase.from('preferences').update(preferences).eq('user_id', this.userID);
+  completeOnboarding = async (): Promise<void> => {
+    await this.supabase.from('profiles').update({ onboarded: true }).eq('user_id', this.userID);
   };
 
   /**
    * Onboards the user. This is called after the user first logs in and fills in their profile and preferences. Supabase will create a profile and preferences row for the user when the account is created.
    * @param options The options to onboard the user with.
    */
-  onboard = async (options: OnboardingPayload): Promise<void> => {
-    const { profileOptions, preferenceOptions } = options;
+  onboard = async ({
+    profile,
+    preferences,
+  }: {
+    profile: Profile;
+    preferences: Preferences;
+  }): Promise<void> => {
+    // This deconstructs the object to remove the user_id and updated_at fields from the profile and preferences objects. This is because we don't want to update those fields.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { user_id: id_1, updated_at: up_1, onboarded, ...profileOptions } = profile;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { user_id: id_2, ...preferenceOptions } = preferences;
 
     await this.supabase
       .from('profiles')

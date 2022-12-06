@@ -14,6 +14,7 @@ export class UserStore {
     this.preferences = {} as Preferences;
     this.getSocials();
     this.getMatchQueue();
+    this.getStoredProfile();
   }
 
   /**
@@ -40,6 +41,28 @@ export class UserStore {
     } else {
       if (supabaseAPI.userID) {
         this.refreshMatchQueue();
+      }
+    }
+  }
+
+  async getStoredProfile(): Promise<void> {
+    const storedProfile = await this.getItem('@profile');
+    if (storedProfile) {
+      this.profile = storedProfile;
+    } else {
+      if (supabaseAPI.userID) {
+        this.refreshProfile();
+      }
+    }
+  }
+
+  async getStoredPreferences(): Promise<void> {
+    const storedPreferences = await this.getItem('@preferences');
+    if (storedPreferences) {
+      this.preferences = storedPreferences;
+    } else {
+      if (supabaseAPI.userID) {
+        this.refreshPreferences();
       }
     }
   }
@@ -89,8 +112,8 @@ export class UserStore {
   /**
    * Store the preference property in the async storage.
    */
-  storePreferences = async (): Promise<void> => {
-    await this.storeItem('@preferences', this.preferences);
+  storePreferences = async (preferences?: Preferences): Promise<void> => {
+    await this.storeItem('@preferences', preferences ?? this.preferences);
   };
 
   /**
@@ -167,6 +190,13 @@ export class UserStore {
     const profile = await supabaseAPI.getProfile(supabaseAPI.userID);
     this.profile = profile;
     await this.storeProfile(profile);
+  };
+
+  refreshPreferences = async (): Promise<void> => {
+    if (!supabaseAPI.userID) return;
+    const preferences = await supabaseAPI.getPreferences(supabaseAPI.userID);
+    this.preferences = preferences;
+    await this.storePreferences(preferences);
   };
 
   clearUserProfile = (): void => {
