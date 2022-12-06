@@ -1,12 +1,12 @@
 import { useContext } from 'react';
+import { Button } from 'native-base';
 import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
+import { AuthContext, supabaseAPI } from '../../provider/AuthProvider';
 import { FaceButton } from '../../components/profile/FaceButton';
 import { Profile } from '../../types/database';
-import { Button } from 'native-base';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Dashboard'>) {
   const { session } = useContext(AuthContext);

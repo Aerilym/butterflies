@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
@@ -6,7 +6,7 @@ import { Platform } from 'react-native';
 import Main from './MainStack';
 import Auth from './AuthStack';
 import Loading from '../screens/utility/Loading';
-import { AuthContext, userStore } from '../provider/AuthProvider';
+import { AuthContext } from '../provider/AuthProvider';
 import Onboarding from '../screens/auth/Onboarding';
 
 export default () => {
