@@ -4,8 +4,9 @@ import { Platform } from 'react-native';
 import { startAsync, makeRedirectUri } from 'expo-auth-session';
 
 import { SB_URL, SB_KEY } from '@env';
-import { Match, Message, Profile } from '../types/database';
+import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
+import { OnboardingPayload } from '../types/auth';
 
 const isWeb = Platform.OS === 'web';
 
@@ -177,5 +178,31 @@ export class SupabaseAPI {
       .from('matches')
       .update({ match_id: matchID, [userLiked]: like })
       .eq('match_id', matchID);
+  };
+
+  completeOnboarding = async (profile: Profile, preferences: Preferences): Promise<void> => {
+    await this.supabase
+      .from('profiles')
+      .update({ ...profile, onboarded: true })
+      .eq('user_id', this.userID);
+    await this.supabase.from('preferences').update(preferences).eq('user_id', this.userID);
+  };
+
+  /**
+   * Onboards the user. This is called after the user first logs in and fills in their profile and preferences. Supabase will create a profile and preferences row for the user when the account is created.
+   * @param options The options to onboard the user with.
+   */
+  onboard = async (options: OnboardingPayload): Promise<void> => {
+    const { profileOptions, preferenceOptions } = options;
+
+    await this.supabase
+      .from('profiles')
+      .update({ ...profileOptions })
+      .eq('user_id', this.userID);
+
+    await this.supabase
+      .from('preferences')
+      .update({ ...preferenceOptions })
+      .eq('user_id', this.userID);
   };
 }

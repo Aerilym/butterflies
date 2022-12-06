@@ -4,6 +4,7 @@ export interface Profile {
   username: string;
   avatar_url: string;
   display_name: string;
+  onboarded: string;
 }
 export interface Match {
   match_id: string;
@@ -21,4 +22,14 @@ export interface Message {
   sender_id: string;
   text: string;
   is_delivered: boolean;
+}
+
+export interface Preferences {
+  user_id: string;
+  age_range: number[];
+  random_switch: string;
+  random_slider: string;
+  random_radio: string;
+  random_dropdown: string;
+  random_checkboxes: string;
 }

@@ -2,12 +2,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Person } from '../types/userstore';
 import { supabaseAPI } from '../provider/AuthProvider';
-import { Match, Message } from '../types/database';
+import { Match, Message, Preferences, Profile } from '../types/database';
 
 export class UserStore {
   public socials?: Person[] | undefined;
   public matchQueue?: Person[] | undefined;
+  public profile: Profile;
+  public preferences: Preferences;
   constructor() {
+    this.profile = {} as Profile;
+    this.preferences = {} as Preferences;
     this.getSocials();
     this.getMatchQueue();
   }
@@ -72,6 +76,21 @@ export class UserStore {
    */
   storeMatchQueue = async (matchQueue: Person[]): Promise<void> => {
     await this.storeItem('@matchQueue', matchQueue);
+  };
+
+  /**
+   * Store the profile property in the async storage.
+   * @param profile The profile to store in the async storage. If no profile is provided, it will store the profile property.
+   */
+  storeProfile = async (profile?: Profile): Promise<void> => {
+    await this.storeItem('@profile', profile ?? this.profile);
+  };
+
+  /**
+   * Store the preference property in the async storage.
+   */
+  storePreferences = async (): Promise<void> => {
+    await this.storeItem('@preferences', this.preferences);
   };
 
   /**
@@ -141,5 +160,16 @@ export class UserStore {
     social.messages.push(message);
     this.socials[socialIdx] = social;
     await this.storeSocials(this.socials);
+  };
+
+  refreshProfile = async (): Promise<void> => {
+    if (!supabaseAPI.userID) return;
+    const profile = await supabaseAPI.getProfile(supabaseAPI.userID);
+    this.profile = profile;
+    await this.storeProfile(profile);
+  };
+
+  clearUserProfile = (): void => {
+    this.profile = {} as Profile;
   };
 }
