@@ -21,6 +21,7 @@ export default () => {
     <NavigationContainer>
       <SafeAreaProvider
         style={{
+          paddingTop: isMobileDevice ? 25 : 0,
           shadowRadius: isMobileDevice ? undefined : 10,
           maxWidth: isMobileDevice ? '100%' : 412,
           maxHeight: isMobileDevice ? '100%' : 915,

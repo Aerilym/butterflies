@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { Button } from 'native-base';
 import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -25,6 +26,14 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         navigation={navigation}
         size={300}
       />
+      <Button
+        onPress={async () => {
+          await supabaseAPI.restartOnboarding();
+          navigation.navigate('Onboarding');
+        }}
+      >
+        Redo Onboarding
+      </Button>
       <TouchableOpacity
         style={{
           width: 150,

@@ -1,0 +1,17 @@
+{
+  "ignorePaths": ["node_modules", "yarn.lock", "*.code-workspace"],
+  "words": [
+    "aerilym",
+    "chatbubble",
+    "gotrue",
+    "Ionicons",
+    "keycloak",
+    "onboarded",
+    "Onboards",
+    "Supabase",
+    "userstore",
+    "vars",
+    "wap",
+    "workos"
+  ]
+}

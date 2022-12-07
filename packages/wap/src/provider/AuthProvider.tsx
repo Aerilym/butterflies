@@ -37,6 +37,7 @@ const AuthProvider = (props: Props) => {
             async () => {
               await AsyncStorage.setItem('@profile', JSON.stringify(null));
               await AsyncStorage.setItem('@session', JSON.stringify(null));
+              userStore.clearUserProfile();
             };
             break;
 
@@ -50,6 +51,7 @@ const AuthProvider = (props: Props) => {
               supabaseAPI.getProfile(userID).then(async (profile) => {
                 setProfile(profile);
                 await AsyncStorage.setItem('@profile', JSON.stringify(profile));
+                userStore.profile = profile;
               });
               userStore.getSocials();
               userStore.getMatchQueue();

@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import { startAsync, makeRedirectUri } from 'expo-auth-session';
 
 import { SB_URL, SB_KEY } from '@env';
-import { Match, Message, Profile } from '../types/database';
+import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
 
 const isWeb = Platform.OS === 'web';
@@ -80,6 +80,21 @@ export class SupabaseAPI {
       .limit(1)
       .single();
     return (profile ?? {}) as Profile;
+  };
+
+  /**
+   * Get a user's preferences.
+   * @param userID The user ID to get the profile for.
+   * @returns The profile for the user.
+   */
+  getPreferences = async (userID?: string): Promise<Preferences> => {
+    const { data: preferences } = await this.supabase
+      .from('preferences')
+      .select('*')
+      .eq('user_id', userID ?? this.userID)
+      .limit(1)
+      .single();
+    return (preferences ?? {}) as Preferences;
   };
 
   /**
@@ -177,5 +192,47 @@ export class SupabaseAPI {
       .from('matches')
       .update({ match_id: matchID, [userLiked]: like })
       .eq('match_id', matchID);
+  };
+
+  /**
+   * Complete the user onboarding by setting the onboarded field to true in the database.
+   */
+  completeOnboarding = async (): Promise<void> => {
+    await this.supabase.from('profiles').update({ onboarded: true }).eq('user_id', this.userID);
+  };
+
+  /**
+   * Restart the user onboarding by setting the onboarded field to false in the database.
+   */
+  restartOnboarding = async (): Promise<void> => {
+    await this.supabase.from('profiles').update({ onboarded: false }).eq('user_id', this.userID);
+  };
+
+  /**
+   * Onboards the user. This is called after the user first logs in and fills in their profile and preferences. Supabase will create a profile and preferences row for the user when the account is created.
+   * @param options The options to onboard the user with.
+   */
+  onboard = async ({
+    profile,
+    preferences,
+  }: {
+    profile: Profile;
+    preferences: Preferences;
+  }): Promise<void> => {
+    // This deconstructs the object to remove the user_id and updated_at fields from the profile and preferences objects. This is because we don't want to update those fields.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { user_id: id_1, updated_at: up_1, onboarded, ...profileOptions } = profile;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { user_id: id_2, ...preferenceOptions } = preferences;
+
+    await this.supabase
+      .from('profiles')
+      .update({ ...profileOptions })
+      .eq('user_id', this.userID);
+
+    await this.supabase
+      .from('preferences')
+      .update({ ...preferenceOptions })
+      .eq('user_id', this.userID);
   };
 }
