@@ -15,10 +15,11 @@ export class UserStore {
     this.getSocials();
     this.getMatchQueue();
     this.getStoredProfile();
+    this.getStoredPreferences();
   }
 
   /**
-   * Get the socials item from the async storage and assigns it to the socials property. If there isn't anything in the async storage, it will fetch the socials from the database.
+   * Get the socials item from the async storage and assign it to the socials property. If there isn't anything in the async storage, it will fetch the socials from the database.
    */
   async getSocials(): Promise<void> {
     const storedSocials = await this.getItem('@socials');
@@ -32,7 +33,7 @@ export class UserStore {
   }
 
   /**
-   * Get the match queue item from the async storage and assigns it to the matchQueue property. If there isn't anything in the async storage, it will fetch the match queue from the database.
+   * Get the match queue item from the async storage and assign it to the matchQueue property. If there isn't anything in the async storage, it will fetch the match queue from the database.
    */
   async getMatchQueue(): Promise<void> {
     const storedMatchQueue = await this.getItem('@matchQueue');
@@ -45,6 +46,9 @@ export class UserStore {
     }
   }
 
+  /**
+   * Get the user's profile item from the async storage and assign it to the profile property. If there isn't anything in the async storage, it will fetch the profile from the database.
+   */
   async getStoredProfile(): Promise<void> {
     const storedProfile = await this.getItem('@profile');
     if (storedProfile) {
@@ -56,6 +60,9 @@ export class UserStore {
     }
   }
 
+  /**
+   * Get the user's preferences item from the async storage and assign it to the preferences property. If there isn't anything in the async storage, it will fetch the preferences from the database.
+   */
   async getStoredPreferences(): Promise<void> {
     const storedPreferences = await this.getItem('@preferences');
     if (storedPreferences) {
@@ -185,6 +192,9 @@ export class UserStore {
     await this.storeSocials(this.socials);
   };
 
+  /**
+   * Refresh the profile property from supabase and store it in the profile property and the async storage.
+   */
   refreshProfile = async (): Promise<void> => {
     if (!supabaseAPI.userID) return;
     const profile = await supabaseAPI.getProfile(supabaseAPI.userID);
@@ -192,6 +202,9 @@ export class UserStore {
     await this.storeProfile(profile);
   };
 
+  /**
+   * Refresh the preferences property from supabase and store it in the preferences property and the async storage.
+   */
   refreshPreferences = async (): Promise<void> => {
     if (!supabaseAPI.userID) return;
     const preferences = await supabaseAPI.getPreferences(supabaseAPI.userID);
@@ -199,6 +212,9 @@ export class UserStore {
     await this.storePreferences(preferences);
   };
 
+  /**
+   * Clear the profile property.
+   */
   clearUserProfile = (): void => {
     this.profile = {} as Profile;
   };

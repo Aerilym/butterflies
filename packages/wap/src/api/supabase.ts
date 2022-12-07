@@ -194,10 +194,16 @@ export class SupabaseAPI {
       .eq('match_id', matchID);
   };
 
+  /**
+   * Complete the user onboarding by setting the onboarded field to true in the database.
+   */
   completeOnboarding = async (): Promise<void> => {
     await this.supabase.from('profiles').update({ onboarded: true }).eq('user_id', this.userID);
   };
 
+  /**
+   * Restart the user onboarding by setting the onboarded field to false in the database.
+   */
   restartOnboarding = async (): Promise<void> => {
     await this.supabase.from('profiles').update({ onboarded: false }).eq('user_id', this.userID);
   };
