@@ -1,4 +1,4 @@
-import { OnboardingStepItem } from '../../types/auth';
+import { OnboardingStepItem } from '../types/auth';
 
 export const steps: OnboardingStepItem[] = [
   {
