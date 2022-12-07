@@ -7,14 +7,11 @@ import Main from './MainStack';
 import Auth from './AuthStack';
 import Loading from '../screens/utility/Loading';
 import { AuthContext } from '../provider/AuthProvider';
-import Onboarding from '../screens/auth/Onboarding';
 
 export default () => {
-  const { session, sessionChecked, profile } = useContext(AuthContext);
+  const { session, sessionChecked } = useContext(AuthContext);
   const userID = session?.user?.id;
   const hasAuth = !!userID;
-
-  const onboardingComplete = profile?.onboarded;
 
   const isReady = sessionChecked;
 
@@ -30,17 +27,7 @@ export default () => {
           maxHeight: isMobileDevice ? '100%' : 915,
         }}
       >
-        {!isReady ? (
-          <Loading />
-        ) : hasAuth ? (
-          onboardingComplete ? (
-            <Main />
-          ) : (
-            <Onboarding />
-          )
-        ) : (
-          <Auth />
-        )}
+        {!isReady ? <Loading /> : hasAuth ? <Main /> : <Auth />}
       </SafeAreaProvider>
     </NavigationContainer>
   );

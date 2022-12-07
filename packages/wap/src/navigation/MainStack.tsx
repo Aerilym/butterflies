@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import Onboarding from '../screens/main/Onboarding';
 import MainTabs from './MainTabs';
 import Filters from '../screens/profile/Filters';
 import Profile from '../screens/profile/Profile';
@@ -20,6 +21,7 @@ export default function Main() {
       <MainStack.Screen name="Profile" component={Profile} />
       <MainStack.Screen name="Settings" component={Settings} />
       <MainStack.Screen name="Chat" component={Chat} />
+      <MainStack.Screen name="Onboarding" component={Onboarding} />
     </MainStack.Navigator>
   );
 }

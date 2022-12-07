@@ -1,6 +1,7 @@
 import type { Message, Profile } from './database';
 
 export type MainStackParamList = {
+  Onboarding: undefined;
   MainTabs: undefined;
   Filters: undefined;
   Settings: undefined;

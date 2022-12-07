@@ -27,8 +27,9 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         size={300}
       />
       <Button
-        onPress={() => {
-          supabaseAPI.restartOnboarding();
+        onPress={async () => {
+          await supabaseAPI.restartOnboarding();
+          navigation.navigate('Onboarding');
         }}
       >
         Redo Onboarding

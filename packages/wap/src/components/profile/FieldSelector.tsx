@@ -18,6 +18,7 @@ import { userStore } from '../../provider/AuthProvider';
 export function FieldSelector(options: OnboardingStepItem) {
   const { selector, bucket, field, label, helperText, defaultValue } = options;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [inputValue, setInputValue] = useState<any>(defaultValue);
 
   const [onChangeValue, setOnChangeValue] = useState<number>(0);

@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Box, Button, Text, Heading, Progress, Badge } from 'native-base';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import type { MainStackParamList } from '../../types/navigation';
 import { FieldSelector } from '../../components/profile/FieldSelector';
 import { supabaseAPI, userStore } from '../../provider/AuthProvider';
 
-import { steps } from './OnboardingSteps';
+import { steps } from '../../data/OnboardingSteps';
 
-export default function () {
+export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Onboarding'>) {
   const [stepNumber, setStepNumber] = useState<number>(0);
 
   const renderCurrentItem = () => {
@@ -30,6 +32,7 @@ export default function () {
             });
             await supabaseAPI.completeOnboarding();
             await userStore.refreshProfile();
+            navigation.navigate('Swipe');
           } else {
             setStepNumber(stepNumber + 1);
           }
