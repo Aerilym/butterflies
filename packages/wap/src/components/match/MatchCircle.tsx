@@ -1,5 +1,5 @@
-import { TouchableOpacity, Image } from 'react-native-ui-lib';
-import type { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
+import { Image } from 'native-base';
 
 import { MatchSocial } from '../../types/social';
 
@@ -29,6 +29,7 @@ export function MatchCircle({
       style={style}
     >
       <Image
+        alt={(matchSocial.profile.display_name ?? '') + `'s profile picture`}
         style={{ width: size, height: size, borderRadius: size, backgroundColor: 'gray' }}
         source={{ uri: matchSocial.profile.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg' }}
       />

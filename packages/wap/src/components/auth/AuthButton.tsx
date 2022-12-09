@@ -1,6 +1,6 @@
-import { View, Icon, Text, TouchableOpacity } from 'react-native-ui-lib';
+import { TouchableOpacity, ImageSourcePropType } from 'react-native';
+import { Image, Text } from 'native-base';
 import type { Provider } from '@supabase/supabase-js';
-import type { ImageSourcePropType } from 'react-native';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
 
@@ -22,16 +22,15 @@ export function AuthButton({ provider, icon }: { provider: Provider; icon: Image
         maxWidth: 250,
       }}
     >
-      <View
+      <Image
+        alt={provider + ' icon'}
+        size={12}
+        source={icon}
         style={{
           marginVertical: 8,
           marginHorizontal: 8,
-          width: 40,
-          height: 40,
         }}
-      >
-        <Icon source={icon} />
-      </View>
+      />
       <Text style={{ color: '#17171E', fontWeight: 'bold' }}>
         Login with {provider.charAt(0).toUpperCase() + provider.slice(1)}
       </Text>

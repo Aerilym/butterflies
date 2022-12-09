@@ -1,11 +1,11 @@
-import { View, Text, Button } from 'react-native-ui-lib';
+import { Box, Text, Button } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Settings'>) {
   return (
-    <View
+    <Box
       style={{
         flex: 1,
         alignItems: 'center',
@@ -14,14 +14,12 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
     >
       <Text style={{ textAlign: 'center' }}>Change Settings Here</Text>
       <Button
-        label={'Return'}
-        size={Button.sizes.medium}
         onPress={() => {
           navigation.goBack();
         }}
       >
         <Text>Return</Text>
       </Button>
-    </View>
+    </Box>
   );
 }

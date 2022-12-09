@@ -1,9 +1,9 @@
-import { View } from 'react-native-ui-lib';
 import { ActivityIndicator } from 'react-native';
+import { Box } from 'native-base';
 
 export default function () {
   return (
-    <View
+    <Box
       style={{
         flex: 1,
         alignItems: 'center',
@@ -11,6 +11,6 @@ export default function () {
       }}
     >
       <ActivityIndicator size="large" />
-    </View>
+    </Box>
   );
 }

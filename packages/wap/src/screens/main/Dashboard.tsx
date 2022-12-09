@@ -1,6 +1,5 @@
 import { useContext } from 'react';
-import { Button } from 'native-base';
-import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
+import { Box, Button, Text } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -13,11 +12,11 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   const name = session?.user.user_metadata.name ?? 'Guest';
 
   return (
-    <View
+    <Box
       style={{
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
       }}
     >
       <Text style={{ textAlign: 'center' }}>Welcome, {name}</Text>
@@ -34,14 +33,8 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       >
         Redo Onboarding
       </Button>
-      <TouchableOpacity
+      <Button
         style={{
-          width: 150,
-          height: 50,
-          borderRadius: 4,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 100,
           backgroundColor: 'red',
         }}
         onPress={() => {
@@ -49,7 +42,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         }}
       >
         <Text>Sign Out</Text>
-      </TouchableOpacity>
-    </View>
+      </Button>
+    </Box>
   );
 }

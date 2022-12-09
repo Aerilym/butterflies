@@ -1,7 +1,9 @@
+import { TouchableOpacity } from 'react-native';
+import { Text, Box } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
-import { Avatar, Text, TouchableOpacity, View } from 'react-native-ui-lib';
 
 import { MatchSocial } from '../../types/social';
+import { FaceButton } from '../profile/FaceButton';
 
 export function MatchRow({
   navigation,
@@ -27,25 +29,21 @@ export function MatchRow({
       }}
       margin-s2
     >
-      <Avatar
-        source={{
-          uri: matchSocial.profile?.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg',
-        }}
-        size={80}
-        onPress={() =>
-          navigation.navigate('Profile', {
-            profile: matchSocial.profile,
-          })
-        }
-        containerStyle={{
+      <FaceButton
+        key={matchSocial.match.match_id}
+        navigation={navigation}
+        profile={matchSocial.profile}
+        size={69}
+        style={{
           marginHorizontal: 10,
-          flexGrow: 0,
+          marginVertical: 10,
         }}
       />
 
-      <View style={{ flexGrow: 0 }}>
+      <Box style={{ flexGrow: 0 }}>
         <Text
           style={{
+            marginTop: 20,
             fontWeight: 'bold',
             fontSize: 18,
           }}
@@ -57,15 +55,16 @@ export function MatchRow({
             ? matchSocial.messages[matchSocial.messages.length - 1].text
             : matchSocial.messages[matchSocial.messages.length - 1].text.substring(32)}
         </Text>
-      </View>
+      </Box>
 
-      <View
+      <Box
         style={{
           flexGrow: 1,
           display: 'flex',
           alignItems: 'flex-end',
           flexWrap: 'nowrap',
           overflow: 'hidden',
+          marginTop: 20,
         }}
       >
         <Text>
@@ -74,7 +73,7 @@ export function MatchRow({
             { addSuffix: true }
           )}
         </Text>
-      </View>
+      </Box>
     </TouchableOpacity>
   );
 }

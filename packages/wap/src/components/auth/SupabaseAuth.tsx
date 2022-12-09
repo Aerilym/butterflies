@@ -1,11 +1,12 @@
-import type { Provider } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
-import { View, Image, Text } from 'react-native-ui-lib';
+import { Box, Image, Text } from 'native-base';
+import type { Provider } from '@supabase/supabase-js';
 
 import { supabaseAPI } from '../../provider/AuthProvider';
 import type { AuthIcons } from '../../types/auth';
 import { AuthButton } from './AuthButton';
+import Loading from '../../screens/utility/Loading';
 
 const icons: AuthIcons = {
   apple: require('../../../assets/icons/apple.png'),
@@ -27,7 +28,7 @@ const icons: AuthIcons = {
 };
 
 export function SupabaseAuth() {
-  const [enabledProviders, setEnabledProviders] = useState<Provider[]>([]);
+  const [enabledProviders, setEnabledProviders] = useState<Provider[] | null>(null);
 
   useEffect(() => {
     supabaseAPI.getEnabledAuthProviders().then((providers) => {
@@ -35,21 +36,25 @@ export function SupabaseAuth() {
     });
   }, []);
   return (
-    <View
+    <Box
       style={{
         alignSelf: 'center',
         alignItems: 'center',
         flexDirection: 'column',
         width: '100%',
+        marginTop: 50,
       }}
     >
-      {enabledProviders.length > 0 ? (
+      {!enabledProviders ? (
+        <Loading />
+      ) : enabledProviders.length > 0 ? (
         enabledProviders.map((provider) => {
           return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
         })
       ) : (
         <>
           <Image
+            alt={'everything is fine gif'}
             style={{
               width: 300,
               height: 200,
@@ -73,6 +78,6 @@ export function SupabaseAuth() {
           </Text>
         </>
       )}
-    </View>
+    </Box>
   );
 }

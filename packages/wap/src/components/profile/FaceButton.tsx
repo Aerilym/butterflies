@@ -1,5 +1,5 @@
-import { TouchableOpacity, Image } from 'react-native-ui-lib';
-import type { StyleProp, ViewStyle } from 'react-native';
+import { TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
+import { Image } from 'native-base';
 
 import { Profile } from '../../types/database';
 
@@ -26,6 +26,7 @@ export function FaceButton({
       style={style}
     >
       <Image
+        alt={(profile.display_name ?? '') + `'s profile picture`}
         style={{ width: size, height: size, borderRadius: size, backgroundColor: 'gray' }}
         source={{ uri: profile?.avatar_url ?? 'https://i.redd.it/3hlhqoibf7471.jpg' }}
       />

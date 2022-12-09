@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Button } from 'react-native-ui-lib';
+import { TouchableOpacity } from 'react-native';
+import { Box, Text, Button } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -49,15 +50,14 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   }, []);
   //TODO: Surely there's a better way to do the swipe card queue https://imgur.com/a/gCJygAt
   return (
-    <View
+    <Box
       style={{
         flex: 1,
         justifyContent: 'center',
       }}
     >
       <Button
-        label={'Refresh'}
-        size={Button.sizes.small}
+        size="md"
         onPress={async () => {
           await userStore.refreshMatchQueue();
           const queue = formatMatchQueue(userStore.matchQueue, userID);
@@ -67,13 +67,13 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         <Text style={{ color: 'white' }}>Refresh</Text>
       </Button>
       {matchQueue && matchQueue.length > 0 ? (
-        <View
+        <Box
           style={{
             flex: 1,
           }}
         >
           {cards?.filter((card) => cards.indexOf(card) === 0)}
-          <View
+          <Box
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -125,13 +125,13 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
             >
               <Ionicons name={'heart'} size={44} />
             </TouchableOpacity>
-          </View>
-        </View>
+          </Box>
+        </Box>
       ) : (
         <Text style={{ textAlign: 'center' }}>
           No profiles match your filters, try expanding them!
         </Text>
       )}
-    </View>
+    </Box>
   );
 }
