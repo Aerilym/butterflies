@@ -1,11 +1,11 @@
-import { KeyboardAvoidingView } from 'react-native';
+import { Box } from 'native-base';
 
 import { SupabaseAuth } from '../../components/auth/SupabaseAuth';
 
 export default function () {
   return (
-    <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
+    <Box>
       <SupabaseAuth />
-    </KeyboardAvoidingView>
+    </Box>
   );
 }

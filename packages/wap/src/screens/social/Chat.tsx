@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { TouchableOpacity, ScrollView } from 'react-native';
+import { Box, Input } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View, TouchableOpacity } from 'react-native-ui-lib';
-import { TextInput, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
@@ -90,12 +90,12 @@ export default function ({
           );
         })}
       </ScrollView>
-      <View
+      <Box
         style={{
           height: '8%',
         }}
       >
-        <View
+        <Box
           style={{
             display: 'flex',
             height: '80%',
@@ -123,29 +123,18 @@ export default function ({
             <Ionicons name={'md-arrow-back'} size={24} />
           </TouchableOpacity>
           <FaceButton navigation={navigation} profile={matchProfile} size={40} />
-          <View
+          <Input
             style={{
               height: '90%',
               flex: 1,
               marginHorizontal: 10,
-              borderColor: 'gray',
-              borderWidth: 1,
-              borderRadius: 30,
             }}
-          >
-            <TextInput
-              style={{
-                height: '90%',
-                flex: 1,
-                marginHorizontal: 12,
-              }}
-              multiline
-              placeholder="Enter your message..."
-              onChangeText={(newText) => setDraftMessage(newText)}
-              value={draftMessage}
-            ></TextInput>
-          </View>
-
+            w="1/2"
+            maxW="200"
+            placeholder="Enter your message..."
+            onChangeText={(newText) => setDraftMessage(newText)}
+            value={draftMessage}
+          />
           <TouchableOpacity
             style={{
               alignSelf: 'center',
@@ -165,8 +154,8 @@ export default function ({
           >
             <Ionicons name={'send-sharp'} size={24} />
           </TouchableOpacity>
-        </View>
-      </View>
+        </Box>
+      </Box>
     </>
   );
 }

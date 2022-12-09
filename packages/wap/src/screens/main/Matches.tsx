@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native-ui-lib';
 import { ScrollView } from 'react-native';
+import { Box, Text, Button } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -52,7 +52,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   }, []);
   return (
     <>
-      <View
+      <Box
         style={{
           height: '15%',
         }}
@@ -82,9 +82,8 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
             <Text>Find a new match by swiping!</Text>
           )}
         </ScrollView>
-      </View>
+      </Box>
       <Button
-        title={'Refresh'}
         onPress={async () => {
           await userStore.refreshSocials();
           const { newMatchList, messagedMatchList } = formatMatches(userStore.socials);

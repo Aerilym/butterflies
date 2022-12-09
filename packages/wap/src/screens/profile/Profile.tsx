@@ -1,4 +1,4 @@
-import { View, Text, Button } from 'react-native-ui-lib';
+import { Box, Text, Button } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
@@ -11,7 +11,7 @@ export default function ({
 }: NativeStackScreenProps<MainStackParamList, 'Profile'>) {
   const { profile } = route.params ?? { profile: {} as Profile };
   return (
-    <View
+    <Box
       style={{
         flex: 1,
         alignItems: 'center',
@@ -20,8 +20,6 @@ export default function ({
     >
       <Text style={{ textAlign: 'center' }}>Play with your profile Here!</Text>
       <Button
-        label={'Return'}
-        size={Button.sizes.medium}
         onPress={() => {
           navigation.goBack();
         }}
@@ -33,6 +31,6 @@ export default function ({
         navigation={navigation}
         size={300}
       />
-    </View>
+    </Box>
   );
 }

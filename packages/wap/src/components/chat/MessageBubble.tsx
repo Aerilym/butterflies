@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Text, TouchableOpacity, View } from 'react-native-ui-lib';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, Box } from 'native-base';
 
 import type { Message } from '../../types/database';
 
@@ -76,20 +76,20 @@ export function MessageBubble({
     },
   });
   return (
-    <View style={boxStyles.container}>
+    <Box style={boxStyles.container}>
       <Text
         style={{ ...boxStyles.textWhen, display: isLead ? 'flex' : isPressed ? 'flex' : 'none' }}
       >
         {parseMessageTime(message.created_at)}
       </Text>
       <TouchableOpacity key={message.message_id} onPress={handleClick} style={boxStyles.button}>
-        <View style={boxStyles.bubble}>
+        <Box style={boxStyles.bubble}>
           <Text>{message.text}</Text>
-        </View>
+        </Box>
       </TouchableOpacity>
       <Text style={{ ...boxStyles.textDelivered, display: isPressed ? 'flex' : 'none' }}>
         {isSender ? (message.is_delivered ? 'Delivered' : 'Sent') : ''}
       </Text>
-    </View>
+    </Box>
   );
 }
