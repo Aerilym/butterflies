@@ -7,6 +7,7 @@
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "prettier.enable": true,
+    "githubPullRequests.ignoredPullRequestBranches": ["master"]
   },
   "extensions": {
     "recommendations": [
