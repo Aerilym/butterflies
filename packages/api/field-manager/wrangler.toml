@@ -1,0 +1,25 @@
+name = "field-manager"
+main = "src/index.ts"
+compatibility_date = "2022-12-12"
+
+kv_namespaces = [
+  { binding = "NAMESPACE_DATING_FIELDS", id = "c63c3dd85d494c16833006de3b5174ca" }
+]
+
+[env.stg]
+name = "field-manager-stg"
+
+[env.prd]
+name = "field-manager"
+
+[vars]
+# The necessary secrets are:
+# - 
+# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
+ENVIRONMENT = "prd"
+
+[env.stg.vars]
+ENVIRONMENT = "stg"
+
+[env.prd.vars]
+ENVIRONMENT = "prd"

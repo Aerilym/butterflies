@@ -1,0 +1,48 @@
+.field-form{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+label{
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: medium;
+}
+
+input{
+  padding: 4px;
+}
+
+label.checkbox{
+  flex-direction: row;
+}
+
+th {
+  text-align: left;
+  font-size: medium;
+  padding: 5px;
+}
+
+td {
+  padding: 5px;
+  text-align: left;
+  font-size: small;
+}
+
+.na-icon{
+  margin-left: 4px;
+  font-size: xx-small;
+}
+
+input:invalid {
+  border: 1px solid red;
+  border-radius: 2px;
+}
+
+input:invalid:required {
+  background-image: linear-gradient(to right, pink, rgb(248, 224, 212));
+}
+
