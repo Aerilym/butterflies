@@ -12,8 +12,9 @@ import {
 } from 'native-base';
 import { useEffect, useState } from 'react';
 
-import { OnboardingStepItem } from '../../types/auth';
+import { OnboardingStepItem } from '../../../../types/fields';
 import { userStore } from '../../provider/AuthProvider';
+import { Preferences, Profile } from '../../types/database';
 
 export function FieldSelector(options: OnboardingStepItem) {
   const { selector, bucket, field, label, helperText, defaultValue } = options;
@@ -25,8 +26,8 @@ export function FieldSelector(options: OnboardingStepItem) {
 
   const submitValue = (): void => {
     bucket === 'profile'
-      ? (userStore.profile[field] = inputValue)
-      : (userStore.preferences[field] = inputValue);
+      ? (userStore.profile[field as keyof Profile] = inputValue)
+      : (userStore.preferences[field as keyof Preferences] = inputValue);
   };
 
   const selectorInput = (): JSX.Element => {
@@ -37,7 +38,7 @@ export function FieldSelector(options: OnboardingStepItem) {
             selectedValue={inputValue}
             minWidth="200"
             accessibilityLabel={label}
-            placeholder={options.hint ?? label ?? defaultValue}
+            placeholder={defaultValue}
             _selectedItem={{
               bg: 'teal.600',
             }}

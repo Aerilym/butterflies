@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldSelectorOptions, OnboardingStepItem } from '../types';
+import { FieldSelectorOptions, OnboardingStepItem } from '../../../../types/fields';
 
 type SelectorOptions = FieldSelectorOptions['selector'] | '';
 

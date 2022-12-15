@@ -1,3 +1,5 @@
+import { OnboardingStepItem } from '../../../types/fields';
+
 /**
  * The bindings assigned to the Worker.
  * @see {@link https://developers.cloudflare.com/workers/runtime-apis/kv/#referencing-kv-from-workers}

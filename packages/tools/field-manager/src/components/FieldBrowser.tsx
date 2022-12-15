@@ -1,5 +1,5 @@
 import React from 'react';
-import { OnboardingStepItem } from '../types';
+import { OnboardingStepItem } from '../../../../types/fields';
 
 type FormProps = {
   fields: OnboardingStepItem[];

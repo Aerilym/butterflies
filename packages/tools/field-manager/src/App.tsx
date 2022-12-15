@@ -4,7 +4,7 @@ import './App.css';
 import './Form.css';
 
 import FieldForm from './components/FieldForm';
-import { OnboardingStepItem } from './types';
+import { OnboardingStepItem } from '../../../types/fields';
 import FieldBrowser from './components/FieldBrowser';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
