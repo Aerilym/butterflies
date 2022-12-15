@@ -1,17 +1,15 @@
-import type { Provider } from '@supabase/supabase-js';
-import type { ImageSourcePropType } from 'react-native';
-import { Preferences, Profile } from './database';
-
-export type AuthIcons = {
-  [key in Provider]: ImageSourcePropType;
-};
-
-export interface OnboardingPayload {
-  profileOptions: Omit<Profile, 'user_id' | 'updated_at'>;
-  preferenceOptions: Omit<Preferences, 'user_id' | 'updated_at'>;
+interface CloudflarePayload {
+  env?: Env;
+  ctx?: ExecutionContext;
 }
 
-export type FieldValue = string | string[] | boolean | number | number[] | Date;
+interface FetchPayload extends CloudflarePayload {
+  request: Request;
+}
+
+interface ScheduledPayload extends CloudflarePayload {
+  controller: ScheduledController;
+}
 
 interface FieldSelectorData {
   label: string;
@@ -71,15 +69,8 @@ type FieldSelectorOptions =
       defaultValue?: string[];
     };
 
-export type OnboardingStepItem = (
-  | {
-      bucket: 'profile';
-      field: keyof Profile;
-    }
-  | {
-      bucket: 'preferences';
-      field: keyof Preferences;
-    }
-) &
-  FieldSelectorOptions &
+type OnboardingStepItem = {
+  bucket: string;
+  field: string;
+} & FieldSelectorOptions &
   FieldSelectorData;
