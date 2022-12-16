@@ -3,6 +3,8 @@ import { OnboardingStepItem } from '../../../../types/fields';
 
 type FormProps = {
   fields: OnboardingStepItem[];
+  handleEdit: (value: OnboardingStepItem) => void;
+  handleDelete: (key: string) => void;
 };
 
 interface GenericField {
@@ -23,13 +25,14 @@ interface GenericField {
 //const fieldNA = <span className="na-icon">N/A</span>;
 const fieldNA = <span className="na-icon"></span>;
 
-export default function FieldBrowser({ fields }: FormProps) {
+export default function FieldBrowser({ fields, handleEdit, handleDelete }: FormProps) {
   const genericFields = fields as GenericField[];
   return (
     <div className="field-browser">
       <table>
         <thead>
           <tr>
+            <th></th>
             <th>Label</th>
             <th>Field</th>
             <th>Bucket</th>
@@ -47,6 +50,29 @@ export default function FieldBrowser({ fields }: FormProps) {
         <tbody>
           {genericFields.map((field) => (
             <tr key={`${field.bucket}-${field.field}`}>
+              <td className="button-group">
+                <button
+                  className="edit"
+                  onClick={() => {
+                    handleEdit(field as OnboardingStepItem);
+                  }}
+                >
+                  edit
+                </button>
+                <button
+                  className="delete"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        'Are you sure you wish to delete the item ' + field.field + '?'
+                      )
+                    )
+                      handleDelete(field.field);
+                  }}
+                >
+                  x
+                </button>
+              </td>
               <td>{field.label}</td>
               <td>{field.field}</td>
               <td>{field.bucket}</td>

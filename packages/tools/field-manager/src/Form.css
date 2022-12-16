@@ -1,10 +1,10 @@
-.field-form{
+.field-form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-label{
+label {
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -12,37 +12,92 @@ label{
   font-size: medium;
 }
 
-input{
-  padding: 4px;
-}
-
-label.checkbox{
+label.checkbox {
   flex-direction: row;
 }
 
 th {
   text-align: left;
-  font-size: medium;
+  font-size: small;
   padding: 5px;
 }
 
 td {
   padding: 5px;
   text-align: left;
-  font-size: small;
+  font-size: x-small;
 }
 
-.na-icon{
+.na-icon {
   margin-left: 4px;
   font-size: xx-small;
 }
 
+input,
+select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
+}
+
 input:invalid {
   border: 1px solid red;
-  border-radius: 2px;
 }
 
 input:invalid:required {
   background-image: linear-gradient(to right, pink, rgb(248, 224, 212));
 }
 
+input:valid {
+  border: 1px solid rgba(0, 128, 0, 0.301);
+}
+
+input:valid:required {
+  background-image: linear-gradient(to right, rgb(212, 248, 212), rgb(224, 248, 212));
+}
+
+input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+}
+
+input[type='radio'] {
+  width: 20px;
+  height: 20px;
+}
+
+input[type='submit'] {
+  margin: 4px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: large;
+  background-color: rgb(87, 175, 87);
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+}
+
+button {
+  margin: 4px;
+  padding: 4px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  font-size: x-small;
+}
+
+button:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+button.edit {
+  background-color: rgb(87, 134, 175);
+}
+
+button.delete {
+  background-color: rgb(175, 87, 87);
+}

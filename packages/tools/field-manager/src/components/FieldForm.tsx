@@ -6,9 +6,11 @@ type SelectorOptions = FieldSelectorOptions['selector'] | '';
 type FormProps = {
   onSubmit: (value: OnboardingStepItem) => void;
   requiredFields: Record<FieldSelectorOptions['selector'], string[]>;
+  data?: OnboardingStepItem;
+  visible: boolean;
 };
 
-export default function FieldForm({ onSubmit, requiredFields }: FormProps) {
+export default function FieldForm({ onSubmit, requiredFields, data, visible }: FormProps) {
   const [value, setValue] = React.useState({} as Partial<OnboardingStepItem>);
 
   const fieldOptions = [
@@ -42,15 +44,33 @@ export default function FieldForm({ onSubmit, requiredFields }: FormProps) {
     setValue({ selector });
   }
 
+  React.useEffect(() => {
+    if (data) {
+      setValue(data);
+    }
+  }, [data]);
+
   return (
-    <form onSubmit={handleSubmit} className="field-form">
+    <form
+      onSubmit={handleSubmit}
+      className="field-form"
+      style={{ visibility: visible ? 'visible' : 'hidden' }}
+    >
       <label htmlFor="field-selector">
         Selector Type:
         <select
           id="field-selector"
           value={value.selector}
           required
-          onChange={(e) => handleSelector(e.target.value as SelectorOptions)}
+          onChange={(e) => {
+            if (
+              !value.selector ||
+              window.confirm(
+                'Changing the selector may clear values not shared between selector types. Continue?'
+              )
+            )
+              handleSelector(e.target.value as SelectorOptions);
+          }}
         >
           {fieldOptions.map((option) => (
             <option
