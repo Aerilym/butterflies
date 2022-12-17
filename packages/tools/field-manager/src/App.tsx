@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import './Form.css';
+import 'react-tooltip/dist/react-tooltip.css';
+import './tooltips.css'
 
 import FieldForm from './components/FieldForm';
 import { OnboardingStepItem } from '../../../types/fields';
