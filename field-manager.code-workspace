@@ -1,0 +1,29 @@
+{
+  "folders": [
+    {
+      "name": "site",
+      "path": "./packages/tools/field-manager"
+    },
+    {
+      "name": "api",
+      "path": "./packages/api/field-manager"
+    }
+  ],
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.enable": true,
+    "githubPullRequests.ignoredPullRequestBranches": ["master"]
+  },
+  "extensions": {
+    "recommendations": [
+      "streetsidesoftware.code-spell-checker",
+      "gruntfuggly.todo-tree",
+      "rvest.vs-code-prettier-eslint",
+      "esbenp.prettier-vscode",
+      "quicktype.quicktype",
+      "bierner.github-markdown-preview",
+      "dbaeumer.vscode-eslint",
+      "formulahendry.auto-rename-tag"
+    ]
+  }
+}

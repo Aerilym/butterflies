@@ -51,6 +51,9 @@ async function handleFetch({ request, env, ctx }: FetchPayload): Promise<Respons
     case 'PUT':
       return await handleAdd(env.NAMESPACE_DATING_FIELDS, request);
 
+    case 'DELETE':
+      return await handleDelete(env.NAMESPACE_DATING_FIELDS, request);
+
     default:
       return new Response('Endpoint or method not found', {
         status: 404,
@@ -114,14 +117,21 @@ async function handleAdd(namespace: KVNamespace, request: Request) {
     : await namespace.put(key, '', {
         metadata: { value: value },
       });
-  return jsonResponse('fields added', 201);
+  return jsonResponse('field added', 201);
+}
+
+async function handleDelete(namespace: KVNamespace, request: Request) {
+  const { key } = (await request.json()) as { key: string };
+
+  await namespace.delete(key);
+  return jsonResponse('field deleted', 200);
 }
 
 const byteSize = (str: string) => new Blob([str]).size;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, HEAD, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, HEAD, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
@@ -139,7 +149,7 @@ const handleOptions = (request: Request) => {
     // Handle standard OPTIONS request.
     return new Response(null, {
       headers: {
-        Allow: 'GET, POST, HEAD, OPTIONS',
+        Allow: 'GET, POST, PUT, DELETE, HEAD, OPTIONS',
       },
     });
   }
