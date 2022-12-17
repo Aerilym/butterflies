@@ -75,6 +75,16 @@ input[type='submit'] {
   background-color: rgb(87, 175, 87);
 }
 
+input[type='submit']:hover {
+  background-color: rgb(87, 175, 175);
+  cursor: pointer;
+}
+
+input[type='submit'][disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .button-group {
   display: flex;
   flex-direction: row;

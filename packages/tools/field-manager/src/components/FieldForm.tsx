@@ -319,7 +319,13 @@ export default function FieldForm({ onSubmit, requiredFields, data, visible }: F
             </label>
           </form>
         )}
-        <input type="submit" value="Submit" />
+        <input
+          type="submit"
+          value="Submit"
+          disabled={
+            !(value.bucket && value.defaultValue && value.field && value.label && value.selector)
+          }
+        />
       </form>
     </div>
   );
