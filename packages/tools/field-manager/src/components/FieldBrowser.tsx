@@ -41,6 +41,8 @@ export default function FieldBrowser({ fields, handleEdit, handleDelete }: FormP
       <Tooltip anchorId="max-chars-header" />
       <Tooltip anchorId="show-char-count-header" />
       <Tooltip anchorId="options-header" />
+
+      <h3>Field Browser</h3>
       <table>
         <thead>
           <tr>

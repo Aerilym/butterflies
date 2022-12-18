@@ -9,6 +9,7 @@ import { OnboardingStepItem } from '../../../types/fields';
  */
 export interface Env {
   NAMESPACE_DATING_FIELDS: KVNamespace;
+  NAMESPACE_DATING_FIELD_OPTIONS: KVNamespace;
 }
 
 export default {
@@ -43,15 +44,38 @@ export default {
 async function handleFetch({ request, env, ctx }: FetchPayload): Promise<Response> {
   if (request.method === 'OPTIONS') return handleOptions(request);
 
+  const url = new URL(request.url);
+  const path = url.pathname.split('/').filter((p) => p);
+
+  const { searchParams } = new URL(request.url);
+
   switch (request.method) {
     case 'GET':
+      switch (path[0]) {
+        case 'options':
+          if (searchParams.get('key')) {
+            return await handleGetOption(env.NAMESPACE_DATING_FIELD_OPTIONS, request);
+          }
+          return await handleListOptions(env.NAMESPACE_DATING_FIELD_OPTIONS);
+      }
+
       return await handleList(env.NAMESPACE_DATING_FIELDS);
 
     case 'POST':
     case 'PUT':
+      switch (path[0]) {
+        case 'options':
+          return await handleSetOption(env.NAMESPACE_DATING_FIELD_OPTIONS, request);
+      }
+
       return await handleAdd(env.NAMESPACE_DATING_FIELDS, request);
 
     case 'DELETE':
+      switch (path[0]) {
+        case 'options':
+          return await handleDelete(env.NAMESPACE_DATING_FIELD_OPTIONS, request);
+      }
+
       return await handleDelete(env.NAMESPACE_DATING_FIELDS, request);
 
     default:
@@ -164,3 +188,58 @@ const jsonResponse = (data: any, code: number) => {
     status: code,
   });
 };
+
+async function handleListOptions(namespace: KVNamespace): Promise<Response> {
+  const value: KVNamespaceListResult<{ value: string | null }> = await namespace.list();
+  const valueRequests: { key: string; index: number }[] = [];
+  const fields = value.keys.map((key, index) => {
+    if (!key.metadata || !key.metadata.value) valueRequests.push({ key: key.name, index });
+    return {
+      name: key.name,
+      value: key.metadata?.value,
+    };
+  });
+  if (valueRequests.length > 0) {
+    const values = await Promise.all(
+      valueRequests.map(async (pair) => {
+        return namespace.get(pair.key);
+      }),
+    );
+    valueRequests.forEach((item) => {
+      fields[item.index].value = values[item.index];
+    });
+  }
+
+  const finalResults: OnboardingStepItem[] = fields.map((field) => {
+    return {
+      ...JSON.parse(field.value ?? '{}'),
+    };
+  });
+
+  return jsonResponse(finalResults, 200);
+}
+
+async function handleGetOption(namespace: KVNamespace, request: Request) {
+  const { searchParams } = new URL(request.url);
+  const key = searchParams.get('key');
+
+  if (!key) return jsonResponse('key is required', 400);
+
+  const res: KVNamespaceGetWithMetadataResult<string, { value: string }> =
+    await namespace.getWithMetadata(key);
+
+  const payload = {
+    key,
+    value: res.metadata?.value ?? res.value,
+  };
+
+  return jsonResponse(payload, 200);
+}
+
+async function handleSetOption(namespace: KVNamespace, request: Request) {
+  const { key, value } = (await request.json()) as { key: string; value: string };
+  await namespace.put(key, '', {
+    metadata: { value: value },
+  });
+  return jsonResponse('option added', 201);
+}

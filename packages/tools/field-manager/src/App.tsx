@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import './Form.css';
 import 'react-tooltip/dist/react-tooltip.css';
-import './tooltips.css'
+import './tooltips.css';
+import './OnboardingOrder.css';
 
 import FieldForm from './components/FieldForm';
 import { OnboardingStepItem } from '../../../types/fields';
 import FieldBrowser from './components/FieldBrowser';
+import OnboardingOrder from './components/OnboardingOrder';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
 
@@ -49,6 +51,19 @@ function App() {
     setShowForm(true);
   }
 
+  function addOption() {
+    fetch('https://field-manager.aerilym.workers.dev/options', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        key: 'onboardingOrder',
+        value: ['displayName'],
+      }),
+    });
+  }
+
   async function handleDelete(key: string) {
     const res = await fetch('https://field-manager.aerilym.workers.dev/', {
       method: 'DELETE',
@@ -74,6 +89,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <OnboardingOrder fields={fields} />
         <FieldBrowser fields={fields} handleEdit={handleEdit} handleDelete={handleDelete} />
 
         {showForm ? (

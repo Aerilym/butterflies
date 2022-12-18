@@ -3,7 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2022-12-12"
 
 kv_namespaces = [
-  { binding = "NAMESPACE_DATING_FIELDS", id = "c63c3dd85d494c16833006de3b5174ca" }
+  { binding = "NAMESPACE_DATING_FIELDS", id = "c63c3dd85d494c16833006de3b5174ca" },
+  { binding = "NAMESPACE_DATING_FIELD_OPTIONS", id = "d2033cdffc734d7aaf6cf154004594a2"}
 ]
 
 [env.stg]
