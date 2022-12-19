@@ -26,10 +26,10 @@ function formatMatchQueue(
 }
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Swipe'>) {
-  const { session, profile } = useContext(AuthContext);
+  const { session } = useContext(AuthContext);
   const userID = session?.user.id ?? '';
 
-  const isOnboarded = profile === null || Boolean(profile?.onboarded);
+  const isOnboarded = Boolean(userStore.profile.onboarded);
   if (!isOnboarded) {
     navigation.navigate('Onboarding');
   }

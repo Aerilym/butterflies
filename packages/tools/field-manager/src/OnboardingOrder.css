@@ -59,6 +59,7 @@ button.order-down:disabled {
   align-items: center;
   justify-content: center;
   height: 100%;
+  margin: 20px;
 }
 
 .onboarding-order li {
@@ -68,4 +69,3 @@ button.order-down:disabled {
   justify-content: left;
   margin: 5px;
 }
-
