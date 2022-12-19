@@ -30,8 +30,6 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   const userID = session?.user.id ?? '';
 
   const isOnboarded = Boolean(userStore.profile.onboarded);
-  console.log(isOnboarded);
-  console.log(userStore.profile);
   if (!isOnboarded) {
     navigation.navigate('Onboarding');
   }
