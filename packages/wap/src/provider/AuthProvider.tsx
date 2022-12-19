@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Session } from '@supabase/supabase-js';
 
 import { SupabaseAPI } from '../api/supabase';
-import { Profile } from '../types/database';
 import { UserStore } from '../api/UserStore';
 
 export const supabaseAPI = new SupabaseAPI();
@@ -11,7 +10,6 @@ export const userStore = new UserStore();
 
 type ContextProps = {
   session: null | Session;
-  profile: null | Profile;
   sessionChecked: boolean;
 };
 
@@ -23,7 +21,6 @@ interface Props {
 
 const AuthProvider = (props: Props) => {
   const [session, setSession] = useState<null | Session>(null);
-  const [profile, setProfile] = useState<null | Profile>(null);
   const [sessionChecked, setSessionChecked] = useState<boolean>(false);
 
   useEffect(() => {
@@ -33,9 +30,7 @@ const AuthProvider = (props: Props) => {
         switch (event) {
           case 'SIGNED_OUT':
             setSession(null);
-            setProfile(null);
             async () => {
-              await AsyncStorage.setItem('@profile', JSON.stringify(null));
               await AsyncStorage.setItem('@session', JSON.stringify(null));
               userStore.clearUserProfile();
             };
@@ -48,11 +43,7 @@ const AuthProvider = (props: Props) => {
             };
             if (userID) {
               supabaseAPI.userID = userID;
-              supabaseAPI.getProfile(userID).then(async (profile) => {
-                setProfile(profile);
-                await AsyncStorage.setItem('@profile', JSON.stringify(profile));
-                userStore.profile = profile;
-              });
+              userStore.getStoredProfile();
               userStore.getSocials();
               userStore.getMatchQueue();
             }
@@ -88,7 +79,6 @@ const AuthProvider = (props: Props) => {
     <AuthContext.Provider
       value={{
         session,
-        profile,
         sessionChecked,
       }}
     >
