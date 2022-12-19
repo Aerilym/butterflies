@@ -7,6 +7,10 @@
     {
       "name": "api",
       "path": "./packages/api/field-manager"
+    },
+    {
+      "name": "types",
+      "path": "./packages/types"
     }
   ],
   "settings": {
