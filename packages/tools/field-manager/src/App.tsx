@@ -7,8 +7,10 @@ import './OnboardingOrder.css';
 
 import FieldForm from './components/FieldForm';
 import { OnboardingStepItem } from '../../../types/fields';
+import { CompletePageData } from '../../../types/api';
 import FieldBrowser from './components/FieldBrowser';
 import OnboardingOrder from './components/OnboardingOrder';
+import CompletePage from './components/CompletePage';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
 
@@ -51,17 +53,21 @@ function App() {
     setShowForm(true);
   }
 
-  function addOption() {
-    fetch('https://field-manager.aerilym.workers.dev/options', {
+  async function updateCompletePage(value: CompletePageData) {
+    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        key: 'onboardingOrder',
-        value: ['displayName'],
+        key: 'completePage',
+        value,
       }),
     });
+
+    if (res.status !== 200 && res.status !== 201) {
+      alert('Something went wrong saving the field: ' + res.statusText);
+    }
   }
 
   async function handleDelete(key: string) {
@@ -89,7 +95,17 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <OnboardingOrder fields={fields} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <OnboardingOrder fields={fields} />
+          <CompletePage onSubmit={updateCompletePage} visible={true} />
+        </div>
+
         <FieldBrowser fields={fields} handleEdit={handleEdit} handleDelete={handleDelete} />
 
         {showForm ? (
