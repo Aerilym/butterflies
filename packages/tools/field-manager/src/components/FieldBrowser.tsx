@@ -22,8 +22,72 @@ interface GenericField {
   options?: string[];
 }
 
-//const fieldNA = <span className="na-icon">N/A</span>;
-const fieldNA = <span className="na-icon"></span>;
+type FieldName = keyof GenericField;
+
+// TODO: This is a hack to get around the fact that I can't use the keyof operator on a union type of objects with different keys (e.g. text and textArea) and have it return the correct type. I'm sure there's a better way to do this.
+const validFields = {
+  text: ['label', 'field', 'bucket', 'selector', 'helperText', 'defaultValue', 'hint'],
+  textArea: [
+    'label',
+    'field',
+    'bucket',
+    'selector',
+    'helperText',
+    'defaultValue',
+    'hint',
+    'maxChars',
+    'showCharCounter',
+  ],
+  slider: [
+    'label',
+    'field',
+    'bucket',
+    'selector',
+    'helperText',
+    'defaultValue',
+    'minNum',
+    'maxNum',
+  ],
+  rangeSlider: [
+    'label',
+    'field',
+    'bucket',
+    'selector',
+    'helperText',
+    'defaultValue',
+    'minNum',
+    'maxNum',
+  ],
+  date: ['label', 'field', 'bucket', 'selector', 'helperText', 'defaultValue'],
+  number: [
+    'label',
+    'field',
+    'bucket',
+    'selector',
+    'helperText',
+    'defaultValue',
+    'minNum',
+    'maxNum',
+  ],
+  switch: ['label', 'field', 'bucket', 'selector', 'helperText', 'defaultValue'],
+  dropdown: ['label', 'field', 'bucket', 'selector', 'helperText', 'defaultValue', 'options'],
+  radio: ['label', 'field', 'bucket', 'selector', 'helperText', 'defaultValue', 'options'],
+  checkboxes: ['label', 'field', 'bucket', 'selector', 'helperText', 'defaultValue', 'options'],
+};
+
+const blankField = function (field: GenericField, fieldName: FieldName): JSX.Element {
+  const typedField = field as OnboardingStepItem;
+
+  if (fieldName in typedField) {
+    return <span className="na-icon"></span>;
+  }
+
+  if (validFields[typedField.selector].includes(fieldName)) {
+    return <span className="na-icon"></span>;
+  }
+
+  return <span className="na-icon">N/A</span>;
+};
 
 export default function FieldBrowser({ fields, handleEdit, handleDelete }: FormProps) {
   const genericFields = fields as GenericField[];
@@ -141,12 +205,12 @@ export default function FieldBrowser({ fields, handleEdit, handleDelete }: FormP
               <td>{field.selector}</td>
               <td>{field.helperText}</td>
               <td>{field.defaultValue?.toString()}</td>
-              <td>{field.hint ?? fieldNA}</td>
-              <td>{field.minNum?.toString() ?? fieldNA}</td>
-              <td>{field.maxNum?.toString() ?? fieldNA}</td>
-              <td>{field.maxChars?.toString() ?? fieldNA}</td>
-              <td>{field.showCharCounter?.toString() ?? fieldNA}</td>
-              <td>{field.options?.join(', ') ?? fieldNA}</td>
+              <td>{field.hint ?? blankField(field, 'hint')}</td>
+              <td>{field.minNum?.toString() ?? blankField(field, 'minNum')}</td>
+              <td>{field.maxNum?.toString() ?? blankField(field, 'maxNum')}</td>
+              <td>{field.maxChars?.toString() ?? blankField(field, 'maxChars')}</td>
+              <td>{field.showCharCounter?.toString() ?? blankField(field, 'showCharCounter')}</td>
+              <td>{field.options?.join(', ') ?? blankField(field, 'options')}</td>
             </tr>
           ))}
         </tbody>
