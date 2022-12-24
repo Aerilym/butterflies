@@ -1,0 +1,59 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.section {
+  width: 80%;
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 20px 0;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+h2 {
+  margin: 40px 0 20px 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.section-col{
+  width: 100%;
+  max-width: 24em;
+  min-width: 15em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.general-expanded > * {
+  flex: 1 0 40%;
+  min-width: 10em;
+}
