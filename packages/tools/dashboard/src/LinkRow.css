@@ -1,0 +1,30 @@
+.link-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.6em;
+  border-radius: 0.8em;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: black;
+  margin: 10px;
+  padding: 10px;
+}
+
+.link-row:hover {
+  background-color: lightgray;
+}
+
+.label {
+  width: 100%;
+  text-align: left;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.link-row .icon {
+  width: 2.8em;
+  margin-left: 10px;
+  margin-right: 10px;
+}
