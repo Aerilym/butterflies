@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && wrangler pages publish build --branch main"
+    "deploy": "yarn build && wrangler pages publish build --branch main --project-name field-manager"
   },
   "eslintConfig": {
     "extends": [
