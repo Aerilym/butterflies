@@ -1,0 +1,46 @@
+.dashboard-sections {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-item form{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.dashboard-item form label {
+  padding-right: 0px
+}
+
+.dashboard-item form .checkbox{
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.dashboard-item form input[type="submit"] {
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.new-item-form{
+  max-width: 400px;
+}
+
+.dashboard-edit-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard-edit-container .dashboard-preview{
+  max-width: 600px;
+  min-width: 100px;
+  height: 100%;
+}

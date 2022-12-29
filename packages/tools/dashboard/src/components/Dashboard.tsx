@@ -4,10 +4,9 @@ import '../dashboard.css'; // import the CSS file
 import LinkButton from './LinkButton';
 import LinkRow from './LinkRow';
 import { DashboardItem } from '../../../../types/dashboard';
-import { testItems } from '../testdata';
 
 interface DashboardProps {
-  // props go here
+  data: DashboardItem[];
 }
 
 function weakURL(url: string) {
@@ -186,8 +185,8 @@ function buildDashboard(items: DashboardItem[]) {
   );
 }
 
-const Dashboard: React.FC<DashboardProps> = (props) => {
-  return <div className="dashboard">{buildDashboard(testItems)}</div>;
+const Dashboard: React.FC<DashboardProps> = ({ data }: DashboardProps) => {
+  return <div className="dashboard">{buildDashboard(data)}</div>;
 };
 
 export default Dashboard;
