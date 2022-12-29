@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "yarn build && wrangler pages publish build --branch main --project-name eros"
+    "deploy": "yarn build && wrangler pages publish dist --branch main --project-name eros"
   },
   "dependencies": {
     "react": "^18.2.0",
