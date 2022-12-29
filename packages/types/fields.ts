@@ -61,3 +61,5 @@ export type OnboardingStepItem = {
   field: string;
 } & FieldSelectorOptions &
   FieldSelectorData;
+
+export const validAuthProviders = ['spotify', 'apple', 'google', 'facebook'];

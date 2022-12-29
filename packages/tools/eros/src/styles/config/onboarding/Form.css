@@ -112,29 +112,3 @@ button.edit {
 button.delete {
   background-color: rgb(175, 87, 87);
 }
-
-button.create-field {
-  background-color: #4caf50; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: large;
-  margin: 16px 8px;
-  cursor: pointer;
-}
-
-button.cancel-field {
-  background-color: #f44336; /* Red */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: large;
-  margin: 16px 8px;
-  cursor: pointer;
-}
