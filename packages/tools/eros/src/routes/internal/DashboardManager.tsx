@@ -27,6 +27,8 @@ export default function DashboardManager() {
     const newItems = [...dashboardItems];
     newItems[index] = item;
 
+    console.log(newItems);
+
     const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
       method: 'POST',
       headers: {
@@ -34,7 +36,7 @@ export default function DashboardManager() {
       },
       body: JSON.stringify({
         key: 'dashboardItems',
-        value: newItems,
+        value: JSON.stringify(newItems),
       }),
     });
 
