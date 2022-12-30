@@ -56,7 +56,7 @@ export default function DashboardItemBlock({
           >
             {sections.map((section) => (
               <option key={section} value={section}>
-                {section}
+                {section.charAt(0).toLocaleUpperCase() + section.substring(1)}
               </option>
             ))}
           </select>
