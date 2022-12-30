@@ -7,6 +7,7 @@ import Header from '../../components/Header';
 import Dashboard from '../../../../dashboard/src/components/Dashboard';
 
 import '../../styles/config/internal/dashboard.css';
+import LinkRow from '../../components/LinkingRow';
 
 interface IndexedItem {
   index: number;
@@ -71,28 +72,33 @@ export default function DashboardManager() {
   }, []);
   return (
     <div className="container">
-      <Header title="Dashboard Manager" description="Dashboard Manager" />
+      <Header title="Dashboard Manager" description="Manage the links on the internal dashboard." />
+      <a href="https://dashboard.aerilym.com" target="_blank" rel="noopener noreferrer">
+        Dashboard
+      </a>
       <div className="content">
-        {showForm ? (
-          <button
-            className="cancel-field"
-            onClick={() => {
-              setShowForm(!showForm);
-            }}
-          >
-            Cancel
-          </button>
-        ) : (
-          <button
-            className="create-field"
-            onClick={() => {
-              setShowForm(!showForm);
-            }}
-          >
-            Create New Link
-          </button>
-        )}
-        <DashboardItemForm data={dashboardItems} sections={sections} visible={showForm} />
+        <div className="new-field-container">
+          {showForm ? (
+            <button
+              className="cancel-field"
+              onClick={() => {
+                setShowForm(!showForm);
+              }}
+            >
+              Cancel
+            </button>
+          ) : (
+            <button
+              className="create-field"
+              onClick={() => {
+                setShowForm(!showForm);
+              }}
+            >
+              Create New Link
+            </button>
+          )}
+          <DashboardItemForm data={dashboardItems} sections={sections} visible={showForm} />
+        </div>
         <div className="dashboard-edit-container">
           <div className="dashboard-sections">
             {[...new Set(indexedItems.map((item: IndexedItem) => item.item.section))].map(

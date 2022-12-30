@@ -19,6 +19,7 @@ import UserManager from './routes/internal/UserManager';
 import RootBase from './routes/base/RootBase';
 import ConfigBase from './routes/base/ConfigBase';
 import InternalBase from './routes/base/InternalBase';
+import Profile from './routes/Profile';
 
 const router = createBrowserRouter([
   {
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
             element: <UserManager />,
           },
         ],
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
       },
     ],
   },

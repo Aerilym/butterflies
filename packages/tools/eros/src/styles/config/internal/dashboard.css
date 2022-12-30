@@ -44,3 +44,10 @@
   min-width: 100px;
   height: 100%;
 }
+
+.new-field-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}

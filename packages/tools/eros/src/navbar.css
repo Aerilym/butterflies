@@ -90,9 +90,17 @@
   height: 100vh;
   padding: 0;
   z-index: 1;
-  width: 8vw;
+  width: 150px;
 }
 
 .side-nav ul {
   display: block;
+}
+
+.profile-circle {
+  height: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: #2f2f2f;
+  margin: 0 1em;
 }

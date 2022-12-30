@@ -109,19 +109,22 @@ export default function DashboardItemBlock({
             id="item-expanded"
             data-tooltip-content="Indicates whether to display the item as an expanded link with its abel or as a primary link button"
             checked={item.expanded}
-            onChange={(e) => setItem({ ...item, expanded: e.target.checked })}
+            onChange={(e) =>
+              setItem(
+                e.target.checked
+                  ? { ...item, expanded: e.target.checked }
+                  : { ...item, expanded: undefined }
+              )
+            }
           />
           Expanded
         </label>
         <input
           type="submit"
           value="Update"
-          disabled={
-            Object.keys(dataItem).length === Object.keys(item).length &&
-            Object.keys(dataItem).every(
-              (key) => dataItem[key as keyof DashboardItem] === item[key as keyof DashboardItem]
-            )
-          }
+          disabled={Object.keys(item).every(
+            (key) => dataItem[key as keyof DashboardItem] === item[key as keyof DashboardItem]
+          )}
         />
       </form>
     </div>

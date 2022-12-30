@@ -3,7 +3,7 @@ import '../App.css';
 import '../navbar.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import '../styles/tooltips.css';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 
 function Root() {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
@@ -37,19 +37,42 @@ function Root() {
         <div className={isNavExpanded ? 'navigation-menu expanded' : 'navigation-menu'}>
           <ul>
             <li>
-              <Link to="/config">Config</Link>
+              <Link
+                to="/config"
+                className={useLocation().pathname.startsWith('/config') ? 'route-active' : ''}
+              >
+                Config
+              </Link>
             </li>
             <li>
-              <Link to="/godview">God View</Link>
+              <Link
+                to="/godview"
+                className={useLocation().pathname.startsWith('/godview') ? 'route-active' : ''}
+              >
+                God View
+              </Link>
             </li>
             <li>
-              <Link to="/analytics">Analytics</Link>
+              <Link
+                to="/analytics"
+                className={useLocation().pathname.startsWith('/analytics') ? 'route-active' : ''}
+              >
+                Analytics
+              </Link>
             </li>
             <li>
-              <Link to="/internal">Internal</Link>
+              <Link
+                to="/internal"
+                className={useLocation().pathname.startsWith('/internal') ? 'route-active' : ''}
+              >
+                Internal
+              </Link>
             </li>
           </ul>
         </div>
+        <Link to="/profile">
+          <div className="profile-circle"></div>
+        </Link>
       </nav>
       <Outlet />
     </div>
