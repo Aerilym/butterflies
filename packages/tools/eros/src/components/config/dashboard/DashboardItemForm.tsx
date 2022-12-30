@@ -25,7 +25,7 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
       },
       body: JSON.stringify({
         key: 'dashboardItems',
-        value: data,
+        value: JSON.stringify(data),
       }),
     });
 
