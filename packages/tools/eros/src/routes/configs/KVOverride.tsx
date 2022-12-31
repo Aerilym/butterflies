@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Loading from '../../components/Loading';
 
 interface KV {
   key: string;
@@ -27,17 +28,20 @@ export default function KVOverride() {
   }
 
   async function lookupKV() {
+    setLoading(true);
     fetch(`https://field-manager.aerilym.workers.dev/options?key=${kvLookup.key}`).then(
       async (response) => {
         const { value } = await response.json();
 
         if (!!value) setKVLookup({ ...kvLookup, value: JSON.stringify(value) });
+        setLoading(false);
       }
     );
   }
 
   return (
     <div className="onboarding-order">
+      {loading ? <Loading /> : null}
       <h3>KV lookup</h3>
       <label htmlFor="lookup-key">
         Key:

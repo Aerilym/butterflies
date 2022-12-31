@@ -8,6 +8,7 @@ import Dashboard from '../../../../dashboard/src/components/Dashboard';
 
 import '../../styles/config/internal/dashboard.css';
 import LinkRow from '../../components/LinkingRow';
+import Loading from '../../components/Loading';
 
 interface IndexedItem {
   index: number;
@@ -22,12 +23,12 @@ export default function DashboardManager() {
   const [indexedItems, setIndexedItems] = useState<IndexedItem[]>([] as IndexedItem[]);
   const [sections, setSections] = useState<string[]>([] as string[]);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   async function handleSubmit(item: DashboardItem, index: number) {
+    setLoading(true);
     const newItems = [...dashboardItems];
     newItems[index] = item;
-
-    console.log(newItems);
 
     const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
       method: 'POST',
@@ -42,9 +43,18 @@ export default function DashboardManager() {
 
     if (res.status === 200 || res.status === 201) {
       setDashboardItems(newItems);
+      setShowForm(false);
+      const indexedItems = newItems.map((item, index) => {
+        return {
+          index,
+          item,
+        };
+      });
+      setIndexedItems(indexedItems);
     } else {
       alert('Something went wrong saving the item: ' + res.statusText);
     }
+    setLoading(false);
   }
 
   function updatePreviewItems(item: DashboardItem, index: number) {
@@ -69,6 +79,7 @@ export default function DashboardManager() {
         setDashboardItems(parsedValue);
         setDashboardPreviewItems(parsedValue);
         setSections(secs);
+        setLoading(false);
       }
     );
   }, []);
@@ -79,6 +90,7 @@ export default function DashboardManager() {
         Dashboard
       </a>
       <div className="content">
+        {loading ? <Loading /> : null}
         <div className="new-field-container">
           {showForm ? (
             <button
@@ -103,28 +115,32 @@ export default function DashboardManager() {
         </div>
         <div className="dashboard-edit-container">
           <div className="dashboard-sections">
-            {[...new Set(indexedItems.map((item: IndexedItem) => item.item.section))].map(
-              (section) => {
-                return (
-                  <div key={section} className="dashboard-section">
-                    <h2>{section.charAt(0).toLocaleUpperCase() + section.substring(1)}</h2>
-                    {indexedItems
-                      .filter((item) => item.item.section === section)
-                      .map((indexedItem) => {
-                        return (
-                          <DashboardItemBlock
-                            key={indexedItem.index}
-                            dataItem={indexedItem.item}
-                            sections={sections}
-                            itemIndex={indexedItem.index}
-                            handleUpdate={handleSubmit}
-                            handlePreviewUpdate={updatePreviewItems}
-                          />
-                        );
-                      })}
-                  </div>
-                );
-              }
+            {indexedItems.length === 0 ? (
+              <Loading />
+            ) : (
+              [...new Set(indexedItems.map((item: IndexedItem) => item.item.section))].map(
+                (section) => {
+                  return (
+                    <div key={section} className="dashboard-section">
+                      <h2>{section.charAt(0).toLocaleUpperCase() + section.substring(1)}</h2>
+                      {indexedItems
+                        .filter((item) => item.item.section === section)
+                        .map((indexedItem) => {
+                          return (
+                            <DashboardItemBlock
+                              key={indexedItem.index}
+                              dataItem={indexedItem.item}
+                              sections={sections}
+                              itemIndex={indexedItem.index}
+                              handleUpdate={handleSubmit}
+                              handlePreviewUpdate={updatePreviewItems}
+                            />
+                          );
+                        })}
+                    </div>
+                  );
+                }
+              )
             )}
           </div>
           <div className="dashboard-preview">

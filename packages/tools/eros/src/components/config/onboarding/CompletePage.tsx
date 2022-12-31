@@ -1,5 +1,6 @@
 import React from 'react';
 import { CompletePageData } from '../../../../../../types/api';
+import Loading from '../../Loading';
 
 type FormProps = {
   onSubmit: (value: CompletePageData) => void;
@@ -8,6 +9,7 @@ type FormProps = {
 
 export default function CompletePage({ onSubmit, visible }: FormProps) {
   const [completePage, setCompletePage] = React.useState({} as CompletePageData);
+  const [loading, setLoading] = React.useState(true);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,6 +21,7 @@ export default function CompletePage({ onSubmit, visible }: FormProps) {
       async (response) => {
         const { value } = await response.json();
         setCompletePage(value);
+        setLoading(false);
       }
     );
   }, []);
@@ -26,6 +29,7 @@ export default function CompletePage({ onSubmit, visible }: FormProps) {
   return (
     <div className="onboarding-order">
       <h3>Complete Page</h3>
+      {loading ? <Loading /> : null}
       <form
         onSubmit={handleSubmit}
         className="complete-page-form"

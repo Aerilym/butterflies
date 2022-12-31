@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { DashboardItem } from '../../../../../../types/dashboard';
+import Loading from '../../Loading';
 
 type FormProps = {
   data?: DashboardItem[];
@@ -37,6 +38,8 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
 
   return (
     <div className="new-item-form">
+      {loading ? <Loading /> : null}
+
       {/*Tooltips that will always have rendered anchor points can be put here, otherwise the tooltip should be rendered with the element it is anchored to. */}
       <Tooltip anchorId="item-section" place="right" />
       <Tooltip anchorId="item-label" place="right" />

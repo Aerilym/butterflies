@@ -11,6 +11,7 @@ import CompletePage from '../../components/config/onboarding/CompletePage';
 
 import '../../styles/config/onboarding/Form.css';
 import '../../styles/config/onboarding/OnboardingOrder.css';
+import Loading from '../../components/Loading';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
 
@@ -31,8 +32,10 @@ export default function Onboarding() {
   const [fields, setFields] = useState<OnboardingStepItem[]>([] as OnboardingStepItem[]);
   const [data, setData] = useState<OnboardingStepItem>({} as OnboardingStepItem);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   async function handleFormSubmit(value: OnboardingStepItem) {
+    setLoading(true);
     const res = await fetch('https://field-manager.aerilym.workers.dev/', {
       method: 'POST',
       headers: {
@@ -43,9 +46,11 @@ export default function Onboarding() {
 
     if (res.status === 200 || res.status === 201) {
       setFields([...fields, value]);
+      setShowForm(false);
     } else {
       alert('Something went wrong saving the field: ' + res.statusText);
     }
+    setLoading(false);
   }
 
   function handleEdit(value: OnboardingStepItem) {
@@ -54,6 +59,7 @@ export default function Onboarding() {
   }
 
   async function updateCompletePage(value: CompletePageData) {
+    setLoading(true);
     const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
       method: 'POST',
       headers: {
@@ -68,9 +74,11 @@ export default function Onboarding() {
     if (res.status !== 200 && res.status !== 201) {
       alert('Something went wrong saving the field: ' + res.statusText);
     }
+    setLoading(false);
   }
 
   async function handleDelete(key: string) {
+    setLoading(true);
     const res = await fetch('https://field-manager.aerilym.workers.dev/', {
       method: 'DELETE',
       headers: {
@@ -84,18 +92,21 @@ export default function Onboarding() {
     } else {
       alert('Something went wrong deleting the field: ' + res.statusText);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) =>
-      setFields(await response.json())
-    );
+    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) => {
+      setFields(await response.json());
+      setLoading(false);
+    });
   }, []);
 
   return (
     <div className="container">
       <Header title="Onboarding Config" description="Onboarding config" />
       <div className="content">
+        {loading ? <Loading /> : null}
         <div
           style={{
             display: 'flex',

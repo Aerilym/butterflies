@@ -8,6 +8,7 @@ import FieldForm from '../../components/config/users/FieldForm';
 import FieldBrowser from '../../components/config/users/FieldBrowser';
 
 import '../../styles/config/onboarding/Form.css';
+import Loading from '../../components/Loading';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
 
@@ -28,8 +29,10 @@ export default function Users() {
   const [fields, setFields] = useState<OnboardingStepItem[]>([] as OnboardingStepItem[]);
   const [data, setData] = useState<OnboardingStepItem>({} as OnboardingStepItem);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   async function handleFormSubmit(value: OnboardingStepItem) {
+    setLoading(true);
     const res = await fetch('https://field-manager.aerilym.workers.dev/', {
       method: 'POST',
       headers: {
@@ -40,9 +43,11 @@ export default function Users() {
 
     if (res.status === 200 || res.status === 201) {
       setFields([...fields, value]);
+      setShowForm(false);
     } else {
       alert('Something went wrong saving the field: ' + res.statusText);
     }
+    setLoading(false);
   }
 
   function handleEdit(value: OnboardingStepItem) {
@@ -51,6 +56,7 @@ export default function Users() {
   }
 
   async function handleDelete(key: string) {
+    setLoading(true);
     const res = await fetch('https://field-manager.aerilym.workers.dev/', {
       method: 'DELETE',
       headers: {
@@ -64,18 +70,21 @@ export default function Users() {
     } else {
       alert('Something went wrong deleting the field: ' + res.statusText);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) =>
-      setFields(await response.json())
-    );
+    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) => {
+      setFields(await response.json());
+      setLoading(false);
+    });
   }, []);
 
   return (
     <div className="container">
       <Header title="User Config" description="User config" />
       <div className="content">
+        {loading ? <Loading /> : null}
         <div
           style={{
             display: 'flex',

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { validAuthProviders } from '../../../../../../types/fields';
+import Loading from '../../Loading';
 
 export default function AuthProviders() {
   const [providerOrder, setProviderOrder] = useState<string[]>([] as string[]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   async function submitOrder() {
     setLoading(true);
@@ -34,12 +35,14 @@ export default function AuthProviders() {
         );
 
         setProviderOrder(filteredOrder);
+        setLoading(false);
       }
     );
   }, []);
   return (
     <div className="onboarding-order">
       <h3>Provider Order</h3>
+      {loading ? <Loading /> : null}
       {providerOrder.length > 0 ? (
         <ul>
           {providerOrder.map((field, index) => (

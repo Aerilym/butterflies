@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { OnboardingStepItem } from '../../../../../../types/fields';
+import Loading from '../../Loading';
 
 type FormProps = {
   fields: OnboardingStepItem[];
@@ -7,7 +8,7 @@ type FormProps = {
 
 export default function OnboardingOrder({ fields }: FormProps) {
   const [onboardingOrder, setOnboardingOrder] = useState<string[]>([] as string[]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   async function submitOrder() {
     setLoading(true);
@@ -49,11 +50,13 @@ export default function OnboardingOrder({ fields }: FormProps) {
               unknownFields.join(', ')
           );
         }
+        setLoading(false);
       }
     );
   }, [fields]);
   return (
     <div className="onboarding-order">
+      {loading ? <Loading /> : null}
       <h3>Onboarding Order</h3>
       {onboardingOrder.length > 0 ? (
         <ul>
