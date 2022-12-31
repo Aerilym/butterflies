@@ -1,0 +1,150 @@
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  
+}
+
+body {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.top-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-left: 150px;
+  padding: 1em;
+  margin-top: 70px;
+  overflow: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.infobox {
+  padding: 1.5em 2.5em;
+  margin: 3em;
+  background-color: #2f2f2f;
+  border-radius: 40px;
+  min-width: 20px;
+  max-width: 700px;
+  height: fit-content;
+}
+
+.nav-page {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.linking-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1em;
+  padding: 1.25em 1.5em;
+  border-radius: 16px;
+  background-color: #2f2f2f;
+  width: 220px;
+  height: 90px;
+}
+
+.linking-row:hover {
+  background-color: #3f3f3f;
+}
+
+.linking-row .label {
+  font-size: 1.5em;
+  font-weight: 500;
+  margin-bottom: 0.5em;
+  color: #f9f9f9;
+}
+
+.linking-row .description {
+  font-size: 1em;
+  font-weight: 300;
+  color: #f9f9f9;
+}
+
+.route-active {
+  color: hwb(224 62% 0%) !important;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

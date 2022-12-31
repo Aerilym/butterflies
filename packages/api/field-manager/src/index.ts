@@ -238,8 +238,10 @@ async function handleGetOption(namespace: KVNamespace, request: Request) {
 
 async function handleSetOption(namespace: KVNamespace, request: Request) {
   const { key, value } = (await request.json()) as { key: string; value: string };
-  await namespace.put(key, '', {
-    metadata: { value: value },
-  });
+  byteSize(JSON.stringify(value)) > 1024
+    ? await namespace.put(key, value)
+    : await namespace.put(key, '', {
+        metadata: { value: value },
+      });
   return jsonResponse('option added', 201);
 }

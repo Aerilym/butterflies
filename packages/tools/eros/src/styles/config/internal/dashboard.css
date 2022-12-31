@@ -1,0 +1,57 @@
+.dashboard-sections {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-item form{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 1em;
+  padding: 0.75em 1em;
+  border-radius: 10px;
+  background-color: rgb(47, 47, 47);
+}
+
+.dashboard-item form label {
+  padding: 0 0.25em;
+}
+
+.dashboard-item form .checkbox{
+  flex-direction: row;
+  align-items: center;
+}
+
+.dashboard-item form input[type="submit"] {
+  margin-left: 10px;
+  padding: 0.25em 0.5em;
+}
+
+.new-item-form{
+  max-width: 400px;
+}
+
+.dashboard-edit-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard-edit-container .dashboard-preview{
+  max-width: 600px;
+  min-width: 100px;
+  height: 100%;
+}
+
+.new-field-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}

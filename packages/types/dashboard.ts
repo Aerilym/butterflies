@@ -6,10 +6,8 @@ export interface DashboardLink {
 }
 
 export interface DashboardLinkOptions {
-  section: DashboardSection;
+  section: string;
   expanded?: boolean;
 }
-
-export type DashboardSection = 'general' | 'development' | 'design' | 'tool';
 
 export type DashboardItem = DashboardLink & DashboardLinkOptions;
