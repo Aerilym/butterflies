@@ -154,9 +154,9 @@ function buildDashboard(items: DashboardItem[]) {
 
   return (
     <div className="dashboard">
-      <h1>Dashboard</h1>
       <h2>General</h2>
       <div
+        id="general"
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -168,6 +168,7 @@ function buildDashboard(items: DashboardItem[]) {
         {generalSection}
       </div>
       <div
+        id="section-group"
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -186,7 +187,7 @@ function buildDashboard(items: DashboardItem[]) {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ data }: DashboardProps) => {
-  return <div className="dashboard">{buildDashboard(data)}</div>;
+  return buildDashboard(data);
 };
 
 export default Dashboard;

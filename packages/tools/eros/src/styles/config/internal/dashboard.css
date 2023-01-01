@@ -49,6 +49,16 @@
   height: 100%;
 }
 
+.dashboard-preview .dashboard {
+  height: 98%;
+}
+
+#section-group {
+  height: 100%;
+  margin-top: 300px;
+  justify-content: space-around;
+}
+
 .new-field-container {
   display: flex;
   flex-direction: row;
