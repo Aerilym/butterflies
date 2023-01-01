@@ -31,9 +31,17 @@ export function SupabaseAuth() {
   const [enabledProviders, setEnabledProviders] = useState<Provider[] | null>(null);
 
   useEffect(() => {
-    supabaseAPI.getEnabledAuthProviders().then((providers) => {
-      setEnabledProviders(providers);
-    });
+    fetch('https://field-manager.aerilym.workers.dev/options?key=providerOrder').then(
+      async (response) => {
+        const { value } = await response.json();
+
+        const filteredOrder = value.filter((provider: string) =>
+          Object.keys(icons).includes(provider)
+        );
+
+        setEnabledProviders(filteredOrder);
+      }
+    );
   }, []);
   return (
     <Box
