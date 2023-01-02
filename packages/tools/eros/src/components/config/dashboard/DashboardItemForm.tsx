@@ -17,6 +17,8 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
     event.preventDefault();
     setLoading(true);
 
+    console.log(item);
+    /* 
     data?.push(item);
 
     const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
@@ -32,7 +34,7 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
 
     if (res.status !== 200 && res.status !== 201) {
       alert('Something went wrong saving the item: ' + res.statusText);
-    }
+    } */
     setLoading(false);
   }
 
@@ -67,6 +69,7 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
               setItem({ ...item, section: e.target.value });
             }}
           >
+            {!item.section ? <option key="blank">{'Select a section'}</option> : null}
             {sections.map((section) => (
               <option key={section} value={section}>
                 {section}
@@ -126,7 +129,18 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
           />
           Expanded
         </label>
-        <input type="submit" value="Submit" disabled={loading} />
+        <input
+          type="submit"
+          value="Submit"
+          disabled={
+            loading ||
+            !item.section ||
+            !item.label ||
+            item.label.length < 2 ||
+            !item.url ||
+            item.url.length < 2
+          }
+        />
       </form>
     </div>
   );
