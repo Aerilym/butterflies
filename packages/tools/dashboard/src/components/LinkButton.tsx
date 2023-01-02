@@ -21,7 +21,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ label, url, icon }) => {
             e.target.src = `https://www.google.com/s2/favicons?domain=${url}&sz=256`;
           }}
           alt={label}
-          src={`images/icons/${icon}.svg`}
+          src={`/images/icons/${icon}.svg`}
         />
       </div>
     </a>
