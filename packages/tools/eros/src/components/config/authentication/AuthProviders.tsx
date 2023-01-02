@@ -4,6 +4,7 @@ import Loading from '../../Loading';
 
 export default function AuthProviders() {
   const [providerOrder, setProviderOrder] = useState<string[]>([] as string[]);
+  const [baseProviderOrder, setBaseProviderOrder] = useState<string[]>([] as string[]);
   const [loading, setLoading] = useState(true);
 
   async function submitOrder() {
@@ -35,6 +36,7 @@ export default function AuthProviders() {
         );
 
         setProviderOrder(filteredOrder);
+        setBaseProviderOrder(filteredOrder);
         setLoading(false);
       }
     );
@@ -91,7 +93,7 @@ export default function AuthProviders() {
                   .filter((item) => !providerOrder.includes(item) || item === field)
                   .map((item) => (
                     <option key={item} value={item}>
-                      {item}
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
                     </option>
                   ))}
               </select>
@@ -113,7 +115,7 @@ export default function AuthProviders() {
         <p>No providers have been added yet.</p>
       )}
       <button
-        disabled={loading}
+        disabled={loading || providerOrder.length === validAuthProviders.length}
         onClick={() => {
           const newOrder = [...providerOrder];
           const newField = validAuthProviders.find((item) => !providerOrder.includes(item));
@@ -125,7 +127,9 @@ export default function AuthProviders() {
         Add Provider
       </button>
       <button
-        disabled={loading}
+        disabled={
+          loading || providerOrder.every((item, index) => item === baseProviderOrder[index])
+        }
         onClick={() => {
           submitOrder();
         }}
