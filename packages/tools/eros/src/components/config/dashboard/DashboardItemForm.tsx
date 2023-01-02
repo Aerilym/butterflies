@@ -17,8 +17,6 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
     event.preventDefault();
     setLoading(true);
 
-    console.log(item);
-    /* 
     data?.push(item);
 
     const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
@@ -34,7 +32,7 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
 
     if (res.status !== 200 && res.status !== 201) {
       alert('Something went wrong saving the item: ' + res.statusText);
-    } */
+    }
     setLoading(false);
   }
 
