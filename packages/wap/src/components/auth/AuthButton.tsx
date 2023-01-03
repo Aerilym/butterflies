@@ -16,23 +16,24 @@ export function AuthButton({ provider, icon }: { provider: Provider; icon: Image
         backgroundColor: '#ffffff',
         borderColor: '#17171E',
         borderRadius: 40,
-        padding: 6,
+        paddingVertical: 6,
+        paddingHorizontal: 50,
         margin: 8,
         width: '100%',
-        maxWidth: 250,
+        maxWidth: 300,
       }}
     >
       <Image
         alt={provider + ' icon'}
-        size={12}
+        size={5}
         source={icon}
         style={{
           marginVertical: 8,
-          marginHorizontal: 8,
+          marginHorizontal: 10,
         }}
       />
       <Text style={{ color: '#17171E', fontWeight: 'bold' }}>
-        Login with {provider.charAt(0).toUpperCase() + provider.slice(1)}
+        Continue with {provider.charAt(0).toUpperCase() + provider.slice(1)}
       </Text>
     </TouchableOpacity>
   );

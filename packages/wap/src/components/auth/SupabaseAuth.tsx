@@ -46,46 +46,72 @@ export function SupabaseAuth() {
   return (
     <Box
       style={{
-        alignSelf: 'center',
-        alignItems: 'center',
+        flex: 1,
+        display: 'flex',
         flexDirection: 'column',
-        width: '100%',
-        marginTop: 50,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginHorizontal: 10,
       }}
     >
-      {!enabledProviders ? (
-        <Loading />
-      ) : enabledProviders.length > 0 ? (
-        enabledProviders.map((provider) => {
-          return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
-        })
-      ) : (
-        <>
-          <Image
-            alt={'everything is fine gif'}
-            style={{
-              width: 300,
-              height: 200,
-            }}
-            source={{ uri: 'https://media.tenor.com/MYZgsN2TDJAAAAAC/this-is.gif' }}
-          />
-          <Text>There are no enabled login providers!</Text>
-          <Text>
-            If you're a dev enable some{' '}
-            <Text
-              style={{ color: 'blue' }}
-              onPress={() =>
-                Linking.openURL(
-                  'https://app.supabase.com/project/btueksreggheiyvqbbdx/editor/18198'
-                )
-              }
-            >
-              HERE
+      <Box>
+        <Image
+          alt={'everything is fine gif'}
+          style={{
+            width: 300,
+            height: 400,
+          }}
+          source={{ uri: 'https://media.tenor.com/MYZgsN2TDJAAAAAC/this-is.gif' }}
+        />
+      </Box>
+      <Box>
+        {!enabledProviders ? (
+          <Loading />
+        ) : enabledProviders.length > 0 ? (
+          enabledProviders.map((provider) => {
+            return <AuthButton key={provider} provider={provider} icon={icons[provider]} />;
+          })
+        ) : (
+          <>
+            <Image
+              alt={'everything is fine gif'}
+              style={{
+                width: 300,
+                height: 200,
+              }}
+              source={{ uri: 'https://media.tenor.com/MYZgsN2TDJAAAAAC/this-is.gif' }}
+            />
+            <Text>There are no enabled login providers!</Text>
+            <Text>
+              If you're a dev enable some{' '}
+              <Text
+                style={{ color: 'blue' }}
+                onPress={() =>
+                  Linking.openURL(
+                    'https://app.supabase.com/project/btueksreggheiyvqbbdx/editor/18198'
+                  )
+                }
+              >
+                HERE
+              </Text>
+              !
             </Text>
-            !
-          </Text>
-        </>
-      )}
+          </>
+        )}
+      </Box>
+      <Box>
+        <Text
+          style={{
+            color: '#17171E',
+            textAlign: 'center',
+            fontSize: 10,
+            marginHorizontal: 20,
+          }}
+        >
+          By signing up, you agree to our Terms of service. View our privacy policy to see how we
+          use your data.
+        </Text>
+      </Box>
     </Box>
   );
 }
