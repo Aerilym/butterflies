@@ -25,7 +25,7 @@ const requiredFields = {
   checkboxes: [...generalRequiredFields, 'options'],
 };
 
-export default function Users() {
+export default function UserFields() {
   const [fields, setFields] = useState<OnboardingStepItem[]>([] as OnboardingStepItem[]);
   const [data, setData] = useState<OnboardingStepItem>({} as OnboardingStepItem);
   const [showForm, setShowForm] = useState(false);

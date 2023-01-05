@@ -10,16 +10,22 @@ import Analytics from './routes/Analytics';
 import GodView from './routes/GodView';
 import Onboarding from './routes/configs/Onboarding';
 import Authentication from './routes/configs/Authentication';
-import Users from './routes/configs/Users';
+import UserFields from './routes/configs/UserFields';
 import KVOverride from './routes/configs/KVOverride';
 import Internal from './routes/Internal';
 import DashboardManager from './routes/internal/DashboardManager';
-import AuthenticationManager from './routes/internal/AuthenticationManager';
-import UserManager from './routes/internal/UserManager';
+import SSOAuthenticationManager from './routes/internal/SSOAuthenticationManager';
+import SSOUserManager from './routes/internal/SSOUserManager';
 import RootBase from './routes/base/RootBase';
 import ConfigBase from './routes/base/ConfigBase';
 import InternalBase from './routes/base/InternalBase';
 import Profile from './routes/Profile';
+import Users from './routes/Users';
+import UsersBase from './routes/base/UsersBase';
+import UsersList from './routes/users/UsersList';
+import { User } from '@supabase/supabase-js';
+import { supabaseAdminAuthClient } from './supabase';
+import { TableColumn, TableData } from './components/Table';
 
 const router = createBrowserRouter([
   {
@@ -49,11 +55,55 @@ const router = createBrowserRouter([
           },
           {
             path: 'users',
-            element: <Users />,
+            element: <UserFields />,
           },
           {
             path: 'kvoverride',
             element: <KVOverride />,
+          },
+        ],
+      },
+      {
+        path: 'users',
+        element: <Users />,
+        children: [
+          {
+            path: '',
+            element: <UsersBase />,
+          },
+          {
+            path: 'list',
+            element: <UsersList />,
+            loader: async () => {
+              const { data, error } = await supabaseAdminAuthClient.listUsers();
+
+              const cols: TableColumn[] = [];
+              const users = data;
+
+              for (const key in users.users[0]) {
+                cols.push({ Header: key, accessor: key });
+              }
+
+              const formatedData = users.users.map((user: User) => {
+                const userData: TableData = {};
+                for (const key in user) {
+                  const value = user[key as keyof User];
+                  if (typeof value === 'string' || typeof value === 'number') {
+                    userData[key] = value;
+                  } else if (typeof value === 'object') {
+                    userData[key] = JSON.stringify(value);
+                  } else {
+                    userData[key] = '';
+                  }
+                }
+                return userData;
+              });
+
+              return {
+                columns: cols,
+                data: formatedData,
+              };
+            },
           },
         ],
       },
@@ -79,11 +129,11 @@ const router = createBrowserRouter([
           },
           {
             path: 'authentication',
-            element: <AuthenticationManager />,
+            element: <SSOAuthenticationManager />,
           },
           {
             path: 'users',
-            element: <UserManager />,
+            element: <SSOUserManager />,
           },
         ],
       },
