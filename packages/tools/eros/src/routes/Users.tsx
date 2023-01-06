@@ -17,6 +17,11 @@ export const usersLinks: { label: string; target: string; description: string }[
     description: 'View all profiles',
   },
   {
+    label: 'Preference List',
+    target: 'preferences',
+    description: 'View all preferences',
+  },
+  {
     label: 'Custom List',
     target: 'custom',
     description: 'View a table you specify',

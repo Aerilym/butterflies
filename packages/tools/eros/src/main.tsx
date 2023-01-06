@@ -29,6 +29,7 @@ import { TableColumn, TableData } from './components/Table';
 import ProfileList from './routes/users/ProfileList';
 import MatchesList from './routes/users/MatchesList';
 import CustomList from './routes/users/CustomList';
+import PreferenceList from './routes/users/PreferenceList';
 
 const router = createBrowserRouter([
   {
@@ -120,6 +121,13 @@ const router = createBrowserRouter([
             element: <MatchesList />,
             loader: async () => {
               return supabaseTableGet('matches');
+            },
+          },
+          {
+            path: 'preferences',
+            element: <PreferenceList />,
+            loader: async () => {
+              return supabaseTableGet('preferences');
             },
           },
           {
