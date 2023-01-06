@@ -5,6 +5,32 @@ import 'react-tooltip/dist/react-tooltip.css';
 import '../styles/tooltips.css';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 
+const navLinks: {
+  to: string;
+  label: string;
+}[] = [
+  {
+    to: '/config',
+    label: 'Config',
+  },
+  {
+    to: '/users',
+    label: 'Users',
+  },
+  {
+    to: '/godview',
+    label: 'God View',
+  },
+  {
+    to: '/analytics',
+    label: 'Analytics',
+  },
+  {
+    to: '/internal',
+    label: 'Internal',
+  },
+].sort((a, b) => a.label.localeCompare(b.label));
+
 function Root() {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
@@ -36,46 +62,16 @@ function Root() {
         </button>
         <div className={isNavExpanded ? 'navigation-menu expanded' : 'navigation-menu'}>
           <ul>
-            <li>
-              <Link
-                to="/config"
-                className={useLocation().pathname.startsWith('/config') ? 'route-active' : ''}
-              >
-                Config
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/users"
-                className={useLocation().pathname.startsWith('/users') ? 'route-active' : ''}
-              >
-                Users
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/godview"
-                className={useLocation().pathname.startsWith('/godview') ? 'route-active' : ''}
-              >
-                God View
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/analytics"
-                className={useLocation().pathname.startsWith('/analytics') ? 'route-active' : ''}
-              >
-                Analytics
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/internal"
-                className={useLocation().pathname.startsWith('/internal') ? 'route-active' : ''}
-              >
-                Internal
-              </Link>
-            </li>
+            {navLinks.map((link) => (
+              <li key={link.label}>
+                <Link
+                  to={link.to}
+                  className={useLocation().pathname.startsWith(link.to) ? 'route-active' : ''}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
         <Link to="/profile">
