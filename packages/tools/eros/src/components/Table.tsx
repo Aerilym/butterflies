@@ -11,6 +11,8 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
   useSortBy,
+  usePagination,
+  Row,
 } from 'react-table';
 import { formatDistanceToNow } from 'date-fns';
 import { matchSorter } from 'match-sorter';
@@ -350,7 +352,36 @@ export default function Table({ columns, data, warnings }: TableProps) {
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns } = useTable(
+  // TODO: Investigate why these are throwing errors and how to properly fix it
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    allColumns,
+    // @ts-ignore
+    page,
+    // @ts-ignore
+    canPreviousPage,
+    // @ts-ignore
+    canNextPage,
+    // @ts-ignore
+    pageOptions,
+    // @ts-ignore
+    pageCount,
+    // @ts-ignore
+    gotoPage,
+    // @ts-ignore
+    nextPage,
+    // @ts-ignore
+    previousPage,
+    // @ts-ignore
+    setPageSize,
+    // @ts-ignore
+    selectedFlatRows,
+    // @ts-ignore
+    state: { pageIndex, pageSize, selectedRowIds },
+  } = useTable(
     {
       columns,
       data,
@@ -363,6 +394,7 @@ export default function Table({ columns, data, warnings }: TableProps) {
     useSortBy,
     useResizeColumns,
     useFlexLayout,
+    usePagination,
     useRowSelect,
     (hooks) => {
       hooks.allColumns.push((columns) => [
@@ -401,7 +433,6 @@ export default function Table({ columns, data, warnings }: TableProps) {
     }
   );
 
-  let firstPageRows = rows.slice(0, 100);
   return (
     <div className="table-container">
       <div {...getTableProps()} className="table">
@@ -500,7 +531,7 @@ export default function Table({ columns, data, warnings }: TableProps) {
           ))}
         </div>
         <div className="tbody">
-          {firstPageRows.map((row) => {
+          {page.map((row: Row<TableData>) => {
             prepareRow(row);
             return (
               <div {...row.getRowProps()} className="tr">
@@ -529,8 +560,56 @@ export default function Table({ columns, data, warnings }: TableProps) {
       </div>
       <div className="showing-results">
         {data.length > 100
-          ? `Showing the first 100 results of ${rows.length} found in all ${data.length} rows`
-          : `Found ${rows.length} results in all ${data.length} rows`}
+          ? `Showing the first 100 results of ${page.length} found in all ${data.length} rows`
+          : `Found ${page.length} results in all ${data.length} rows`}
+      </div>
+      <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'<<'}
+        </button>
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </button>
+        <span>
+          Page
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>
+        </span>
+        {pageOptions.length > 1 && (
+          <span>
+            | Go to page:
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              min={1}
+              max={pageOptions.length}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+              style={{ width: `${pageOptions.length.toString().length * 0.6 + 1.2}em` }}
+            />
+          </span>
+        )}
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50, 100, 200, 500, 1000].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
