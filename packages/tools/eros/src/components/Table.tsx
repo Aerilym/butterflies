@@ -381,6 +381,7 @@ export default function Table({ columns, data, warnings }: TableProps) {
     selectedFlatRows,
     // @ts-ignore
     state: { pageIndex, pageSize, selectedRowIds },
+    initialState,
   } = useTable(
     {
       columns,
@@ -432,6 +433,10 @@ export default function Table({ columns, data, warnings }: TableProps) {
       });
     }
   );
+
+  // TODO: Investigate why this is throwing an error and how to properly fix it
+  // @ts-ignore
+  initialState.pageSize = 100;
 
   return (
     <div className="table-container">
