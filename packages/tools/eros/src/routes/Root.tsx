@@ -47,7 +47,7 @@ function Root() {
             <li>
               <Link
                 to="/users"
-                className={useLocation().pathname.startsWith('/config') ? 'route-active' : ''}
+                className={useLocation().pathname.startsWith('/users') ? 'route-active' : ''}
               >
                 Users
               </Link>

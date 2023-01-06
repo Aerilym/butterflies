@@ -12,6 +12,7 @@ import CompletePage from '../../components/config/onboarding/CompletePage';
 import '../../styles/config/onboarding/Form.css';
 import '../../styles/config/onboarding/OnboardingOrder.css';
 import Loading from '../../components/Loading';
+import { TableData } from '../../components/Table';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
 
@@ -95,6 +96,22 @@ export default function Onboarding() {
     setLoading(false);
   }
 
+  const columns = [];
+
+  for (const key in fields[0]) {
+    columns.push({ Header: key, accessor: key });
+  }
+
+  const fieldData = fields.map((field) => {
+    const row: TableData = {};
+
+    for (const key in field) {
+      row[key] = field[key as keyof OnboardingStepItem] as string;
+    }
+
+    return row;
+  });
+
   useEffect(() => {
     fetch('https://field-manager.aerilym.workers.dev/').then(async (response) => {
       setFields(await response.json());
@@ -114,7 +131,6 @@ export default function Onboarding() {
           }}
         >
           <OnboardingOrder fields={fields} />
-          <FieldBrowser fields={fields} handleEdit={handleEdit} handleDelete={handleDelete} />
         </div>
         <div
           style={{

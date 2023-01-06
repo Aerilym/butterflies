@@ -4,7 +4,7 @@ import '../../styles/config/onboarding/Form.css';
 import Table, { TableProps } from '../../components/Table';
 import { useLoaderData } from 'react-router-dom';
 
-export default function UsersList() {
+export default function MatchesList() {
   const { data, columns } = useLoaderData() as TableProps;
 
   return (

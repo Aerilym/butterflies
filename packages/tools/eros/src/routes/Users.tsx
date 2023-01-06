@@ -11,6 +11,16 @@ export const usersLinks: { label: string; target: string; description: string }[
     target: 'matches',
     description: 'View all matches',
   },
+  {
+    label: 'Profile List',
+    target: 'profiles',
+    description: 'View all profiles',
+  },
+  {
+    label: 'Custom List',
+    target: 'custom',
+    description: 'View a table you specify',
+  },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 export default function Users() {

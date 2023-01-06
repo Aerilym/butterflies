@@ -9,6 +9,8 @@ import FieldBrowser from '../../components/config/users/FieldBrowser';
 
 import '../../styles/config/onboarding/Form.css';
 import Loading from '../../components/Loading';
+import Table, { RowWarning, TableData } from '../../components/Table';
+import { supabaseAdminClient } from '../../supabase';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
 
@@ -28,6 +30,8 @@ const requiredFields = {
 export default function UserFields() {
   const [fields, setFields] = useState<OnboardingStepItem[]>([] as OnboardingStepItem[]);
   const [data, setData] = useState<OnboardingStepItem>({} as OnboardingStepItem);
+  const [profileCols, setProfileCols] = useState<string[]>([]);
+  const [preferenceCols, setPreferenceCols] = useState<string[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -73,58 +77,123 @@ export default function UserFields() {
     setLoading(false);
   }
 
+  const columns = [];
+
+  for (const key in fields[0]) {
+    columns.push({ Header: key, accessor: key });
+  }
+
+  const fieldData = fields.map((field) => {
+    const row: TableData = {};
+
+    for (const key in field) {
+      row[key] = field[key as keyof OnboardingStepItem] as string;
+    }
+
+    return row;
+  });
+
+  const warningRows: RowWarning[] = fields.map((field) => {
+    const warning: RowWarning = {
+      severity: 'none',
+      message: `${field.field} not found in ${field.bucket} table`,
+    };
+    if (field.bucket === 'profile') {
+      warning.severity = profileCols.includes(field.field) ? 'none' : 'low';
+    } else if (field.bucket === 'preferences') {
+      warning.severity = preferenceCols.includes(field.field) ? 'none' : 'low';
+    }
+    return warning;
+  });
+
+  const warnings = {
+    rowWarnings: {
+      rows: warningRows,
+      attachedColumn: 'field',
+    },
+  };
+
   useEffect(() => {
     fetch('https://field-manager.aerilym.workers.dev/').then(async (response) => {
       setFields(await response.json());
       setLoading(false);
     });
+    supabaseAdminClient
+      .from('profiles')
+      .select('*')
+      .limit(1)
+      .then(({ data, error }) => {
+        if (error) throw error;
+        if (!data) return;
+
+        const cols = [];
+
+        for (const key in data[0]) {
+          cols.push(key);
+        }
+        setProfileCols(cols);
+      });
+    supabaseAdminClient
+      .from('preferences')
+      .select('*')
+      .limit(1)
+      .then(({ data, error }) => {
+        if (error) throw error;
+        if (!data) return;
+
+        const cols = [];
+
+        for (const key in data[0]) {
+          cols.push(key);
+        }
+        setPreferenceCols(cols);
+      });
   }, []);
 
   return (
     <div className="container">
       <Header title="User Config" description="User config" />
-      <div className="content">
-        {loading ? <Loading /> : null}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <FieldBrowser fields={fields} handleEdit={handleEdit} handleDelete={handleDelete} />
-          {showForm ? (
-            <button
-              className="cancel-field"
-              onClick={() => {
-                setShowForm(!showForm);
-              }}
-            >
-              Cancel
-            </button>
-          ) : (
-            <button
-              className="create-field"
-              onClick={() => {
-                setShowForm(!showForm);
-              }}
-            >
-              Create New Field
-            </button>
-          )}
-          <FieldForm
-            onSubmit={handleFormSubmit}
-            requiredFields={requiredFields}
-            data={data}
-            visible={showForm}
-          />
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        ></div>
+      {loading ? <Loading /> : null}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {/* <FieldBrowser fields={fields} handleEdit={handleEdit} handleDelete={handleDelete} /> */}
+        <Table columns={columns} data={fieldData} warnings={warnings} />
+        {showForm ? (
+          <button
+            className="cancel-field"
+            onClick={() => {
+              setShowForm(!showForm);
+            }}
+          >
+            Cancel
+          </button>
+        ) : (
+          <button
+            className="create-field"
+            onClick={() => {
+              setShowForm(!showForm);
+            }}
+          >
+            Create New Field
+          </button>
+        )}
+        <FieldForm
+          onSubmit={handleFormSubmit}
+          requiredFields={requiredFields}
+          data={data}
+          visible={showForm}
+        />
       </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      ></div>
     </div>
   );
 }

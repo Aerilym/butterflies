@@ -116,3 +116,51 @@
 .eye-closed:hover {
   opacity: 1;
 }
+
+.date-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-original {
+  display: none;
+}
+
+.date-cell:hover .date-original {
+  display: block;
+}
+
+.date-cell:hover .date-formatted {
+  display: none;
+}
+
+.warning {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff00;
+  margin-left: 0.3em;
+  align-self: center;
+}
+
+.warning,
+.warning img {
+  height: 1.2em;
+  aspect-ratio: 1;
+  border-radius: 20%;
+  user-select: none;
+}
+
+.warning img {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  fill: red;
+  color: red;
+  background-color: red;
+}
+
+.warning img:hover {
+  opacity: 0.5;
+}
