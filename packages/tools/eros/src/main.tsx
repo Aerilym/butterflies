@@ -88,7 +88,7 @@ const router = createBrowserRouter([
                 cols.push({ Header: key, accessor: key });
               }
 
-              const formatedData = users.users.map((user: User) => {
+              const formattedData = users.users.map((user: User) => {
                 const userData: TableData = {};
                 for (const key in user) {
                   const value = user[key as keyof User];
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
 
               return {
                 columns: cols,
-                data: formatedData,
+                data: formattedData,
               };
             },
           },

@@ -1,4 +1,4 @@
-import React, { ForwardRefExoticComponent, MutableRefObject, useEffect } from 'react';
+import React, { ForwardRefExoticComponent, MutableRefObject } from 'react';
 import {
   useTable,
   useResizeColumns,
@@ -8,8 +8,6 @@ import {
   RowPropGetter,
   HeaderGroup,
   useFilters,
-  useGlobalFilter,
-  useAsyncDebounce,
   useSortBy,
   usePagination,
   Row,

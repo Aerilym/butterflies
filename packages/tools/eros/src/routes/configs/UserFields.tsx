@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { OnboardingStepItem } from '../../../../../types/fields';
-import { CompletePageData } from '../../../../../types/api';
 
 import Header from '../../components/Header';
 import FieldForm from '../../components/config/users/FieldForm';
-import FieldBrowser from '../../components/config/users/FieldBrowser';
 
 import '../../styles/config/onboarding/Form.css';
 import Loading from '../../components/Loading';
@@ -160,7 +158,6 @@ export default function UserFields() {
           flexDirection: 'column',
         }}
       >
-        {/* <FieldBrowser fields={fields} handleEdit={handleEdit} handleDelete={handleDelete} /> */}
         <Table columns={columns} data={fieldData} warnings={warnings} />
         {showForm ? (
           <button
