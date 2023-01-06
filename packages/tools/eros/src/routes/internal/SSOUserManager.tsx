@@ -1,9 +1,9 @@
 import Header from '../../components/Header';
 
-export default function AuthenticationManager() {
+export default function SSOUserManager() {
   return (
     <div className="container">
-      <Header title="Authentication Manager" description="Authentication Manager" />
+      <Header title="User Manager" description="User Manager" />
       <div className="content"></div>
     </div>
   );

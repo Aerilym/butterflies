@@ -1,0 +1,166 @@
+.resizer {
+  right: 0;
+  border-color: gray;
+  border-left: 0;
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 1px;
+  border-style: solid;
+  width: 5px;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  touch-action: none;
+}
+
+.th,
+.td {
+  padding: 0em 0.5em;
+  line-height: 2em;
+}
+
+.td {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.th {
+  display: flex;
+  flex-direction: column;
+  background-color: #2f2f2f;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  white-space: pre-wrap;
+}
+
+.table {
+  overflow-y: hidden;
+}
+
+.th input {
+  user-select: none;
+  width: 100%;
+  border: none;
+  background-color: #2f2f2f;
+  color: white;
+  font-size: 1em;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.th input:focus {
+  outline: none;
+}
+
+.table-controls {
+  width: 100%;
+}
+
+.visibility-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.individual-visibility-menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.individual-visibility-menu label {
+  font-size: small;
+}
+
+.individual-visibility-menu input {
+  width: 1em;
+}
+
+.column-hider,
+.column-hider * {
+  user-select: none;
+  width: 2em;
+  aspect-ratio: 1;
+  border-radius: 100%;
+  background-color: #ffffff00;
+  border: 0;
+}
+
+.column-hider:hover {
+  background-color: #ffffff00;
+}
+
+.eye {
+  position: absolute;
+  top: 0.5em;
+  left: 1.2em;
+}
+
+.eye-open {
+  opacity: 1;
+}
+
+.eye-closed {
+  opacity: 0;
+}
+
+.eye-open:hover {
+  opacity: 0;
+}
+
+.eye-closed:hover {
+  opacity: 1;
+}
+
+.date-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-original {
+  display: none;
+}
+
+.date-cell:hover .date-original {
+  display: block;
+}
+
+.date-cell:hover .date-formatted {
+  display: none;
+}
+
+.warning {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff00;
+  margin-left: 0.3em;
+  align-self: center;
+}
+
+.warning,
+.warning img {
+  height: 1.2em;
+  aspect-ratio: 1;
+  border-radius: 20%;
+  user-select: none;
+}
+
+.warning img {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  fill: red;
+  color: red;
+  background-color: red;
+}
+
+.warning img:hover {
+  opacity: 0.5;
+}

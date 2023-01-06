@@ -46,6 +46,14 @@ function Root() {
             </li>
             <li>
               <Link
+                to="/users"
+                className={useLocation().pathname.startsWith('/users') ? 'route-active' : ''}
+              >
+                Users
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/godview"
                 className={useLocation().pathname.startsWith('/godview') ? 'route-active' : ''}
               >
