@@ -12,7 +12,7 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-
+import { formatDistanceToNow } from 'date-fns';
 import { matchSorter } from 'match-sorter';
 
 export interface TableColumn {
@@ -25,9 +25,29 @@ export type TableData = Record<string, string>;
 export interface TableProps {
   columns: TableColumn[];
   data: TableData[];
+  warnings?: Warnings;
+}
+
+type RowWarningSeverity = 'none' | 'info' | 'low' | 'high';
+export interface RowWarning {
+  severity: RowWarningSeverity;
+  message: string;
+}
+
+export interface RowWarnings {
+  rows: RowWarning[];
+  attachedColumn?: string;
+}
+
+export interface Warnings {
+  rowWarnings?: RowWarnings;
 }
 
 import '../styles/table.css';
+
+const supabaseDateTimeRegex = new RegExp(
+  /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{6})?(Z|\+\d{2}:\d{2})?/
+);
 
 // TODO: Work out the proper typing, forcing type any works but is sloppy
 const getStyles = (props: any, align = 'left') => [
@@ -226,7 +246,80 @@ function filterGreaterThan(rows, id, filterValue) {
 // check, but here, we want to remove the filter if it's not a number
 filterGreaterThan.autoRemove = (val) => typeof val !== 'number'; */
 
-export default function Table({ columns, data }: TableProps) {
+type DateFormat = 'TZ' | 'baseString' | 'localString' | 'since';
+interface DateFormatOption {
+  value: DateFormat;
+  label: string;
+}
+const dateFormats: DateFormatOption[] = [
+  { value: 'TZ', label: 'Time Zone' },
+  { value: 'baseString', label: 'Basic String' },
+  { value: 'localString', label: 'Local String' },
+  { value: 'since', label: 'Time Since' },
+];
+
+function formatDate(date: string, dateFormat: DateFormat) {
+  if (!supabaseDateTimeRegex.test(date)) return date;
+  switch (dateFormat) {
+    case 'since':
+      return formatDistanceToNow(new Date(date), { addSuffix: true });
+
+    case 'localString':
+      return new Date(date).toLocaleString();
+
+    case 'baseString':
+      return new Date(date).toString();
+
+    case 'TZ':
+    default:
+      return new Date(date).toISOString();
+  }
+}
+
+function formatDates(dateFormat: DateFormat): void {
+  const dateCells = document.getElementsByClassName('date-cell');
+  if (dateCells.length === 0) {
+    createFormattedDates();
+    return formatDates(dateFormat);
+  }
+  for (let i = 0; i < dateCells.length; i++) {
+    const dateCell = dateCells[i];
+    const dateOriginal = dateCell.getElementsByClassName('date-original')[0];
+    const dateFormatted = dateCell.getElementsByClassName('date-formatted')[0];
+    if (!dateOriginal || !dateFormatted || !dateOriginal.textContent) continue;
+    dateFormatted.textContent = formatDate(dateOriginal.textContent, dateFormat);
+  }
+}
+
+function createFormattedDates() {
+  const tds = document.getElementsByClassName('td');
+  for (let i = 0; i < tds.length; i++) {
+    const td = tds[i];
+    const text = td.textContent;
+    if (!text) continue;
+    if (supabaseDateTimeRegex.test(text)) {
+      td.classList.add('date-cell');
+      td.textContent = '';
+      const { dateOriginal, dateFormatted } = createDateItem(text);
+      td.append(dateOriginal);
+      td.append(dateFormatted);
+    }
+  }
+}
+
+function createDateItem(date: string) {
+  const dateOriginal = document.createElement('div');
+  dateOriginal.className = 'date-original';
+  dateOriginal.textContent = date;
+
+  const dateFormatted = document.createElement('div');
+  dateFormatted.className = 'date-formatted';
+  dateFormatted.textContent = date;
+
+  return { dateOriginal, dateFormatted };
+}
+
+export default function Table({ columns, data, warnings }: TableProps) {
   const [showVisibilityMenu, setShowVisibilityMenu] = React.useState<boolean>(false);
   const filterTypes = React.useMemo(
     () => ({
@@ -309,7 +402,6 @@ export default function Table({ columns, data }: TableProps) {
   );
 
   let firstPageRows = rows.slice(0, 100);
-
   return (
     <div className="table-container">
       <div {...getTableProps()} className="table">
@@ -321,6 +413,22 @@ export default function Table({ columns, data }: TableProps) {
           >
             Column Visibility
           </button>
+          Date Format:
+          <select
+            id="date-format"
+            onChange={(e) => {
+              const dateFormat = e.target.value;
+              formatDates(dateFormat as DateFormat);
+            }}
+          >
+            {dateFormats.map((dateFormat) => {
+              return (
+                <option key={dateFormat.value} value={dateFormat.value}>
+                  {dateFormat.label}
+                </option>
+              );
+            })}
+          </select>
         </div>
         {showVisibilityMenu && (
           <div className="visibility-menu">
@@ -400,6 +508,17 @@ export default function Table({ columns, data }: TableProps) {
                   return (
                     <div {...cell.getCellProps(cellProps)} className="td">
                       {cell.render('Cell')}
+                      {cell.column.id === warnings?.rowWarnings?.attachedColumn ? (
+                        warnings.rowWarnings.rows[cell.row.index].severity !== 'none' ? (
+                          <div className="warning">
+                            <img
+                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAA50lEQVR4nO2UTQ7BQABG30LZs5EgrmCJlAV34QL+TuTvGm4gYYFLILZGJplJRrXTqY6dl3xJM9O+bzrTFP54pAVcgLO69koB2ANC5QAEPgumhlxn4kteBa4xBTeg5qNgFSPXWeaV94GnpUBm8K08UIdpyrpAGBn7+sBnMavVRMflR5CJOnDPUPAAmlkKNgn7rYmbW+PI0HKgIdCzzMtnrRSBY8pXIyw5ASVbwSKHXKjMk+SNhIMVRspAJeWeu3J9sHVYXcWhQCjXGx0PWyMiaZsF4x8UjMwC+do7h/+OcMhTuaTzD6m8AGIz0rRb3H6FAAAAAElFTkSuQmCC"
+                              alt={warnings.rowWarnings.rows[cell.row.index].message}
+                              title={warnings.rowWarnings.rows[cell.row.index].message}
+                            ></img>
+                          </div>
+                        ) : null
+                      ) : null}
                     </div>
                   );
                 })}
