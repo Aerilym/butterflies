@@ -5,29 +5,31 @@ import 'react-tooltip/dist/react-tooltip.css';
 import '../styles/tooltips.css';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 
-const navLinks: {
-  to: string;
-  label: string;
-}[] = [
+const rootNavLinks: { label: string; target: string; description: string }[] = [
   {
-    to: '/config',
+    target: '/config',
     label: 'Config',
+    description: 'Configure all aspects of the the app settings, preferences, and environment',
   },
   {
-    to: '/users',
+    target: '/users',
     label: 'Users',
+    description: 'Manage all users and everything about them.',
   },
   {
-    to: '/godview',
+    target: '/godview',
     label: 'God View',
+    description: 'See all...',
   },
-  {
-    to: '/analytics',
+  /* {
+    target: '/analytics',
     label: 'Analytics',
-  },
+    description: 'View the app analytics.',
+  }, */
   {
-    to: '/internal',
+    target: '/internal',
     label: 'Internal',
+    description: 'Manage the internal tools and settings for everyone working on the app.',
   },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
@@ -62,11 +64,11 @@ function Root() {
         </button>
         <div className={isNavExpanded ? 'navigation-menu expanded' : 'navigation-menu'}>
           <ul>
-            {navLinks.map((link) => (
+            {rootNavLinks.map((link) => (
               <li key={link.label}>
                 <Link
-                  to={link.to}
-                  className={useLocation().pathname.startsWith(link.to) ? 'route-active' : ''}
+                  to={link.target}
+                  className={useLocation().pathname.startsWith(link.target) ? 'route-active' : ''}
                 >
                   {link.label}
                 </Link>
