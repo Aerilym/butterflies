@@ -5,7 +5,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 import '../styles/tooltips.css';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 
-const rootNavLinks: { label: string; target: string; description: string }[] = [
+export const rootNavLinks: { label: string; target: string; description: string }[] = [
   {
     target: '/config',
     label: 'Config',
