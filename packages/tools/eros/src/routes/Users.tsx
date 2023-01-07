@@ -1,30 +1,40 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 
-export const internalLinks: { label: string; target: string; description: string }[] = [
+export const usersLinks: { label: string; target: string; description: string }[] = [
   {
-    label: 'Dashboard',
-    target: 'dashboard',
-    description: 'Edit the internal dashboard',
-  },
-  /* {
-    label: 'Authentication',
-    target: 'authentication',
-    description: 'Configure the internal authentication settings',
+    label: 'User List',
+    target: 'list',
+    description: 'View all users',
   },
   {
-    label: 'Users',
-    target: 'users',
-    description: 'Manage the internal users',
-  }, */
+    label: 'Match List',
+    target: 'matches',
+    description: 'View all matches',
+  },
+  {
+    label: 'Profile List',
+    target: 'profiles',
+    description: 'View all profiles',
+  },
+  {
+    label: 'Preference List',
+    target: 'preferences',
+    description: 'View all preferences',
+  },
+  {
+    label: 'Custom List',
+    target: 'custom',
+    description: 'View a table you specify',
+  },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
-export default function Internal() {
+export default function Users() {
   return (
     <div className="top-container">
       <nav className="navigation side-nav">
         <div className="navigation-menu expanded">
           <ul>
-            {internalLinks.map((link) => (
+            {usersLinks.map((link) => (
               <li key={link.label}>
                 <Link
                   to={link.target}
