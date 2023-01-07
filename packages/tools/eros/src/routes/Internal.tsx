@@ -6,7 +6,7 @@ export const internalLinks: { label: string; target: string; description: string
     target: 'dashboard',
     description: 'Edit the internal dashboard',
   },
-  {
+  /* {
     label: 'Authentication',
     target: 'authentication',
     description: 'Configure the internal authentication settings',
@@ -15,7 +15,7 @@ export const internalLinks: { label: string; target: string; description: string
     label: 'Users',
     target: 'users',
     description: 'Manage the internal users',
-  },
+  }, */
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 export default function Internal() {
