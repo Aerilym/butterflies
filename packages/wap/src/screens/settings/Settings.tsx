@@ -22,15 +22,23 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       >
         <Text>Return</Text>
       </Button>
+      <Button
+        onPress={async () => {
+          await userStore.refreshLocationData();
+        }}
+      >
+        Refresh Location Data
+      </Button>
       {userStore.locationData ? (
         <Box>
+          <Text>-----RAW LOCATION DATA-----</Text>
           <Text>
             {userStore.locationData.coords.latitude}, {userStore.locationData.coords.longitude}
           </Text>
 
           <Text>Last Updated: {formatDistanceToNow(userStore.locationData.timestamp)}</Text>
 
-          <Text>Accuracy: {userStore.locationData.coords.accuracy}</Text>
+          <Text>Accuracy: {userStore.locationData.coords.accuracy}m</Text>
 
           <Text>Altitude: {userStore.locationData.coords.altitude}</Text>
 
@@ -42,7 +50,15 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
 
           <Text>Mocked: {userStore.locationData.mocked ? 'Yes' : 'No'}</Text>
 
+          <Text>-----GOOGLE GEOCODE DATA-----</Text>
+
           <Text>Name: {userStore.locationData.name}</Text>
+
+          <Text>Post Code: {userStore.locationData.postalCode}</Text>
+
+          <Text>ISO county code: {userStore.locationData.isoCountryCode}</Text>
+
+          <Text>Timezone (IOS Only): {userStore.locationData.timezone}</Text>
 
           <Text>
             Address:
