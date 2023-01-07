@@ -123,8 +123,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   return (
     <Box style={{ flex: 1, justifyContent: 'space-between' }}>
       <Box style={{ justifyContent: 'flex-start' }}>
-        <Heading style={{ marginVertical: 10, alignSelf: 'center' }}>Onboarding</Heading>
-        <Box style={{ marginVertical: 10 }}>
+        <Box style={{ marginVertical: 10, marginHorizontal: '20%' }}>
           <Box
             style={{
               position: 'absolute',
