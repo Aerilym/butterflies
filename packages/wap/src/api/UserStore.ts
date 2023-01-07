@@ -8,7 +8,9 @@ import { supabaseAPI } from '../provider/AuthProvider';
 import { Match, Message, Preferences, Profile } from '../types/database';
 import { LocationGeocodedAddress, LocationObject } from 'expo-location';
 
-export type UserLocationData = LocationObject & LocationGeocodedAddress;
+export type GeocodeLocation = LocationGeocodedAddress & { geocodeTimestamp: number };
+
+export type UserLocationData = LocationObject & GeocodeLocation;
 
 export class UserStore {
   public socials?: Person[] | undefined;
@@ -117,6 +119,9 @@ export class UserStore {
     await this.storeMatchQueue(this.matchQueue);
   };
 
+  /**
+   * Refresh the user's location data and store it in the locationData property and the async storage.
+   */
   refreshLocationData = async (): Promise<void> => {
     const { status } = await locationManager.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -125,11 +130,18 @@ export class UserStore {
     }
     locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
     const position = await locationManager.getCurrentPositionAsync({});
-    const address = await locationManager.reverseGeocodeAsync({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    });
-    this.locationData = { ...position, ...address[0] };
+    let geocodeLocation: GeocodeLocation = {} as GeocodeLocation;
+    try {
+      const geocodeResult = await locationManager.reverseGeocodeAsync({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+      geocodeLocation = { ...geocodeResult[0], geocodeTimestamp: Date.now() };
+    } catch (error) {
+      console.log('Error getting location data: ', error);
+    }
+
+    this.locationData = { ...position, ...geocodeLocation };
     this.storeLocationData(this.locationData);
   };
 
