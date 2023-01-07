@@ -132,6 +132,7 @@ export class UserStore {
     const position = await locationManager.getCurrentPositionAsync({});
     let geocodeLocation: GeocodeLocation = {} as GeocodeLocation;
     try {
+      locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
       const geocodeResult = await locationManager.reverseGeocodeAsync({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
