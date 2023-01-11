@@ -1,14 +1,23 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as locationManager from 'expo-location';
+
+import { GOOGLE_GEOCODE_API_KEY } from '@env';
 
 import { Person } from '../types/userstore';
 import { supabaseAPI } from '../provider/AuthProvider';
 import { Match, Message, Preferences, Profile } from '../types/database';
+import { LocationGeocodedAddress, LocationObject } from 'expo-location';
+
+export type GeocodeLocation = LocationGeocodedAddress & { geocodeTimestamp: number };
+
+export type UserLocationData = LocationObject & GeocodeLocation;
 
 export class UserStore {
   public socials?: Person[] | undefined;
   public matchQueue?: Person[] | undefined;
   public profile: Profile;
   public preferences: Preferences;
+  public locationData?: UserLocationData | undefined;
   constructor() {
     this.profile = {} as Profile;
     this.preferences = {} as Preferences;
@@ -16,6 +25,7 @@ export class UserStore {
     this.getMatchQueue();
     this.getStoredProfile();
     this.getStoredPreferences();
+    this.getLocationData();
   }
 
   /**
@@ -75,6 +85,23 @@ export class UserStore {
   }
 
   /**
+   * Get the user's location data item from the async storage and assign it to the locationData property. If there isn't anything in the async storage, it will fetch the location data from the database.
+   * If the location data is stale, it will refresh the location data.
+   * NOTE: The stale check happens after the stored location data is assigned to the locationData property. This is because its possible the user's location permission is revoked, so if it's stale but we can't get the new one we want to use the old one.
+   */
+  async getLocationData(): Promise<void> {
+    const storedLocationData = await this.getItem('@locationData');
+    if (storedLocationData) {
+      this.locationData = storedLocationData;
+      if (this.isStale(storedLocationData.timestamp)) {
+        this.refreshLocationData();
+      }
+    } else {
+      this.refreshLocationData();
+    }
+  }
+
+  /**
    * Refresh the socials property from supabase and store it in the socials property and the async storage.
    */
   refreshSocials = async (): Promise<void> => {
@@ -90,6 +117,33 @@ export class UserStore {
     const matches = await supabaseAPI.getMatchQueue();
     this.matchQueue = await this.getPeople(matches, false);
     await this.storeMatchQueue(this.matchQueue);
+  };
+
+  /**
+   * Refresh the user's location data and store it in the locationData property and the async storage.
+   */
+  refreshLocationData = async (): Promise<void> => {
+    const { status } = await locationManager.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Permission to access location was denied');
+      return;
+    }
+    locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
+    const position = await locationManager.getCurrentPositionAsync({});
+    let geocodeLocation: GeocodeLocation = {} as GeocodeLocation;
+    try {
+      locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
+      const geocodeResult = await locationManager.reverseGeocodeAsync({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+      geocodeLocation = { ...geocodeResult[0], geocodeTimestamp: Date.now() };
+    } catch (error) {
+      console.log('Error getting location data: ', error);
+    }
+
+    this.locationData = { ...position, ...geocodeLocation };
+    this.storeLocationData(this.locationData);
   };
 
   /**
@@ -121,6 +175,10 @@ export class UserStore {
    */
   storePreferences = async (preferences?: Preferences): Promise<void> => {
     await this.storeItem('@preferences', preferences ?? this.preferences);
+  };
+
+  storeLocationData = async (locationData?: UserLocationData): Promise<void> => {
+    await this.storeItem('@locationData', locationData ?? this.locationData);
   };
 
   /**
@@ -217,5 +275,12 @@ export class UserStore {
    */
   clearUserProfile = (): void => {
     this.profile = {} as Profile;
+  };
+
+  isStale = (lastUpdated: Date | number): boolean => {
+    if (typeof lastUpdated === 'number') lastUpdated = new Date(lastUpdated);
+    const now = new Date();
+    const diff = now.getTime() - lastUpdated.getTime();
+    return diff > 1000 * 60 * 60 * 24;
   };
 }
