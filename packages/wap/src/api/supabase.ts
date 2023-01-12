@@ -28,6 +28,7 @@ export class SupabaseAPI {
    * @param provider A supabase auth provider
    */
   login = async (provider: Provider): Promise<void> => {
+    console.log('isWeb', isWeb);
     if (isWeb) {
       await this.supabase.auth.signInWithOAuth({
         provider,
@@ -35,24 +36,42 @@ export class SupabaseAPI {
       return;
     }
 
-    const returnUrl = makeRedirectUri({ useProxy: false });
-    const authUrl = `${SB_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${returnUrl}`;
-    const response = await startAsync({ authUrl, returnUrl });
+    /* const returnUrl = makeRedirectUri({ useProxy: false }); */
+    const redirectUrl = makeRedirectUri({ useProxy: false });
+    /* const authUrl = `${SB_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${returnUrl}`;
+    const response = await startAsync({ authUrl, returnUrl }); */
 
-    if (response.type !== 'success') {
+    const authResponse = await startAsync({
+      authUrl: `${SB_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${redirectUrl}`,
+      returnUrl: redirectUrl,
+    });
+
+    console.log('authResponse', authResponse);
+
+    if (authResponse.type !== 'success') {
       return;
     }
 
-    const refreshToken = response.params?.refresh_token;
+    /* const refreshToken = response.params?.refresh_token;
     if (!refreshToken) return;
-    this.supabase.auth.setSessionFromToken(refreshToken);
+    this.supabase.auth.setSessionFromToken(refreshToken); */
+    /* await this.supabase.auth.setSession({
+      access_token: authResponse.params?.access_token,
+      refresh_token: authResponse.params?.refresh_token,
+    });
+    const { data, error } = await this.supabase.auth.getSession();
+    console.log(data, error); */
+    const { data: data2, error: error2 } = await this.supabase.auth.refreshSession({
+      refresh_token: authResponse.params?.refresh_token,
+    });
+    console.log(data2, error2);
   };
 
   /**
    * Logout of Supabase.
    */
   logout = async (): Promise<void> => {
-    this.supabase.auth.signOut();
+    await this.supabase.auth.signOut();
   };
 
   /**

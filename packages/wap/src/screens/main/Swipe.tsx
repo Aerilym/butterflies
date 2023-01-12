@@ -5,7 +5,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
+import { supabaseAPI, userStore } from '../../provider/AuthProvider';
 import { SwipeCard } from '../../components/swipe/SwipeCard';
 import { Person } from '../../types/userstore';
 import { MatchQueueItem } from '../../types/social';
@@ -26,13 +26,7 @@ function formatMatchQueue(
 }
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Swipe'>) {
-  const { session } = useContext(AuthContext);
-  const userID = session?.user.id ?? '';
-
-  const isOnboarded = Boolean(userStore.profile.onboarded);
-  if (!isOnboarded) {
-    navigation.navigate('Onboarding');
-  }
+  const userID = userStore.profile.user_id;
 
   const [matchQueue, setMatchQueue] = useState<null | MatchQueueItem[]>(null);
 

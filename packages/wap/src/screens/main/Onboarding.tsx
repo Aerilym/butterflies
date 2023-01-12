@@ -8,6 +8,7 @@ import { FieldSelector } from '../../components/profile/FieldSelector';
 import { supabaseAPI, userStore } from '../../provider/AuthProvider';
 import { OnboardingStepItem } from '../../../../types/fields';
 import Loading from '../utility/Loading';
+import { supabase } from '@supabase/auth-ui-react/dist/esm/common/theming';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Onboarding'>) {
   const [stepNumber, setStepNumber] = useState<number>(0);
@@ -69,7 +70,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
             });
             await supabaseAPI.completeOnboarding();
             await userStore.refreshProfile();
-            navigation.navigate('Swipe');
+            await supabaseAPI.supabase.auth.refreshSession();
           } else {
             setStepNumber(stepNumber + 1);
           }

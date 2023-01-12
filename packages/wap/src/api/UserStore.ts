@@ -1,15 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Person } from '../types/userstore';
-import { supabaseAPI } from '../provider/AuthProvider';
 import { Match, Message, Preferences, Profile } from '../types/database';
+import type { SupabaseAPI } from './supabase';
 
 export class UserStore {
   public socials?: Person[] | undefined;
   public matchQueue?: Person[] | undefined;
   public profile: Profile;
   public preferences: Preferences;
-  constructor() {
+  private supabaseAPI: SupabaseAPI;
+  constructor(supabaseAPI: SupabaseAPI) {
+    this.supabaseAPI = supabaseAPI;
     this.profile = {} as Profile;
     this.preferences = {} as Preferences;
     this.getSocials();
@@ -26,7 +28,7 @@ export class UserStore {
     if (storedSocials) {
       this.socials = storedSocials;
     } else {
-      if (supabaseAPI.userID) {
+      if (this.supabaseAPI.userID) {
         this.refreshSocials();
       }
     }
@@ -40,7 +42,7 @@ export class UserStore {
     if (storedMatchQueue) {
       this.matchQueue = storedMatchQueue;
     } else {
-      if (supabaseAPI.userID) {
+      if (this.supabaseAPI.userID) {
         this.refreshMatchQueue();
       }
     }
@@ -54,7 +56,7 @@ export class UserStore {
     if (storedProfile) {
       this.profile = storedProfile;
     } else {
-      if (supabaseAPI.userID) {
+      if (this.supabaseAPI.userID) {
         this.refreshProfile();
       }
     }
@@ -68,7 +70,7 @@ export class UserStore {
     if (storedPreferences) {
       this.preferences = storedPreferences;
     } else {
-      if (supabaseAPI.userID) {
+      if (this.supabaseAPI.userID) {
         this.refreshPreferences();
       }
     }
@@ -78,7 +80,7 @@ export class UserStore {
    * Refresh the socials property from supabase and store it in the socials property and the async storage.
    */
   refreshSocials = async (): Promise<void> => {
-    const matches = await supabaseAPI.getMatches();
+    const matches = await this.supabaseAPI.getMatches();
     this.socials = await this.getPeople(matches, true);
     await this.storeSocials(this.socials);
   };
@@ -87,7 +89,7 @@ export class UserStore {
    * Refresh the match queue property from supabase and store it in the matchQueue property and the async storage.
    */
   refreshMatchQueue = async (): Promise<void> => {
-    const matches = await supabaseAPI.getMatchQueue();
+    const matches = await this.supabaseAPI.getMatchQueue();
     this.matchQueue = await this.getPeople(matches, false);
     await this.storeMatchQueue(this.matchQueue);
   };
@@ -160,8 +162,8 @@ export class UserStore {
    */
   getPeople = async (matches: Match[], matched: boolean): Promise<Person[]> => {
     const peopleGets = matches.map(async (match) => {
-      const userID = match.user_id1 === supabaseAPI.userID ? match.user_id2 : match.user_id1;
-      const profile = await supabaseAPI.getProfile(userID);
+      const userID = match.user_id1 === this.supabaseAPI.userID ? match.user_id2 : match.user_id1;
+      const profile = await this.supabaseAPI.getProfile(userID);
       const person: Person = {
         id: userID,
         profile,
@@ -170,7 +172,7 @@ export class UserStore {
         messages: [],
       };
       if (!matched) return person;
-      person.messages = await supabaseAPI.getMessages(match.match_id);
+      person.messages = await this.supabaseAPI.getMessages(match.match_id);
       return person;
     });
     const people = await Promise.all(peopleGets);
@@ -196,8 +198,8 @@ export class UserStore {
    * Refresh the profile property from supabase and store it in the profile property and the async storage.
    */
   refreshProfile = async (): Promise<void> => {
-    if (!supabaseAPI.userID) return;
-    const profile = await supabaseAPI.getProfile(supabaseAPI.userID);
+    if (!this.supabaseAPI.userID) return;
+    const profile = await this.supabaseAPI.getProfile(this.supabaseAPI.userID);
     this.profile = profile;
     await this.storeProfile(profile);
   };
@@ -206,8 +208,8 @@ export class UserStore {
    * Refresh the preferences property from supabase and store it in the preferences property and the async storage.
    */
   refreshPreferences = async (): Promise<void> => {
-    if (!supabaseAPI.userID) return;
-    const preferences = await supabaseAPI.getPreferences(supabaseAPI.userID);
+    if (!this.supabaseAPI.userID) return;
+    const preferences = await this.supabaseAPI.getPreferences(this.supabaseAPI.userID);
     this.preferences = preferences;
     await this.storePreferences(preferences);
   };
