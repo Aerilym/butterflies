@@ -83,7 +83,6 @@ export default () => {
   useEffect(() => {
     const { data: authListener } = supabaseAPI.supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log(event, session);
         switch (event) {
           case 'SIGNED_OUT':
             authContext.signOut();
@@ -99,12 +98,6 @@ export default () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       authListener!.subscription.unsubscribe();
     };
-  });
-
-  console.log('stateofStuff', {
-    isLoading: state.isLoading,
-    userToken: state.userToken,
-    onboarded: userStore.profile.onboarded,
   });
 
   return (
