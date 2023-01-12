@@ -26,6 +26,13 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         Redo Onboarding
       </Button>
       <Button
+        onPress={async () => {
+          navigation.navigate('Settings');
+        }}
+      >
+        Settings
+      </Button>
+      <Button
         style={{
           backgroundColor: 'red',
         }}
