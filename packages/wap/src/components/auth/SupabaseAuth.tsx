@@ -3,7 +3,6 @@ import { ImageSourcePropType, Linking } from 'react-native';
 import { Box, Image, Text } from 'native-base';
 import type { Provider } from '@supabase/supabase-js';
 
-import { supabaseAPI } from '../../provider/AuthProvider';
 import type { AuthIcons } from '../../types/auth';
 import { AuthButton } from './AuthButton';
 import Loading from '../../screens/utility/Loading';

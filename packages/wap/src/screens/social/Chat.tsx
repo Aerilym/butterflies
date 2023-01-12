@@ -1,10 +1,10 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TouchableOpacity, ScrollView } from 'react-native';
 import { Box, Input } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
-import { AuthContext, supabaseAPI, userStore } from '../../provider/AuthProvider';
+import { supabaseAPI, userStore } from '../../provider/AuthProvider';
 import type { MainStackParamList } from '../../types/navigation';
 import type { Message, Profile } from '../../types/database';
 import { MessageBubble } from '../../components/chat/MessageBubble';
@@ -29,11 +29,10 @@ export default function ({
     messages: [] as Message[],
   };
 
-  const { session } = useContext(AuthContext);
-  const userID = session?.user.id ?? '';
-
   const [messages, setMessages] = useState<Message[]>(socialMessages);
   const [draftMessage, setDraftMessage] = useState<string>('');
+
+  const userID = userStore.profile.user_id;
 
   useEffect(() => {
     //TODO: Move subscribe events to supabaseAPI class.
