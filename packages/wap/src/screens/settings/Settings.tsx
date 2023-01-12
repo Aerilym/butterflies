@@ -4,6 +4,8 @@ import { formatDistanceToNow } from 'date-fns';
 
 import type { MainStackParamList } from '../../types/navigation';
 import { userStore } from '../../provider/AuthProvider';
+import { earthDistance } from '../../helpers/location';
+import { LocationObjectCoords } from 'expo-location';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Settings'>) {
   return (
@@ -74,6 +76,17 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
               .filter((line) => line)
               .filter((line) => line !== ' ')
               .join(', ')}
+          </Text>
+
+          <Text>
+            Distance from Yah Yahs:{' '}
+            {Math.round(
+              earthDistance(userStore.locationData.coords, {
+                latitude: -37.80586505770181,
+                longitude: 144.98296141840655,
+              } as LocationObjectCoords)
+            )}{' '}
+            km
           </Text>
         </Box>
       ) : null}
