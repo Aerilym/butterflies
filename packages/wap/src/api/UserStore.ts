@@ -13,7 +13,6 @@ export type GeocodeLocation = LocationGeocodedAddress & { geocodeTimestamp: numb
 
 export type UserLocationData = LocationObject & GeocodeLocation;
 
-
 export class UserStore {
   public socials?: Person[] | undefined;
   public matchQueue?: Person[] | undefined;
@@ -129,6 +128,7 @@ export class UserStore {
   refreshLocationData = async (): Promise<void> => {
     const { status } = await locationManager.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
+      //TODO: Handle location permission being denied.
       console.log('Permission to access location was denied');
       return;
     }
@@ -143,6 +143,7 @@ export class UserStore {
       });
       geocodeLocation = { ...geocodeResult[0], geocodeTimestamp: Date.now() };
     } catch (error) {
+      //TODO: Handle location errors
       console.log('Error getting location data: ', error);
     }
 

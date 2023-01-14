@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Box, Text, Button } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
