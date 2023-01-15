@@ -1,5 +1,5 @@
-import { createContext, useEffect, useMemo, useReducer } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { createContext, useEffect, useMemo, useReducer, useRef } from 'react';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
 
@@ -10,11 +10,14 @@ import Auth from './AuthStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Session } from '@supabase/supabase-js';
 import OnboardingStack from './OnboardingStack';
+import { log } from '../services/log/logger';
 
 const AuthContext = createContext({});
 
 // TODO: Separate the Auth Provider into its own file.
 export default () => {
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef<string>();
   const [state, dispatch] = useReducer(
     (prevState: any, action: any) => {
       switch (action.type) {
@@ -102,7 +105,22 @@ export default () => {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.getCurrentRoute()?.name;
+        }}
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.getCurrentRoute()?.name;
+
+          if (previousRouteName !== currentRouteName) {
+            // Save the current route name for later comparison
+            routeNameRef.current = currentRouteName;
+            log.info('Navigation Event:', previousRouteName, ' -> ', currentRouteName);
+          }
+        }}
+      >
         <SafeAreaProvider
           style={{
             paddingTop: isMobileDevice ? 25 : 0,
