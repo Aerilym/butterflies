@@ -1,18 +1,18 @@
 import { SupabaseClient, createClient, Provider } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
 import { startAsync, makeRedirectUri } from 'expo-auth-session';
 
 import { SB_URL, SB_KEY } from '@env';
 import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
-
-const isWeb = Platform.OS === 'web';
+import { isWeb } from '../helpers/environment';
+import { log } from '../services/log/logger';
 
 export class SupabaseAPI {
   supabase: SupabaseClient;
   userID?: string;
   constructor() {
+    log.debug('Creating Supabase API');
     this.supabase = createClient(SB_URL, SB_KEY, {
       auth: {
         autoRefreshToken: true,
@@ -28,10 +28,13 @@ export class SupabaseAPI {
    * @param provider A supabase auth provider
    */
   login = async (provider: Provider): Promise<void> => {
+    log.debug('Logging in with provider:', provider);
     if (isWeb) {
-      await this.supabase.auth.signInWithOAuth({
+      const { data, error } = await this.supabase.auth.signInWithOAuth({
         provider,
       });
+      log.debug('Provider login response', data);
+      if (error) log.error('Error logging in with provider: ', provider, error, data);
       return;
     }
 
@@ -42,18 +45,23 @@ export class SupabaseAPI {
       returnUrl: redirectUrl,
     });
 
+    log.debug('Login auth response', authResponse);
     if (authResponse.type !== 'success') return;
 
-    await this.supabase.auth.refreshSession({
+    const { data, error } = await this.supabase.auth.refreshSession({
       refresh_token: authResponse.params?.refresh_token,
     });
+    log.debug('Provider login response', data);
+    if (error) log.error('Error logging in with provider: ', provider, error, data);
   };
 
   /**
    * Logout of Supabase.
    */
   logout = async (): Promise<void> => {
-    await this.supabase.auth.signOut();
+    log.debug('Logging out');
+    const { error } = await this.supabase.auth.signOut();
+    if (error) log.error('Error logging out', error);
   };
 
   /**
@@ -64,6 +72,8 @@ export class SupabaseAPI {
     //TODO: Replace mock function with method to get enabled providers from Supabase or somewhere.
 
     const { data } = await this.supabase.from('providers').select('provider').is('enabled', true);
+
+    log.debug('Enabled providers', data);
 
     return data?.map((provider) => provider.provider) ?? [];
   };
