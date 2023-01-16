@@ -69,13 +69,16 @@ export class SupabaseAPI {
    * @returns A list of enabled providers
    */
   getEnabledAuthProviders = async (): Promise<Provider[]> => {
-    //TODO: Replace mock function with method to get enabled providers from Supabase or somewhere.
+    const response = await fetch(
+      'https://field-manager.aerilym.workers.dev/options?key=providerOrder'
+    );
 
-    const { data } = await this.supabase.from('providers').select('provider').is('enabled', true);
+    const { value } = await response.json();
 
-    log.debug('Enabled providers', data);
+    log.debug('Enabled providers', value);
+    if (!value || value.length === 0) log.warn('No enabled providers found');
 
-    return data?.map((provider) => provider.provider) ?? [];
+    return value ?? [];
   };
 
   /**
