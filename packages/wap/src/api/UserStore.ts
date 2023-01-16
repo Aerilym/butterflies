@@ -8,6 +8,7 @@ import { Match, Message, Preferences, Profile } from '../types/database';
 
 import type { SupabaseAPI } from './supabase';
 import { LocationGeocodedAddress, LocationObject } from 'expo-location';
+import { log } from '../services/log/logger';
 
 export type GeocodeLocation = LocationGeocodedAddress & { geocodeTimestamp: number };
 
@@ -21,6 +22,7 @@ export class UserStore {
   public locationData?: UserLocationData | undefined;
   private supabaseAPI: SupabaseAPI;
   constructor(supabaseAPI: SupabaseAPI) {
+    log.debug('Creating UserStore');
     this.supabaseAPI = supabaseAPI;
     this.profile = {} as Profile;
     this.preferences = {} as Preferences;
@@ -35,6 +37,7 @@ export class UserStore {
    * Get the socials item from the async storage and assign it to the socials property. If there isn't anything in the async storage, it will fetch the socials from the database.
    */
   async getSocials(): Promise<void> {
+    log.debug('UserStore', 'getSocials called');
     const storedSocials = await this.getItem('@socials');
     if (storedSocials) {
       this.socials = storedSocials;
@@ -49,6 +52,7 @@ export class UserStore {
    * Get the match queue item from the async storage and assign it to the matchQueue property. If there isn't anything in the async storage, it will fetch the match queue from the database.
    */
   async getMatchQueue(): Promise<void> {
+    log.debug('UserStore', 'getMatchQueue called');
     const storedMatchQueue = await this.getItem('@matchQueue');
     if (storedMatchQueue) {
       this.matchQueue = storedMatchQueue;
@@ -63,6 +67,7 @@ export class UserStore {
    * Get the user's profile item from the async storage and assign it to the profile property. If there isn't anything in the async storage, it will fetch the profile from the database.
    */
   async getStoredProfile(): Promise<void> {
+    log.debug('UserStore', 'getStoredProfile called');
     const storedProfile = await this.getItem('@profile');
     if (storedProfile) {
       this.profile = storedProfile;
@@ -77,6 +82,7 @@ export class UserStore {
    * Get the user's preferences item from the async storage and assign it to the preferences property. If there isn't anything in the async storage, it will fetch the preferences from the database.
    */
   async getStoredPreferences(): Promise<void> {
+    log.debug('UserStore', 'getStoredPreferences called');
     const storedPreferences = await this.getItem('@preferences');
     if (storedPreferences) {
       this.preferences = storedPreferences;
@@ -93,6 +99,7 @@ export class UserStore {
    * NOTE: The stale check happens after the stored location data is assigned to the locationData property. This is because its possible the user's location permission is revoked, so if it's stale but we can't get the new one we want to use the old one.
    */
   async getLocationData(): Promise<void> {
+    log.debug('UserStore', 'getLocationData called');
     const storedLocationData = await this.getItem('@locationData');
     if (storedLocationData) {
       this.locationData = storedLocationData;
@@ -108,6 +115,7 @@ export class UserStore {
    * Refresh the socials property from supabase and store it in the socials property and the async storage.
    */
   refreshSocials = async (): Promise<void> => {
+    log.debug('UserStore', 'refreshSocials called');
     const matches = await this.supabaseAPI.getMatches();
     this.socials = await this.getPeople(matches, true);
     await this.storeSocials(this.socials);
@@ -117,6 +125,7 @@ export class UserStore {
    * Refresh the match queue property from supabase and store it in the matchQueue property and the async storage.
    */
   refreshMatchQueue = async (): Promise<void> => {
+    log.debug('UserStore', 'refreshMatchQueue called');
     const matches = await this.supabaseAPI.getMatchQueue();
     this.matchQueue = await this.getPeople(matches, false);
     await this.storeMatchQueue(this.matchQueue);
@@ -126,14 +135,16 @@ export class UserStore {
    * Refresh the user's location data and store it in the locationData property and the async storage.
    */
   refreshLocationData = async (): Promise<void> => {
+    log.debug('UserStore', 'refreshLocationData called');
     const { status } = await locationManager.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       //TODO: Handle location permission being denied.
-      console.log('Permission to access location was denied');
+      log.warn('UserStore', 'refreshLocationData', 'Location permission denied');
       return;
     }
     locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
     const position = await locationManager.getCurrentPositionAsync({});
+    log.debug('Position determined', position);
     let geocodeLocation: GeocodeLocation = {} as GeocodeLocation;
     try {
       locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
@@ -142,9 +153,10 @@ export class UserStore {
         longitude: position.coords.longitude,
       });
       geocodeLocation = { ...geocodeResult[0], geocodeTimestamp: Date.now() };
+      log.debug('Geocode result', geocodeResult);
     } catch (error) {
       //TODO: Handle location errors
-      console.log('Error getting location data: ', error);
+      log.error('UserStore', 'refreshLocationData', error);
     }
 
     this.locationData = { ...position, ...geocodeLocation };
@@ -193,9 +205,11 @@ export class UserStore {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   storeItem = async (key: string, item: any): Promise<void> => {
+    log.debug('UserStore', 'storeItem called', key, item);
     try {
       await AsyncStorage.setItem(key, JSON.stringify(item));
     } catch (e) {
+      log.error('UserStore', 'storeItem', e);
       return;
     }
   };
@@ -207,10 +221,12 @@ export class UserStore {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getItem = async (key: string): Promise<any> => {
+    log.debug('UserStore', 'getItem called', key);
     try {
       const item = await AsyncStorage.getItem(key);
       return item ? JSON.parse(item) : null;
     } catch (e) {
+      log.error('UserStore', 'getItem', e);
       return null;
     }
   };
@@ -222,6 +238,7 @@ export class UserStore {
    * @returns The people from the matches.
    */
   getPeople = async (matches: Match[], matched: boolean): Promise<Person[]> => {
+    log.debug('UserStore', 'getPeople called', matches, matched);
     const peopleGets = matches.map(async (match) => {
       const userID = match.user_id1 === this.supabaseAPI.userID ? match.user_id2 : match.user_id1;
       const profile = await this.supabaseAPI.getProfile(userID);
@@ -246,6 +263,7 @@ export class UserStore {
    * @param message The message to add to the messages
    */
   addMessage = async (matchID: string, message: Message): Promise<void> => {
+    log.debug('UserStore', 'addMessage called', matchID, message);
     if (!this.socials) return;
     const social = this.socials.find((social) => social.match.match_id === matchID);
     const socialIdx = this.socials.findIndex((social) => social.match.match_id === matchID);
@@ -259,6 +277,7 @@ export class UserStore {
    * Refresh the profile property from supabase and store it in the profile property and the async storage.
    */
   refreshProfile = async (): Promise<void> => {
+    log.debug('UserStore', 'refreshProfile called');
     if (!this.supabaseAPI.userID) return;
     const profile = await this.supabaseAPI.getProfile(this.supabaseAPI.userID);
     this.profile = profile;
@@ -269,6 +288,7 @@ export class UserStore {
    * Refresh the preferences property from supabase and store it in the preferences property and the async storage.
    */
   refreshPreferences = async (): Promise<void> => {
+    log.debug('UserStore', 'refreshPreferences called');
     if (!this.supabaseAPI.userID) return;
     const preferences = await this.supabaseAPI.getPreferences(this.supabaseAPI.userID);
     this.preferences = preferences;
@@ -279,6 +299,7 @@ export class UserStore {
    * Clear the profile property.
    */
   clearUserProfile = (): void => {
+    log.debug('UserStore', 'clearUserProfile called');
     this.profile = {} as Profile;
   };
 
