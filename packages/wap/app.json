@@ -18,9 +18,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -38,6 +36,20 @@
       "eas": {
         "projectId": "b3e615e2-c69f-4558-a5a9-c64a1d76b64a"
       }
+    },
+    "plugins": ["sentry-expo"],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "butterflies",
+            "project": "react-native-expo",
+            "authToken": "a02fe8f71fef477ba76b470fb3077926f0e3e550f7d84f6187f63570989b3e34",
+            "release": "dev"
+          }
+        }
+      ]
     }
   }
 }

@@ -6,6 +6,7 @@ import type { Provider } from '@supabase/supabase-js';
 import type { AuthIcons } from '../../types/auth';
 import { AuthButton } from './AuthButton';
 import Loading from '../../screens/utility/Loading';
+import { supabaseAPI } from '../../provider/AuthProvider';
 
 const icons: AuthIcons = {
   apple: require('../../../assets/icons/apple.png'),
@@ -30,17 +31,10 @@ export function SupabaseAuth() {
   const [enabledProviders, setEnabledProviders] = useState<Provider[] | null>(null);
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/options?key=providerOrder').then(
-      async (response) => {
-        const { value } = await response.json();
-
-        const filteredOrder = value.filter((provider: string) =>
-          Object.keys(icons).includes(provider)
-        );
-
-        setEnabledProviders(filteredOrder);
-      }
-    );
+    supabaseAPI.getEnabledAuthProviders().then(async (order) => {
+      const filteredOrder = order.filter((provider) => Object.keys(icons).includes(provider));
+      setEnabledProviders(filteredOrder);
+    });
   }, []);
   return (
     <>
