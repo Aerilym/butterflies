@@ -1,7 +1,6 @@
 import { createContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Platform } from 'react-native';
 
 import Main from './MainStack';
 import { supabaseAPI, userStore } from '../provider/AuthProvider';
@@ -11,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Session } from '@supabase/supabase-js';
 import OnboardingStack from './OnboardingStack';
 import { log } from '../services/log/logger';
+import { isMobileDevice } from '../helpers/environment';
 
 const AuthContext = createContext({});
 
@@ -47,8 +47,6 @@ export default () => {
       userToken: null,
     }
   );
-
-  const isMobileDevice = Platform.OS === 'ios' || Platform.OS === 'android';
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
