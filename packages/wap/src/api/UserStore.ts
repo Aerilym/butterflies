@@ -1,29 +1,31 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as locationManager from 'expo-location';
 
 import { GOOGLE_GEOCODE_API_KEY } from '@env';
 
 import { Person } from '../types/userstore';
 import { Match, Message, Preferences, Profile } from '../types/database';
-
 import type { SupabaseAPI } from './supabase';
-import { LocationGeocodedAddress, LocationObject } from 'expo-location';
 import { log } from '../services/log/logger';
+import { LocationAPI, LocationAPIParams, UserLocationData } from './location';
 
-export type GeocodeLocation = LocationGeocodedAddress & { geocodeTimestamp: number };
-
-export type UserLocationData = LocationObject & GeocodeLocation;
+const locationAPIConfig: LocationAPIParams = {
+  key: {
+    googleGeocode: GOOGLE_GEOCODE_API_KEY,
+  },
+};
 
 export class UserStore {
   public socials?: Person[] | undefined;
   public matchQueue?: Person[] | undefined;
   public profile: Profile;
   public preferences: Preferences;
-  public locationData?: UserLocationData | undefined;
+  public locationData?: UserLocationData | null;
   private supabaseAPI: SupabaseAPI;
+  private locationAPI: LocationAPI;
   constructor(supabaseAPI: SupabaseAPI) {
     log.debug('Creating UserStore');
     this.supabaseAPI = supabaseAPI;
+    this.locationAPI = new LocationAPI(locationAPIConfig);
     this.profile = {} as Profile;
     this.preferences = {} as Preferences;
     this.getSocials();
@@ -136,31 +138,10 @@ export class UserStore {
    */
   refreshLocationData = async (): Promise<void> => {
     log.debug('UserStore', 'refreshLocationData called');
-    const { status } = await locationManager.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      //TODO: Handle location permission being denied.
-      log.warn('UserStore', 'refreshLocationData', 'Location permission denied');
-      return;
-    }
-    locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
-    const position = await locationManager.getCurrentPositionAsync({});
-    log.debug('Position determined', position);
-    let geocodeLocation: GeocodeLocation = {} as GeocodeLocation;
-    try {
-      locationManager.setGoogleApiKey(GOOGLE_GEOCODE_API_KEY);
-      const geocodeResult = await locationManager.reverseGeocodeAsync({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-      geocodeLocation = { ...geocodeResult[0], geocodeTimestamp: Date.now() };
-      log.debug('Geocode result', geocodeResult);
-    } catch (error) {
-      //TODO: Handle location errors
-      log.error('UserStore', 'refreshLocationData', error);
-    }
 
-    this.locationData = { ...position, ...geocodeLocation };
-    this.storeLocationData(this.locationData);
+    const locationData = await this.locationAPI.getLocationData();
+    this.locationData = locationData;
+    await this.storeLocationData(this.locationData ?? ({} as UserLocationData));
   };
 
   /**
@@ -194,6 +175,10 @@ export class UserStore {
     await this.storeItem('@preferences', preferences ?? this.preferences);
   };
 
+  /**
+   * Store the user location data in the async storage.
+   * @param locationData The user's location data
+   */
   storeLocationData = async (locationData?: UserLocationData): Promise<void> => {
     await this.storeItem('@locationData', locationData ?? this.locationData);
   };
