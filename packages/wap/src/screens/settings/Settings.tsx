@@ -6,8 +6,13 @@ import type { MainStackParamList } from '../../types/navigation';
 import { userStore } from '../../provider/AuthProvider';
 import { earthDistance } from '../../helpers/location';
 import { LocationObjectCoords } from 'expo-location';
+import { useState } from 'react';
+import { UserLocationData } from '../../api/location';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Settings'>) {
+  const [location, setLocation] = useState<UserLocationData>(
+    userStore.locationData ?? ({} as UserLocationData)
+  );
   return (
     <Box
       style={{
@@ -27,50 +32,53 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       <Button
         onPress={async () => {
           await userStore.refreshLocationData();
+          if (userStore.locationData) {
+            setLocation(userStore.locationData);
+          }
         }}
       >
         Refresh Location Data
       </Button>
-      {userStore.locationData ? (
+      {userStore.locationData && location ? (
         <Box>
           <Text>-----RAW LOCATION DATA-----</Text>
           <Text>
-            {userStore.locationData.coords.latitude}, {userStore.locationData.coords.longitude}
+            {location.coords.latitude}, {location.coords.longitude}
           </Text>
 
-          <Text>Last Updated: {formatDistanceToNow(userStore.locationData.timestamp)}</Text>
+          <Text>Last Updated: {formatDistanceToNow(location.timestamp)}</Text>
 
-          <Text>Accuracy: {userStore.locationData.coords.accuracy}m</Text>
+          <Text>Accuracy: {location.coords.accuracy}m</Text>
 
-          <Text>Altitude: {userStore.locationData.coords.altitude}</Text>
+          <Text>Altitude: {location.coords.altitude}</Text>
 
-          <Text>Altitude Accuracy: {userStore.locationData.coords.altitudeAccuracy}</Text>
+          <Text>Altitude Accuracy: {location.coords.altitudeAccuracy}</Text>
 
-          <Text>Heading: {userStore.locationData.coords.heading}</Text>
+          <Text>Heading: {location.coords.heading}</Text>
 
-          <Text>Speed: {userStore.locationData.coords.speed}</Text>
+          <Text>Speed: {location.coords.speed}</Text>
 
-          <Text>Mocked: {userStore.locationData.mocked ? 'Yes' : 'No'}</Text>
+          <Text>Mocked: {location.mocked ? 'Yes' : 'No'}</Text>
 
           <Text>-----GOOGLE GEOCODE DATA-----</Text>
 
-          <Text>Name: {userStore.locationData.name}</Text>
+          <Text>Name: {location.name}</Text>
 
-          <Text>Post Code: {userStore.locationData.postalCode}</Text>
+          <Text>Post Code: {location.postalCode}</Text>
 
-          <Text>ISO county code: {userStore.locationData.isoCountryCode}</Text>
+          <Text>ISO county code: {location.isoCountryCode}</Text>
 
-          <Text>Timezone (IOS Only): {userStore.locationData.timezone}</Text>
+          <Text>Timezone (IOS Only): {location.timezone}</Text>
 
           <Text>
             Address:
             {[
-              userStore.locationData.streetNumber + ' ' + userStore.locationData.street,
-              userStore.locationData.district,
-              userStore.locationData.city,
-              userStore.locationData.subregion,
-              userStore.locationData.region,
-              userStore.locationData.country,
+              location.streetNumber + ' ' + location.street,
+              location.district,
+              location.city,
+              location.subregion,
+              location.region,
+              location.country,
             ]
               .map((line) => line?.replaceAll('undefined', ''))
               .filter((line) => line)
@@ -81,7 +89,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           <Text>
             Distance from Yah Yahs:{' '}
             {Math.round(
-              earthDistance(userStore.locationData.coords, {
+              earthDistance(location.coords, {
                 latitude: -37.80586505770181,
                 longitude: 144.98296141840655,
               } as LocationObjectCoords)
