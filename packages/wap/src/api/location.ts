@@ -1,5 +1,6 @@
 import * as locationManager from 'expo-location';
-import { LocationGeocodedAddress, LocationObject } from 'expo-location';
+import { LocationGeocodedAddress, LocationGeocodedLocation, LocationObject } from 'expo-location';
+import { parseLocation } from '../helpers/location';
 import { log } from '../services/log/logger';
 
 export interface LocationAPIParams {
@@ -151,5 +152,15 @@ export class LocationAPI {
     const userLocationData = { ...position, ...geocodeLocation, geocodeTimestamp: Date.now() };
     log.debug('User location data', userLocationData);
     return userLocationData;
+  }
+
+  async getPositionFromLocation(
+    location: GeocodeLocation | string
+  ): Promise<LocationGeocodedLocation> {
+    log.debug('Getting position from geocode location');
+    if (typeof location !== 'string') location = parseLocation(location);
+    const position = (await locationManager.geocodeAsync(location))[0];
+    log.debug('Position from geocode location', position);
+    return position;
   }
 }

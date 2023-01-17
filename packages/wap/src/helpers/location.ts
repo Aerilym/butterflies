@@ -1,4 +1,5 @@
 import type { LocationObjectCoords } from 'expo-location';
+import { GeocodeLocation } from '../api/location';
 
 /**
  * Calculate the distance between two points on the earth in kilometres.
@@ -29,3 +30,8 @@ export const earthDistance = (
 function deg2rad(degrees: number) {
   return degrees * (Math.PI / 180);
 }
+
+export const parseLocation = (location: GeocodeLocation): string => {
+  const address = Object.values(location).join(' ');
+  return address;
+};
