@@ -5,9 +5,11 @@ import './src/services/log/sentry';
 import Navigation from './src/navigation';
 import { log } from './src/services/log/logger';
 
+import { appTheme } from './src/styles/theme';
+
 export default function App() {
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={appTheme}>
       <Navigation />
     </NativeBaseProvider>
   );

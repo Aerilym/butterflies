@@ -1,6 +1,7 @@
 import { createContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useFonts } from 'expo-font';
 
 import Main from './MainStack';
 import { supabaseAPI, userStore } from '../provider/AuthProvider';
@@ -11,11 +12,13 @@ import { Session } from '@supabase/supabase-js';
 import OnboardingStack from './OnboardingStack';
 import { log } from '../services/log/logger';
 import { isMobileDevice } from '../helpers/environment';
+import { importedFonts } from '../styles/fonts';
 
 const AuthContext = createContext({});
 
 // TODO: Separate the Auth Provider into its own file.
 export default () => {
+  const [fontsLoaded] = useFonts(importedFonts);
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef<string>();
   const [state, dispatch] = useReducer(
@@ -127,7 +130,7 @@ export default () => {
             maxHeight: isMobileDevice ? '100%' : 915,
           }}
         >
-          {state.isLoading ? (
+          {!fontsLoaded && state.isLoading ? (
             <Loading />
           ) : state.userToken ? (
             userStore.profile.onboarded ? (
