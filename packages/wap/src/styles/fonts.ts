@@ -25,7 +25,7 @@ const fontConfig: Record<
   },
   TerminaTest: {
     400: {
-      normal: 'TerminaTestBlack',
+      normal: 'TerminaTestBold',
     },
   },
   StretchPro: {
@@ -42,7 +42,17 @@ const fonts: Record<'heading' | 'body' | 'mono' | 'title', keyof typeof fontConf
   mono: 'GothamBook',
 };
 
+const components = {
+  Heading: {
+    baseStyle: {
+      fontWeight: 'normal',
+      fontFamily: 'heading',
+    },
+  },
+};
+
 export const themeFontConfig = {
   fontConfig,
   fonts,
+  components,
 };
