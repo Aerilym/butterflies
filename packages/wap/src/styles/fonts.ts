@@ -35,7 +35,8 @@ const fontConfig: Record<
   },
 };
 
-const fonts: Record<'heading' | 'body' | 'mono', keyof typeof fontConfig> = {
+const fonts: Record<'heading' | 'body' | 'mono' | 'title', keyof typeof fontConfig> = {
+  title: 'StretchPro',
   heading: 'TerminaTest',
   body: 'GothamBook',
   mono: 'GothamBook',
