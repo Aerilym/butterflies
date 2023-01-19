@@ -1,4 +1,4 @@
-import { Box, Text, Image } from 'native-base';
+import { Box, Text, Image, Heading } from 'native-base';
 import { SupabaseAuth } from '../../components/auth/SupabaseAuth';
 
 export default function () {
@@ -13,7 +13,13 @@ export default function () {
         marginHorizontal: 10,
       }}
     >
-      <Box>
+      <Box
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <Image
           alt={'everything is fine gif'}
           style={{
@@ -22,6 +28,9 @@ export default function () {
           }}
           source={{ uri: 'https://media.tenor.com/MYZgsN2TDJAAAAAC/this-is.gif' }}
         />
+        <Text fontFamily={'title'} fontSize={'3xl'}>
+          Butterflies
+        </Text>
       </Box>
       <Box>
         <SupabaseAuth />
