@@ -50,6 +50,7 @@ const sentryConfig = {
 // The file logger is only created if the app is running on a mobile device.
 const fileConfig = isMobileDevice
   ? {
+      ...baseConfig,
       severity: 'debug',
       transport: fileAsyncTransport,
       transportOptions: {
