@@ -3,7 +3,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatDistanceToNow } from 'date-fns';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { userStore } from '../../provider/AuthProvider';
+import { supabaseAPI, userStore } from '../../provider/AuthProvider';
 import { earthDistance } from '../../helpers/location';
 import { LocationObjectCoords } from 'expo-location';
 import { useState } from 'react';
@@ -28,6 +28,13 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         }}
       >
         <Text>Return</Text>
+      </Button>
+      <Button
+        onPress={async () => {
+          await supabaseAPI.uploadLogFiles();
+        }}
+      >
+        Upload Logs
       </Button>
       <Button
         onPress={async () => {

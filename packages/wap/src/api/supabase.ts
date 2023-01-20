@@ -5,8 +5,8 @@ import { startAsync, makeRedirectUri } from 'expo-auth-session';
 import { SB_URL, SB_KEY } from '@env';
 import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
-import { isWeb } from '../helpers/environment';
-import { log } from '../services/log/logger';
+import { isMobileDevice, isWeb } from '../helpers/environment';
+import { getLogFiles, log } from '../services/log/logger';
 
 export class SupabaseAPI {
   supabase: SupabaseClient;
@@ -248,5 +248,58 @@ export class SupabaseAPI {
       .from('preferences')
       .update({ ...preferenceOptions })
       .eq('user_id', this.userID);
+  };
+
+  /**
+   * Upload the log files between two dates to the Supabase logs storage bucket.
+   * @param startDate The start date to upload the log files from. If this is not provided, it will upload the log file for the end date.
+   * @param endDate The end date to upload the log files to. Default: Today.
+   */
+  uploadLogFiles = async (startDate?: Date, endDate = new Date()): Promise<void> => {
+    if (!isMobileDevice) return;
+    if (startDate)
+      log.debug(
+        'Uploading log files between',
+        startDate.toISOString(),
+        'and',
+        endDate.toISOString()
+      );
+    else log.debug('Uploading log file for', endDate.toISOString());
+
+    const logFiles = await getLogFiles(startDate, endDate);
+    logFiles.forEach(async (logFile) => {
+      log.debug('Uploading log file', logFile.name);
+      const arrayBuffer = new TextEncoder().encode(logFile.contents).buffer;
+      const { data, error } = await this.supabase.storage
+        .from('logs')
+        .upload(`${this.userID}/${logFile.name}`, arrayBuffer);
+      if (error) log.error('File upload error', error);
+      if (data) log.debug('File upload success', data);
+    });
+  };
+
+  /**
+   * Upload the log files for a number of days in the past.
+   * @param pastDays The number of days in the past to upload the log files for. Default: 1.
+   */
+  uploadLogFileDays = async (pastDays = 1): Promise<void> => {
+    if (pastDays < 1) return log.error('pastDays must be greater than 0');
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - pastDays - 1);
+    await this.uploadLogFiles(startDate);
+  };
+
+  /**
+   * Upload the log files for today and yesterday.
+   */
+  uploadLogFileTwoDays = async (): Promise<void> => {
+    await this.uploadLogFileDays(2);
+  };
+
+  /**
+   * Upload the log files for the last 7 days.
+   */
+  uploadLogFileOneWeek = async (): Promise<void> => {
+    await this.uploadLogFileDays(7);
   };
 }
