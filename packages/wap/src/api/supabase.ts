@@ -261,11 +261,11 @@ export class SupabaseAPI {
     if (startDate)
       log.debug(
         'Uploading log files between',
-        startDate.toISOString(),
+        startDate.toDateString(),
         'and',
-        endDate.toISOString()
+        endDate.toDateString()
       );
-    else log.debug('Uploading log file for', endDate.toISOString());
+    else log.debug('Uploading log file for', endDate.toDateString());
 
     const logFiles = await getLogFiles(startDate, endDate);
     logFiles.forEach(async (logFile) => {
