@@ -7,7 +7,7 @@ import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
 import { isMobileDevice, isWeb } from '../helpers/environment';
 import { getLogFiles, log } from '../services/log/logger';
-import { compressString } from '../helpers/compressor';
+import { compressString } from '../helpers/compression';
 
 export class SupabaseAPI {
   supabase: SupabaseClient;
