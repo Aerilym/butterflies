@@ -7,6 +7,7 @@ import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
 import { isMobileDevice, isWeb } from '../helpers/environment';
 import { getLogFiles, log } from '../services/log/logger';
+import { compressString } from '../helpers/compressor';
 
 export class SupabaseAPI {
   supabase: SupabaseClient;
@@ -269,7 +270,10 @@ export class SupabaseAPI {
     const logFiles = await getLogFiles(startDate, endDate);
     logFiles.forEach(async (logFile) => {
       log.debug('Uploading log file', logFile.name);
-      const arrayBuffer = new TextEncoder().encode(logFile.contents).buffer;
+
+      const compressedString = await compressString(logFile.contents);
+
+      const arrayBuffer = new TextEncoder().encode(compressedString).buffer;
       const { data, error } = await this.supabase.storage
         .from('logs')
         .upload(`${this.userID}/${logFile.name}`, arrayBuffer);
