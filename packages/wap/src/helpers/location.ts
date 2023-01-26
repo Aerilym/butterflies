@@ -82,7 +82,7 @@ interface IPGeoLocationResult {
  * @param IP the IP address to lookup, if not provided the current IP will be used.
  * @returns the location of the IP address or undefined if the lookup failed.
  */
-export const lookupLocationFromIP = async (IP?: string): Promise<void | UserLocationData> => {
+export const lookupLocationFromIP = async (IP?: string): Promise<null | UserLocationData> => {
   const apiKey = 'b6793efa924840a5a2842590382fd130';
   const baseUrl = 'https://api.ipgeolocation.io/ipgeo';
   let url = `${baseUrl}?apiKey=${apiKey}`;
@@ -90,7 +90,10 @@ export const lookupLocationFromIP = async (IP?: string): Promise<void | UserLoca
 
   const result = await fetch(url);
 
-  if (!result.ok) return log.warn('IP location lookup failed', result.status, result.statusText);
+  if (!result.ok) {
+    log.warn('IP location lookup failed', result.status, result.statusText);
+    return null;
+  }
 
   const data: IPGeoLocationResult = await result.json();
 

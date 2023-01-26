@@ -1,6 +1,6 @@
 import * as locationManager from 'expo-location';
 import { LocationGeocodedAddress, LocationGeocodedLocation, LocationObject } from 'expo-location';
-import { parseLocation } from '../helpers/location';
+import { lookupLocationFromIP, parseLocation } from '../helpers/location';
 import { log } from '../services/log/logger';
 
 export interface LocationAPIParams {
@@ -13,13 +13,26 @@ interface LocationAPIKeys {
 
 export type GeocodeLocation = LocationGeocodedAddress & { geocodeTimestamp: number };
 
-export type UserLocationData = LocationObject & GeocodeLocation;
+export type PositionObject = LocationObject & { source: PositionSource };
+
+export type UserLocationData = PositionObject & GeocodeLocation;
+
+type PositionSource = 'real' | 'old' | 'last' | 'ip';
 
 export class LocationAPI {
-  private lastPosition?: LocationObject;
+  private _lastPosition: PositionObject | undefined;
   constructor({ key }: LocationAPIParams) {
     log.debug('Creating Location API');
     this.setGoogleApiKey(key.googleGeocode);
+  }
+
+  public get lastPosition(): PositionObject | undefined {
+    if (!this._lastPosition) return;
+    return { ...this._lastPosition, source: 'old' as PositionSource };
+  }
+
+  public set lastPosition(position: PositionObject | undefined) {
+    this._lastPosition = position;
   }
 
   /**
@@ -59,7 +72,7 @@ export class LocationAPI {
    * Get the user's current position, checking and asking for permission if required.
    * @returns The user's current position if retrievable.
    */
-  async getCurrentPosition(): Promise<LocationObject | void> {
+  async getCurrentPosition(): Promise<PositionObject | void> {
     log.debug('Getting current position');
     const hasPermission = await this.manageLocationPermission();
     if (!hasPermission) return;
@@ -69,15 +82,14 @@ export class LocationAPI {
 
     if (!position) return;
 
-    this.lastPosition = position;
-    return position;
+    return { ...position, source: 'real' as PositionSource };
   }
 
   /**
    * Get the user's last known position, checking and asking for permission if required.
    * @returns The user's last known position if retrievable.
    */
-  async getLastKnownPosition(): Promise<LocationObject | void> {
+  async getLastKnownPosition(): Promise<PositionObject | void> {
     log.debug('Getting last known position');
     const hasPermission = await this.manageLocationPermission();
     if (!hasPermission) return;
@@ -87,8 +99,7 @@ export class LocationAPI {
 
     if (!position) return;
 
-    this.lastPosition = position;
-    return position;
+    return { ...position, source: 'last' as PositionSource };
   }
 
   /**
@@ -96,7 +107,7 @@ export class LocationAPI {
    * @param position The user's position.
    * @returns A list of address results.
    */
-  async getGeocodeLocations(position: LocationObject): Promise<GeocodeLocation[]> {
+  async getGeocodeLocations(position: PositionObject): Promise<GeocodeLocation[]> {
     log.debug('Getting geocoded locations', position);
     const { coords } = position;
 
@@ -123,7 +134,7 @@ export class LocationAPI {
    * @param position The user's position.
    * @returns An address result.
    */
-  async getGeocodeLocation(position: LocationObject): Promise<GeocodeLocation> {
+  async getGeocodeLocation(position: PositionObject): Promise<GeocodeLocation> {
     const geocodeLocation = (await this.getGeocodeLocations(position))[0];
     log.debug('Geocode location', geocodeLocation);
     return geocodeLocation;
@@ -135,21 +146,23 @@ export class LocationAPI {
    */
   async getLocationData(): Promise<UserLocationData | null> {
     log.debug('Getting user location data');
-    let position = await this.getCurrentPosition();
+    const position =
+      (await this.getCurrentPosition()) ??
+      this.lastPosition ??
+      (await this.getLastKnownPosition()) ??
+      (await this.getLocationFromIP());
+
     if (!position) {
-      log.debug('Position could not be retrieved, getting last position');
-      position = this.lastPosition;
+      log.error('No position found', position);
+      return null;
     }
-    if (!position) {
-      log.debug('No last position found');
-      position = await this.getLastKnownPosition();
-    }
-    if (!position) return null;
-    log.debug('Using position', position);
 
     const geocodeLocation = await this.getGeocodeLocation(position);
 
-    const userLocationData = { ...position, ...geocodeLocation, geocodeTimestamp: Date.now() };
+    const userLocationData = {
+      ...position,
+      ...geocodeLocation,
+    };
     log.debug('User location data', userLocationData);
     return userLocationData;
   }
@@ -162,5 +175,12 @@ export class LocationAPI {
     const position = (await locationManager.geocodeAsync(location))[0];
     log.debug('Position from geocode location', position);
     return position;
+  }
+
+  async getLocationFromIP(): Promise<UserLocationData | null> {
+    log.debug('Getting location from IP');
+    const location = await lookupLocationFromIP();
+    log.debug('Location from IP', location);
+    return location;
   }
 }
