@@ -130,7 +130,7 @@ export default () => {
             maxHeight: isMobileDevice ? '100%' : 915,
           }}
         >
-          {!fontsLoaded && state.isLoading ? (
+          {state.isLoading || !fontsLoaded ? (
             <Loading />
           ) : state.userToken ? (
             userStore.profile.onboarded ? (
