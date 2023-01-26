@@ -1,5 +1,6 @@
 import type { LocationObjectCoords } from 'expo-location';
-import { GeocodeLocation } from '../api/location';
+import { GeocodeLocation, UserLocationData } from '../api/location';
+import { log } from '../services/log/logger';
 
 /**
  * Calculate the distance between two points on the earth in kilometres.
@@ -34,4 +35,77 @@ function deg2rad(degrees: number) {
 export const parseLocation = (location: GeocodeLocation): string => {
   const address = Object.values(location).join(' ');
   return address;
+};
+
+interface IPGeoLocationResult {
+  ip: string;
+  hostname: string;
+  continent_code: string;
+  continent_name: string;
+  country_code2: string;
+  country_code3: string;
+  country_name: string;
+  country_capital: string;
+  state_prov: string;
+  district: string;
+  city: string;
+  zipcode: string;
+  latitude: number;
+  longitude: number;
+  is_eu: boolean;
+  calling_code: string;
+  country_tld: string;
+  languages: string;
+  country_flag: string;
+  geoname_id: string;
+  isp: string;
+  connection_type: string;
+  organization: string;
+  asn: string;
+  currency: {
+    code: string;
+    name: string;
+    symbol: string;
+  };
+  time_zone: {
+    name: string;
+    offset: number;
+    current_time: string;
+    current_time_unix: number;
+    is_dst: boolean;
+    dst_savings: number;
+  };
+}
+
+/**
+ * Lookup the location of a given IP address.
+ * @param IP the IP address to lookup, if not provided the current IP will be used.
+ * @returns the location of the IP address or undefined if the lookup failed.
+ */
+export const lookupLocationFromIP = async (IP?: string): Promise<void | UserLocationData> => {
+  const apiKey = 'b6793efa924840a5a2842590382fd130';
+  const baseUrl = 'https://api.ipgeolocation.io/ipgeo';
+  let url = `${baseUrl}?apiKey=${apiKey}`;
+  if (IP) url += `&ip=${IP}`;
+
+  const result = await fetch(url);
+
+  if (!result.ok) return log.warn('IP location lookup failed', result.status, result.statusText);
+
+  const data: IPGeoLocationResult = await result.json();
+
+  const now = Date.now();
+
+  return {
+    timestamp: now,
+    geocodeTimestamp: now,
+    coords: {
+      latitude: data.latitude,
+      longitude: data.longitude,
+    },
+    country: data.country_name,
+    city: data.city,
+    district: data.district,
+    region: data.state_prov,
+  } as UserLocationData;
 };
