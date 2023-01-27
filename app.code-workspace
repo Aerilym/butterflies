@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "path": "./packages/wap"
+      "path": "./packages/app"
     },
     {
       "name": "types",
