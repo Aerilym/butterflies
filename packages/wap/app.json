@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "dating",
-    "description": "dating app",
-    "slug": "dating",
+    "name": "Butterflies",
+    "description": "The dating app of the future",
+    "slug": "butterflies",
     "owner": "aerilym",
     "privacy": "hidden",
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#8d51db",
     "icon": "./assets/icon.png",
-    "scheme": "dating",
+    "scheme": "butterflies",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -27,7 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.aerilym.dating"
+      "package": "app.butterflies"
     },
     "web": {
       "favicon": "./assets/favicon.png"

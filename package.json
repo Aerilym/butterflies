@@ -1,5 +1,5 @@
 {
-  "name": "dating",
+  "name": "butterflies",
   "private": true,
   "scripts": {
     "lint": "bash scripts/lint.sh"
