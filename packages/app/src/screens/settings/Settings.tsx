@@ -8,6 +8,7 @@ import { earthDistance } from '../../helpers/location';
 import { LocationObjectCoords } from 'expo-location';
 import { useState } from 'react';
 import { UserLocationData } from '../../api/location';
+import ImagePicker from '../../components/utility/ImagePicker';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Settings'>) {
   const [location, setLocation] = useState<UserLocationData>(
@@ -36,6 +37,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       >
         Upload Logs
       </Button>
+      <ImagePicker />
       <Button
         onPress={async () => {
           await userStore.refreshLocationData();

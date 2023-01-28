@@ -37,7 +37,7 @@
         "projectId": "b3e615e2-c69f-4558-a5a9-c64a1d76b64a"
       }
     },
-    "plugins": ["sentry-expo"],
+    "plugins": ["sentry-expo", "expo-image-picker"],
     "hooks": {
       "postPublish": [
         {

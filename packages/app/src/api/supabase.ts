@@ -306,4 +306,14 @@ export class SupabaseAPI {
   uploadLogFileOneWeek = async (): Promise<void> => {
     await this.uploadLogFileDays(7);
   };
+
+  uploadImage = async (uri: string): Promise<void> => {
+    const imageFile = await fetch(uri).then((response) => response.blob());
+
+    const { data, error } = await this.supabase.storage
+      .from('picture')
+      .upload('test.jpg', imageFile);
+    if (error) log.error('File upload error', error);
+    if (data) log.debug('File upload success', data);
+  };
 }
