@@ -18,8 +18,8 @@ export default function ImagePicker() {
 
     log.debug('Image Picker Result', result);
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
   };
 
