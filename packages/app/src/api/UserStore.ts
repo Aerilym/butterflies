@@ -44,7 +44,7 @@ export class UserStore {
     if (storedSocials) {
       this.socials = storedSocials;
     } else {
-      if (this.supabaseAPI.userID) {
+      if (this.supabaseAPI.isUserIdSet()) {
         this.refreshSocials();
       }
     }
@@ -59,7 +59,7 @@ export class UserStore {
     if (storedMatchQueue) {
       this.matchQueue = storedMatchQueue;
     } else {
-      if (this.supabaseAPI.userID) {
+      if (this.supabaseAPI.isUserIdSet()) {
         this.refreshMatchQueue();
       }
     }
@@ -74,7 +74,7 @@ export class UserStore {
     if (storedProfile) {
       this.profile = storedProfile;
     } else {
-      if (this.supabaseAPI.userID) {
+      if (this.supabaseAPI.isUserIdSet()) {
         this.refreshProfile();
       }
     }
@@ -89,7 +89,7 @@ export class UserStore {
     if (storedPreferences) {
       this.preferences = storedPreferences;
     } else {
-      if (this.supabaseAPI.userID) {
+      if (this.supabaseAPI.isUserIdSet()) {
         this.refreshPreferences();
       }
     }
@@ -225,7 +225,8 @@ export class UserStore {
   getPeople = async (matches: Match[], matched: boolean): Promise<Person[]> => {
     log.debug('UserStore', 'getPeople called', matches, matched);
     const peopleGets = matches.map(async (match) => {
-      const userID = match.user_id1 === this.supabaseAPI.userID ? match.user_id2 : match.user_id1;
+      const id = await this.supabaseAPI.userID;
+      const userID = match.user_id1 === id ? match.user_id2 : match.user_id1;
       const profile = await this.supabaseAPI.getProfile(userID);
       const person: Person = {
         id: userID,
@@ -263,8 +264,9 @@ export class UserStore {
    */
   refreshProfile = async (): Promise<void> => {
     log.debug('UserStore', 'refreshProfile called');
-    if (!this.supabaseAPI.userID) return;
-    const profile = await this.supabaseAPI.getProfile(this.supabaseAPI.userID);
+    const id = await this.supabaseAPI.userID;
+    if (!id) return;
+    const profile = await this.supabaseAPI.getProfile(id);
     this.profile = profile;
     await this.storeProfile(profile);
   };
@@ -274,8 +276,9 @@ export class UserStore {
    */
   refreshPreferences = async (): Promise<void> => {
     log.debug('UserStore', 'refreshPreferences called');
-    if (!this.supabaseAPI.userID) return;
-    const preferences = await this.supabaseAPI.getPreferences(this.supabaseAPI.userID);
+    const id = await this.supabaseAPI.userID;
+    if (!id) return;
+    const preferences = await this.supabaseAPI.getPreferences(id);
     this.preferences = preferences;
     await this.storePreferences(preferences);
   };
