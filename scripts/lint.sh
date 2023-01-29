@@ -1,1 +1,1 @@
-cd ./packages/wap && yarn install && yarn lint
+cd ./packages/app && yarn install && yarn lint
