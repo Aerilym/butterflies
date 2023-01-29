@@ -6,6 +6,7 @@ import Profile from '../screens/profile/Profile';
 import Settings from '../screens/settings/Settings';
 import Chat from '../screens/social/Chat';
 import type { MainStackParamList } from '../types/navigation';
+import DevTabs from './DevTabs';
 
 const MainStack = createNativeStackNavigator<MainStackParamList>();
 export default function Main() {
@@ -20,6 +21,7 @@ export default function Main() {
       <MainStack.Screen name="Profile" component={Profile} />
       <MainStack.Screen name="Settings" component={Settings} />
       <MainStack.Screen name="Chat" component={Chat} />
+      <MainStack.Screen name="DevTabs" component={DevTabs} />
     </MainStack.Navigator>
   );
 }

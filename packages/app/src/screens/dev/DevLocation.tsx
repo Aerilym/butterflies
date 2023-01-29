@@ -3,14 +3,15 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatDistanceToNow } from 'date-fns';
 
 import type { MainStackParamList } from '../../types/navigation';
-import { supabaseAPI, userStore } from '../../provider/AuthProvider';
+import { userStore } from '../../provider/AuthProvider';
 import { earthDistance } from '../../helpers/location';
 import { LocationObjectCoords } from 'expo-location';
 import { useState } from 'react';
 import { UserLocationData } from '../../api/location';
-import ImagePicker from '../../components/utility/ImagePicker';
 
-export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Settings'>) {
+export default function ({
+  navigation,
+}: NativeStackScreenProps<MainStackParamList, 'DevLocation'>) {
   const [location, setLocation] = useState<UserLocationData>(
     userStore.locationData ?? ({} as UserLocationData)
   );
@@ -20,29 +21,6 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         flex: 1,
       }}
     >
-      <Text style={{ textAlign: 'center' }}>Change Settings Here</Text>
-      <Button
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Text>Return</Text>
-      </Button>
-      <Button
-        onPress={() => {
-          navigation.navigate('DevTabs');
-        }}
-      >
-        <Text>Dev Menu</Text>
-      </Button>
-      <Button
-        onPress={async () => {
-          await supabaseAPI.uploadLogFiles();
-        }}
-      >
-        Upload Logs
-      </Button>
-      <ImagePicker />
       <Button
         onPress={async () => {
           await userStore.refreshLocationData();
