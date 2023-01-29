@@ -361,9 +361,12 @@ export class SupabaseAPI {
     await this.uploadLogFileDays(7);
   };
 
-  uploadImage = async (uri: string, compress?: boolean, name?: string): Promise<void> => {
+  uploadImage = async (
+    uri: string,
+    { compress, name }: { compress?: boolean; name?: string }
+  ): Promise<void> => {
     if (compress) uri = await compressImage(uri);
-    if (!name) name = uuid.generate();
+    if (!name || name === '') name = uuid.generate();
 
     const image = await fetch(uri);
     if (!image.ok) return log.error('Image fetch failed', image);
