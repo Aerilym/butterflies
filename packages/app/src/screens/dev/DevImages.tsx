@@ -11,7 +11,14 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
         flex: 1,
       }}
     >
-      <ImagePicker />
+      <ImagePicker
+        compress
+        showCompressedAndOriginal
+        showStats
+        showCompressionStats
+        showUploadButton
+        showNameField
+      />
     </ScrollView>
   );
 }
