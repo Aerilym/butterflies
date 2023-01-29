@@ -1,4 +1,4 @@
-import { Box, Text, Button } from 'native-base';
+import { Box, Text, Button, ScrollView } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -15,11 +15,9 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
     userStore.locationData ?? ({} as UserLocationData)
   );
   return (
-    <Box
+    <ScrollView
       style={{
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
       }}
     >
       <Text style={{ textAlign: 'center' }}>Change Settings Here</Text>
@@ -107,6 +105,6 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           </Text>
         </Box>
       ) : null}
-    </Box>
+    </ScrollView>
   );
 }
