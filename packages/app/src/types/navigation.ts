@@ -14,6 +14,11 @@ export type MainStackParamList = {
     matchProfile: Profile;
     messages: Message[];
   };
+  DevTabs: undefined;
+  DevHome: undefined;
+  DevImages: undefined;
+  DevLocation: undefined;
+  DevLogs: undefined;
 };
 
 export type AuthStackParamList = {
