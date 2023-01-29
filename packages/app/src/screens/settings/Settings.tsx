@@ -1,4 +1,4 @@
-import { Box, Text, Button } from 'native-base';
+import { Box, Text, Button, ScrollView } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -8,17 +8,16 @@ import { earthDistance } from '../../helpers/location';
 import { LocationObjectCoords } from 'expo-location';
 import { useState } from 'react';
 import { UserLocationData } from '../../api/location';
+import ImagePicker from '../../components/utility/ImagePicker';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'Settings'>) {
   const [location, setLocation] = useState<UserLocationData>(
     userStore.locationData ?? ({} as UserLocationData)
   );
   return (
-    <Box
+    <ScrollView
       style={{
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
       }}
     >
       <Text style={{ textAlign: 'center' }}>Change Settings Here</Text>
@@ -36,6 +35,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       >
         Upload Logs
       </Button>
+      <ImagePicker />
       <Button
         onPress={async () => {
           await userStore.refreshLocationData();
@@ -105,6 +105,6 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
           </Text>
         </Box>
       ) : null}
-    </Box>
+    </ScrollView>
   );
 }

@@ -7,11 +7,12 @@ import { Match, Message, Preferences, Profile } from '../types/database';
 import { sendMessageParams, updateMatchLikeParams } from '../types/supabaseAPI';
 import { isMobileDevice, isWeb } from '../helpers/environment';
 import { getLogFiles, log } from '../services/log/logger';
-import { compressString } from '../helpers/compression';
+import { compressString, compressImage } from '../helpers/compression';
+import { uuid } from '../helpers/random';
 
 export class SupabaseAPI {
   supabase: SupabaseClient;
-  userID?: string;
+  private _userID?: string;
   constructor() {
     log.debug('Creating Supabase API');
     this.supabase = createClient(SB_URL, SB_KEY, {
@@ -23,6 +24,59 @@ export class SupabaseAPI {
       },
     });
   }
+
+  /**
+   * Get the current user ID.
+   * If there is no current user ID, it will be fetched from Supabase
+   * if the user is logged in, otherwise it will return null.
+   */
+  public get userID(): Promise<string | null> | string {
+    if (this._userID) return this._userID;
+    return (async () => {
+      const { data } = await this.supabase.auth.getUser();
+      const id = data.user?.id ?? null;
+      if (id) this._userID = id;
+      return id ?? null;
+    })();
+  }
+
+  /**
+   * Set the current user ID.
+   * @param id The user ID to set.
+   * If the ID is a string, it will be set immediately.
+   * If the ID is undefined or null, it will be set to undefined immediately.
+   * If the ID is a promise, it will be awaited before being set.
+   * If the ID is a promise that resolves to a string, it will be set to that string.
+   * If the ID is a promise that resolves to undefined or null, it will throw an error.
+   */
+  public set userID(id: Promise<string | null> | string) {
+    if (typeof id === 'string') this._userID = id;
+    else if (id === undefined || id === null) this._userID = undefined;
+    else if (id instanceof Promise)
+      (async () => {
+        const resolvedId = await id;
+        if (typeof resolvedId === 'string') this._userID = resolvedId;
+        else throw new Error('User ID must be a string');
+      })();
+  }
+
+  /**
+   * Get if the user ID is set.
+   * @returns Whether the user ID is set.
+   */
+  isUserIdSet = (): boolean => {
+    return this._userID !== undefined;
+  };
+
+  /**
+   * Get the user ID if it is set.
+   * This is a workaround for getting the user ID if it is expected
+   * to be set where the normal getter can't be used as it can return a promise.
+   * @returns The user ID if it is set, otherwise undefined.
+   */
+  getUserIdIfSet = (): string | undefined => {
+    if (this.isUserIdSet()) return this._userID;
+  };
 
   /**
    * Login to an auth provider using Supabase.
@@ -305,5 +359,24 @@ export class SupabaseAPI {
    */
   uploadLogFileOneWeek = async (): Promise<void> => {
     await this.uploadLogFileDays(7);
+  };
+
+  uploadImage = async (uri: string, compress?: boolean, name?: string): Promise<void> => {
+    if (compress) uri = await compressImage(uri);
+    if (!name) name = uuid.generate();
+
+    const image = await fetch(uri);
+    if (!image.ok) return log.error('Image fetch failed', image);
+
+    const blob = await image.blob();
+
+    const { data, error } = await this.supabase.storage
+      .from('picture')
+      .upload(`${this.userID}/${name}`, blob, {
+        contentType: 'image/jpeg',
+      });
+
+    if (error) log.error('File upload error', error);
+    if (data) log.debug('File upload success', data);
   };
 }

@@ -1,4 +1,5 @@
 import { compressToBase64 } from 'lz-string';
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import { log } from '../services/log/logger';
 
 /**
@@ -28,4 +29,29 @@ export async function compressString(string: string): Promise<string> {
       compressed: compressedString,
     });
   return compressedString;
+}
+
+export async function compressImage(image: string): Promise<string> {
+  log.debug('Compressing image of size', image.length);
+  const compressedImage = await manipulateAsync(image, [], {
+    format: SaveFormat.JPEG,
+    compress: 0.5,
+  });
+
+  const imageUri = compressedImage.uri;
+  const percent = (((image.length - imageUri.length) / image.length) * 100).toFixed(2);
+  log.debug('Image compressed', 'from', image.length, 'to', imageUri.length, `(${percent}%)`);
+
+  if (imageUri.length > image.length) {
+    log.error('Image compression produced an inflated image', {
+      percent,
+      originalSize: image.length,
+      compressedSize: imageUri.length,
+      original: image,
+      compressed: compressedImage,
+    });
+    return image;
+  }
+
+  return imageUri;
 }
