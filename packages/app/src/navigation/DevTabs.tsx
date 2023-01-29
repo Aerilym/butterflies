@@ -21,7 +21,7 @@ export default function DevTabs() {
         name="DevHome"
         component={DevHome}
         options={{
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'albums'} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'code'} />,
           tabBarShowLabel: false,
         }}
       />
@@ -29,7 +29,7 @@ export default function DevTabs() {
         name="DevImages"
         component={DevImages}
         options={{
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'chatbubble'} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'camera'} />,
           tabBarShowLabel: false,
         }}
       />
@@ -37,7 +37,7 @@ export default function DevTabs() {
         name="DevLocation"
         component={DevLocation}
         options={{
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'person'} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'location'} />,
           tabBarShowLabel: false,
         }}
       />
@@ -45,7 +45,7 @@ export default function DevTabs() {
         name="DevLogs"
         component={DevLogs}
         options={{
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'person'} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} icon={'file-tray-full'} />,
           tabBarShowLabel: false,
         }}
       />
