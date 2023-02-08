@@ -3,6 +3,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { MainStackParamList } from '../../types/navigation';
 import { supabaseAPI } from '../../provider/AuthProvider';
+import FileBrowser from '../../components/utility/FileBrowser';
 
 export default function ({ navigation }: NativeStackScreenProps<MainStackParamList, 'DevLogs'>) {
   return (
@@ -18,6 +19,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
       >
         Upload Logs
       </Button>
+      <FileBrowser allowNameSearch />
     </ScrollView>
   );
 }
