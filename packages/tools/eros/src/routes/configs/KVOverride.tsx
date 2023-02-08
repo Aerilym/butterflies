@@ -13,7 +13,7 @@ export default function KVOverride() {
 
   async function submitKV() {
     setLoading(true);
-    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export default function KVOverride() {
 
   async function lookupKV() {
     setLoading(true);
-    fetch(`https://field-manager.aerilym.workers.dev/options?key=${kvLookup.key}`).then(
+    fetch(`https://field-manager.butterfliesapp.workers.dev/options?key=${kvLookup.key}`).then(
       async (response) => {
         const { value } = await response.json();
 

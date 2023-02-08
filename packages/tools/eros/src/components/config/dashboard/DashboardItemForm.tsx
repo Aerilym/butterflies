@@ -19,7 +19,7 @@ export default function DashboardItemForm({ data, sections, visible }: FormProps
 
     data?.push(item);
 
-    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

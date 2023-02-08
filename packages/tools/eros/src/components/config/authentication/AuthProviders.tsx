@@ -9,7 +9,7 @@ export default function AuthProviders() {
 
   async function submitOrder() {
     setLoading(true);
-    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,9 +27,15 @@ export default function AuthProviders() {
   }
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/options?key=providerOrder').then(
+    fetch('https://field-manager.butterfliesapp.workers.dev/options?key=providerOrder').then(
       async (response) => {
         const { value } = await response.json();
+
+        if (!value || value.length < 1) {
+          setProviderOrder([]);
+          setBaseProviderOrder([]);
+          setLoading(false);
+        }
 
         const filteredOrder = value.filter((provider: string) =>
           validAuthProviders.includes(provider)

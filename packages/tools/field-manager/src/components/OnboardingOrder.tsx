@@ -11,7 +11,7 @@ export default function OnboardingOrder({ fields }: FormProps) {
 
   async function submitOrder() {
     setLoading(true);
-    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export default function OnboardingOrder({ fields }: FormProps) {
   useEffect(() => {
     if (fields.length === 0) return;
 
-    fetch('https://field-manager.aerilym.workers.dev/options?key=onboardingOrder').then(
+    fetch('https://field-manager.butterfliesapp.workers.dev/options?key=onboardingOrder').then(
       async (response) => {
         const { value } = await response.json();
 

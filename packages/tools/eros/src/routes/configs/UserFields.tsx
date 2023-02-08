@@ -35,7 +35,7 @@ export default function UserFields() {
 
   async function handleFormSubmit(value: OnboardingStepItem) {
     setLoading(true);
-    const res = await fetch('https://field-manager.aerilym.workers.dev/', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export default function UserFields() {
 
   async function handleDelete(key: string) {
     setLoading(true);
-    const res = await fetch('https://field-manager.aerilym.workers.dev/', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ export default function UserFields() {
   };
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) => {
+    fetch('https://field-manager.butterfliesapp.workers.dev/').then(async (response) => {
       setFields(await response.json());
       setLoading(false);
     });

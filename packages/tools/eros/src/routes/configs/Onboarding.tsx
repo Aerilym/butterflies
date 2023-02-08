@@ -17,7 +17,7 @@ export default function Onboarding() {
 
   async function updateCompletePage(value: CompletePageData) {
     setLoading(true);
-    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export default function Onboarding() {
   }
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) => {
+    fetch('https://field-manager.butterfliesapp.workers.dev/').then(async (response) => {
       setFields(await response.json());
       setLoading(false);
     });

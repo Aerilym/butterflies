@@ -10,7 +10,7 @@ import Loading from './components/Loading';
 function App() {
   const [dashboardItems, setDashboardItems] = useState<DashboardItem[]>([] as DashboardItem[]);
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/options?key=dashboardItems').then(
+    fetch('https://field-manager.butterfliesapp.workers.dev/options?key=dashboardItems').then(
       async (res) => {
         const { value } = await res.json();
         const parsedValue = JSON.parse(value) as DashboardItem[];

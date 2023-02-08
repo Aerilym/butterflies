@@ -33,7 +33,7 @@ function App() {
   const [showForm, setShowForm] = useState(false);
 
   async function handleFormSubmit(value: OnboardingStepItem) {
-    const res = await fetch('https://field-manager.aerilym.workers.dev/', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ function App() {
   }
 
   async function updateCompletePage(value: CompletePageData) {
-    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ function App() {
   }
 
   async function handleDelete(key: string) {
-    const res = await fetch('https://field-manager.aerilym.workers.dev/', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ function App() {
   }
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) =>
+    fetch('https://field-manager.butterfliesapp.workers.dev/').then(async (response) =>
       setFields(await response.json())
     );
   }, []);
