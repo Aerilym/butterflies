@@ -17,7 +17,7 @@ export default function CompletePage({ onSubmit, visible }: FormProps) {
   }
 
   React.useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/options?key=completePage').then(
+    fetch('https://field-manager.butterfliesapp.workers.dev/options?key=completePage').then(
       async (response) => {
         const { value } = await response.json();
         setCompletePage(value);

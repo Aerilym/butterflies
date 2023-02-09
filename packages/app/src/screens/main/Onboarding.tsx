@@ -16,13 +16,13 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
   const [fields, setFields] = useState<OnboardingStepItem[]>([] as OnboardingStepItem[]);
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/options?key=onboardingOrder').then(
+    fetch('https://field-manager.butterfliesapp.workers.dev/options?key=onboardingOrder').then(
       async (response) => {
         const { value } = await response.json();
         setOnboardingOrder(value);
       }
     );
-    fetch('https://field-manager.aerilym.workers.dev/options?key=completePage').then(
+    fetch('https://field-manager.butterfliesapp.workers.dev/options?key=completePage').then(
       async (response) => {
         const { value } = await response.json();
         setCompletePage(value);
@@ -32,7 +32,7 @@ export default function ({ navigation }: NativeStackScreenProps<MainStackParamLi
 
   useEffect(() => {
     if (onboardingOrder.length === 0) return;
-    fetch('https://field-manager.aerilym.workers.dev/').then(async (response) => {
+    fetch('https://field-manager.butterfliesapp.workers.dev/').then(async (response) => {
       const value: OnboardingStepItem[] = await response.json();
       const newFields = value
         .filter((item) => onboardingOrder.includes(item.field))

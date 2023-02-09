@@ -94,7 +94,7 @@ function buildDashboard(items: DashboardItem[]) {
 
   const developmentSection = (
     <div className="section-col">
-      <h2>Development</h2>
+      <h2>Engineering</h2>
       <div className="section">
         <div className="button-group">{developmentButtons}</div>
         {developmentExpanded}

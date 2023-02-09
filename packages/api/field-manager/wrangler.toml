@@ -1,10 +1,10 @@
 name = "field-manager"
 main = "src/index.ts"
-compatibility_date = "2022-12-12"
+compatibility_date = "2023-02-02"
 
 kv_namespaces = [
-  { binding = "NAMESPACE_DATING_FIELDS", id = "c63c3dd85d494c16833006de3b5174ca" },
-  { binding = "NAMESPACE_DATING_FIELD_OPTIONS", id = "d2033cdffc734d7aaf6cf154004594a2"}
+  { binding = "NAMESPACE_DATING_FIELDS", id = "5ed9bd161ad94728989537ab31d16862" },
+  { binding = "NAMESPACE_DATING_FIELD_OPTIONS", id = "15943283cb5a429a86b05650f0b4ab3d"}
 ]
 
 [env.stg]

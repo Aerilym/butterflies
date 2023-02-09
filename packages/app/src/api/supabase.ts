@@ -125,7 +125,7 @@ export class SupabaseAPI {
    */
   getEnabledAuthProviders = async (): Promise<Provider[]> => {
     const response = await fetch(
-      'https://field-manager.aerilym.workers.dev/options?key=providerOrder'
+      'https://field-manager.butterfliesapp.workers.dev/options?key=providerOrder'
     );
 
     const { value } = await response.json();

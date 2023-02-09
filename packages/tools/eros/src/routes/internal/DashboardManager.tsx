@@ -30,7 +30,7 @@ export default function DashboardManager() {
     const newItems = [...dashboardItems];
     newItems[index] = item;
 
-    const res = await fetch('https://field-manager.aerilym.workers.dev/options', {
+    const res = await fetch('https://field-manager.butterfliesapp.workers.dev/options', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export default function DashboardManager() {
   }
 
   useEffect(() => {
-    fetch('https://field-manager.aerilym.workers.dev/options?key=dashboardItems').then(
+    fetch('https://field-manager.butterfliesapp.workers.dev/options?key=dashboardItems').then(
       async (res) => {
         const { value } = await res.json();
         const parsedValue = JSON.parse(value) as DashboardItem[];
@@ -86,7 +86,7 @@ export default function DashboardManager() {
   return (
     <div className="container">
       <Header title="Dashboard Manager" description="Manage the links on the internal dashboard." />
-      <a href="https://dashboard.aerilym.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://internal.butterflies.app/" target="_blank" rel="noopener noreferrer">
         Dashboard
       </a>
       <div className="content">
