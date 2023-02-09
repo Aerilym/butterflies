@@ -86,7 +86,7 @@ export default function DashboardManager() {
   return (
     <div className="container">
       <Header title="Dashboard Manager" description="Manage the links on the internal dashboard." />
-      <a href="https://dashboard.aerilym.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://internal.butterflies.app/" target="_blank" rel="noopener noreferrer">
         Dashboard
       </a>
       <div className="content">
