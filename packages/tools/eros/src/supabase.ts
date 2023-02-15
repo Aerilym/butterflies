@@ -1,16 +1,28 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_REACT_APP_SUPABASE_ANON_KEY;
-const supabaseServiceKey = import.meta.env.VITE_REACT_APP_SUPABASE_SERVICE_KEY;
+const supabaseButterfliesUrl = import.meta.env.VITE_REACT_APP_SUPABASE_URL_BUTTERFLIES;
+const supabaseButterfliesAnonKey = import.meta.env.VITE_REACT_APP_SUPABASE_ANON_KEY_BUTTERFLIES;
+const supabaseButterfliesServiceKey = import.meta.env
+  .VITE_REACT_APP_SUPABASE_SERVICE_KEY_BUTTERFLIES;
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+const supabaseInternalUrl = import.meta.env.VITE_REACT_APP_SUPABASE_URL_INTERNAL;
+const supabaseInternalAnonKey = import.meta.env.VITE_REACT_APP_SUPABASE_ANON_KEY_INTERNAL;
+
+const supabaseButterflies = createClient(supabaseButterfliesUrl, supabaseButterfliesServiceKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false,
   },
 });
 
+const supabaseInternal = createClient(supabaseInternalUrl, supabaseInternalAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+  },
+});
+
 // Access auth admin api
-export const supabaseAdminAuthClient = supabase.auth.admin;
-export const supabaseAdminClient = supabase;
+export const supabaseAdminAuthClient = supabaseButterflies.auth.admin;
+export const supabaseAdminClient = supabaseButterflies;
+export const supabaseInternalClient = supabaseInternal;

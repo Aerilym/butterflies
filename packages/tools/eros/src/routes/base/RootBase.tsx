@@ -5,15 +5,12 @@ export default function RootBase() {
         <div className="infobox">
           <h3>What is this?</h3>
           <p>
-            Eros is a comprehensive platform that is used to manage and operate the dating app. It
+            Eros is a comprehensive platform for managing and operate the Butterflies app. It
             handles a wide range of tasks that are essential to the smooth functioning of the app,
-            including managing user accounts and authentication, integrating with third-party
-            services, and providing an internal dashboard and tools for the team to use. The "Eros"
-            tool also manages the configuration of various elements of the app, such as the
-            onboarding process for new users, and creating and managing user profile fields. In
-            addition to these core functions, the Eros also handles other tasks related to the
-            management and operation of the dating app. Eros provides everyone with with the tools
-            and information needed to effectively manage and support the app.
+            including managing user accounts, authentication, integrating with third-party services,
+            and providing an internal dashboard and tools for the team to use. The "Eros" platform
+            also manages the configuration of various elements of the app, such as the onboarding
+            process for new users, and creating and managing user profile fields.
           </p>
         </div>
         <div className="infobox">

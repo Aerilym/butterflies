@@ -26,24 +26,6 @@ export const configLinks: { label: string; target: string; description: string }
 export default function Config() {
   return (
     <div className="top-container">
-      <nav className="navigation side-nav">
-        <div className={'navigation-menu expanded'}>
-          <ul>
-            {configLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  to={link.target}
-                  className={
-                    useLocation().pathname.split('/')[2] === link.target ? 'route-active' : ''
-                  }
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
       <Outlet />
     </div>
   );
