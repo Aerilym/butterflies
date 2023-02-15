@@ -4,7 +4,7 @@ import DashboardItemBlock from '../../components/config/dashboard/DashboardItemB
 import DashboardItemForm from '../../components/config/dashboard/DashboardItemForm';
 import Header from '../../components/Header';
 
-import Dashboard from '../../../../dashboard/src/components/Dashboard';
+import Dashboard from '../../components/dashboard/Dashboard';
 
 import '../../styles/config/internal/dashboard.css';
 import LinkRow from '../../components/LinkingRow';

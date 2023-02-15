@@ -117,7 +117,7 @@ function Navigation({
           }}
         >
           <img
-            src="/logo.svg"
+            src="/images/icons/butterflies.svg"
             alt="logo"
             width={50}
             height={50}

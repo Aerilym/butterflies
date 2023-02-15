@@ -1,5 +1,4 @@
 import React from 'react';
-import '../LinkButton.css'; // import the CSS file
 
 interface LinkButtonProps {
   // props go here

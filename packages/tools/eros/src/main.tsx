@@ -38,6 +38,7 @@ import { ProtectedRoute } from './components/authentication/ProtectedRoute';
 import Login from './routes/Login';
 import { AuthLayout } from './routes/AuthLayout';
 import { UserData } from './components/authentication/AuthProvider';
+import { DashboardItem } from '../../../types/dashboard';
 
 const getUserData = async () => {
   const userString = window.localStorage.getItem('user');
@@ -170,6 +171,14 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <RootBase />,
+            loader: async () => {
+              const res = await fetch(
+                'https://field-manager.butterfliesapp.workers.dev/options?key=dashboardItems'
+              );
+              const { value } = await res.json();
+              const parsedValue = JSON.parse(value) as DashboardItem[];
+              return { dashboardItems: parsedValue };
+            },
           },
           {
             path: 'meet',
