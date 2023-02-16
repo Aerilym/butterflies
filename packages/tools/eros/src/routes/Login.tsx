@@ -20,9 +20,29 @@ export default function Login() {
         }}
       >
         <div>
-          <h1>Eros</h1>
-          <h2>Butterflies</h2>
-          <img src="/logo.svg" alt="logo" width={200} height={200} />
+          <img
+            src="/images/icons/butterflies.svg"
+            alt="logo"
+            width={256}
+            height={256}
+            style={{
+              margin: '32px',
+            }}
+          />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <div>
+              <span style={{ fontSize: '64px' }}>EROS</span>
+              <br></br>
+              <br></br>
+              <span style={{ fontSize: '48px' }}>by Butterflies</span>
+            </div>
+          </div>
         </div>
         <div>
           <h1>Login</h1>

@@ -39,8 +39,22 @@
 }
 
 .dashboard-edit-container {
-  display: flex;
-  flex-direction: row;
+}
+
+.dashboard-live{
+  width: 25%;
+  min-width: 800px;
+}
+
+
+
+.dashboard-live > .dashboard > #section-group > .section-col > .section > .neo-container >  .link-row > .neo-bottom.rectangle-button{
+  width: 540px !important;
+}
+
+
+.dashboard-live > .dashboard > #general > .section > .general-expanded > .neo-container > .link-row > .neo-bottom.rectangle-button{
+  width: 260px !important;
 }
 
 .dashboard-edit-container .dashboard-preview{
@@ -49,8 +63,10 @@
   height: 100%;
 }
 
-.dashboard-preview .dashboard {
-  height: 98%;
+.dashboard-preview {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 #section-group {

@@ -161,7 +161,7 @@ function buildDashboard(items: DashboardItem[]) {
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'center',
-          width: '100%',
+          width: 'calc(92% + 40px)',
           maxWidth: '2700px',
         }}
       >
@@ -175,6 +175,7 @@ function buildDashboard(items: DashboardItem[]) {
           justifyContent: 'center',
           flexWrap: 'wrap',
           width: '100%',
+          marginTop: '0',
           maxWidth: '2700px',
         }}
       >

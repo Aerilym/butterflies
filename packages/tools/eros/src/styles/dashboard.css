@@ -6,13 +6,14 @@
 }
 
 .section {
-  width: 80%;
-  margin: 20px 0;
+  width: 100%;
+  min-width: 600px;
+  margin: 40px 0;
   padding: 20px;
   border: 1px solid lightgray;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: white;
+  background-color: #e0e0e0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -24,15 +25,16 @@
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
+  margin-bottom: 30px;
 }
 
 h1, h2 {
   text-align: center;
+  font-size: 40px !important;
 }
 
 h1 {
   margin: 0 0 20px 0;
-  font-size: 2em;
   font-weight: bold;
 }
 
@@ -45,36 +47,41 @@ h2 {
 }
 
 .section-col{
-  width: 100%;
-  max-width: 24em;
-  min-width: 15em;
+  width: 42%;
+  max-width: 42%;
+  min-width: 600px;
+  margin: 4%;
+  margin-top: 1%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.general-expanded{
+  padding-bottom: 62px;
+  margin-top: -30px;
+}
+
 .general-expanded > * {
-  flex: 1 0 40%;
-  min-width: 10em;
+  flex: 1 0 calc(42% - 28px - 40px + 8px);
+  height: 1.4em;
+  border-radius: 1em;
+  width: calc(42% - 28px - 40px + 8px);
+  margin: 14px;
+  padding: 14px;
 }
 
 .link-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 5em;
+  width: 8em;
   min-width: 1em;
   aspect-ratio: 1;
   border-radius: 100%;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-decoration: none;
   color: black;
   margin: 10px;
-}
-
-.link-button:hover {
-  background-color: lightgray;
 }
 
 .icon {
@@ -93,18 +100,17 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 1.6em;
-  border-radius: 0.8em;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 1.4em;
+  border-radius: 1em;
   text-decoration: none;
   color: black;
-  margin: 10px;
-  padding: 10px;
+  margin: 14px;
+  padding: 14px;
+  font-size: 1.6em;
 }
 
-.link-row:hover {
-  background-color: lightgray;
+.general-expanded > .neo-container > .link-row{
+  min-width: 230px;
 }
 
 .label {
@@ -115,7 +121,86 @@ h2 {
 }
 
 .link-row .icon {
-  width: 2.8em;
+  width: 4em;
   margin-left: 10px;
   margin-right: 10px;
 }
+/* 
+.neo {
+  border-radius: 50px;
+  background: #e0e0e0;
+  box-shadow:  20px 20px 60px #bebebe,
+               -20px -20px 60px #ffffff;
+}
+.neo:hover {
+  transform: scale(0.995, 0.995);
+  border-radius: 50px;
+}
+.neo:after {
+  background: linear-gradient(145deg, #cacaca, #f0f0f0);
+  box-shadow:  20px 20px 60px #bebebe,
+               -20px -20px 60px #ffffff;
+} */
+    /* span {
+      line-height: 100px;
+      font-family: "Montserrat", sans-serif;
+      font-size: 32px;
+      font-weight: semibold;
+    } */
+    .neo-container{
+      color: #6f6cde;
+    }
+    .neo-container:hover {
+      color: #79e3b6;
+      }
+    .neo-container:after{
+      color: #79e3b6;
+    }
+    .neo-bottom{
+      position: absolute;
+      color: #6f6cde;
+      transition: all 0.4s ease-in-out;
+      border-radius: 100%;
+    }
+
+    .neo-bottom.circle-button{
+      width: calc(8em + 20px);
+      aspect-ratio: 1;
+    }
+
+    .neo-bottom.rectangle-button{
+      height: 1.4em;
+      border-radius: 1em;
+      min-width: 540px;
+      width: calc(42% - 28px - 40px + 8px);
+      margin: 14px;
+      padding: 14px;
+    }
+
+    .general-expanded > .neo-container > a > .neo-bottom.rectangle-button{
+      min-width: 230px;
+    }
+    
+    .neo-bottom.start {
+      box-shadow: -6px -6px 10px rgba(255, 255, 255, 0.8),
+      6px 6px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.4s ease-in-out;
+      opacity: 1;
+    }
+    .neo-bottom.start:hover{
+      opacity: 0;
+    }
+    .neo-bottom.later{
+      box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5),
+        inset 8px 8px 16px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease-in-out;
+      opacity: 0.3;
+    }
+    /* active {
+        opacity: 1;
+        box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5),
+          inset 8px 8px 16px rgba(0, 0, 0, 0.1);
+        color: #79e3b6;
+      } */
+    
+  
