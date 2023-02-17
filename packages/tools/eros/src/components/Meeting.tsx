@@ -1,7 +1,9 @@
 import { JaaSMeeting } from '@jitsi/react-sdk';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { capitaliseWords } from '../helper';
 import { UserData } from './authentication/AuthProvider';
+import Countdown from './Countdown';
 import { generateJWT, JwtUser } from './jwt';
 import Loading from './Loading';
 
@@ -36,7 +38,12 @@ GVcY73sACkqs9mm5Zi5M0pE=
 
 export default function Meeting({ roomName, user }: { roomName: string; user?: UserData | null }) {
   const [loading, setLoading] = useState(true);
+  const [endMeeting, setEndMeeting] = useState(false);
+  const [redirectTimeout, setRedirectTimeout] = useState<number | null>(null);
   const [jwt, setJwt] = useState<null | string>(null);
+  const redirectTimer = 10000;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const jwtUser: JwtUser = {
@@ -54,6 +61,63 @@ export default function Meeting({ roomName, user }: { roomName: string; user?: U
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (endMeeting) {
+      setRedirectTimeout(
+        setTimeout(() => {
+          navigate('/meet', { replace: true });
+        }, redirectTimer)
+      );
+    }
+    return () => {
+      if (redirectTimeout) {
+        clearTimeout(redirectTimeout);
+      }
+    };
+  }, [endMeeting]);
+
+  const handleRejoinMeeting = () => {
+    if (redirectTimeout) {
+      clearTimeout(redirectTimeout);
+    }
+    setEndMeeting(false);
+  };
+
+  if (endMeeting) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <h1>
+          Thank you for joining the meeting{' '}
+          {capitaliseWords(user?.preferred_name ?? user?.first_name ?? '')}!
+        </h1>
+        <h1>
+          You will be redirected to the meeting platform in{' '}
+          {<Countdown startingTime={redirectTimer} />}...
+        </h1>
+        <button
+          onClick={handleRejoinMeeting}
+          style={{
+            padding: '1rem',
+            fontSize: '1.5rem',
+            border: 'none',
+            borderRadius: '0.5rem',
+            backgroundColor: 'blue',
+            color: 'white',
+            cursor: 'pointer',
+          }}
+        >
+          Rejoin Meeting: {roomName}
+        </button>
+      </div>
+    );
+  }
 
   return loading ? (
     <Loading />
@@ -78,6 +142,9 @@ export default function Meeting({ roomName, user }: { roomName: string; user?: U
       }}
       getIFrameRef={(iframeRef) => {
         iframeRef.style.height = '100vh';
+      }}
+      onReadyToClose={() => {
+        setEndMeeting(true);
       }}
     />
   ) : (
