@@ -1,23 +1,29 @@
 .navbar {
+  z-index: 1000000;
+  position: fixed;
+  top: 0;
+  right: 0;
   display: flex;
   justify-content: space-around;
-  width: 100vw;
   align-items: center;
-  position: fixed;
-  top: -100%;
-  z-index: 1000000;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
+  width: 100vw;
   background-color: #fff;
-  margin-bottom: 1rem;  
-  transition: top 0.5s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(0);
 }
 
 .navbar:hover {
-  top: 0 !important;
+  transform: translateY(0);
 }
 
-.navbar-expanded {
-  top: 0 !important;
+.navbar-show {
+  transform: translateY(0);
+}
+
+.navbar-hide {
+  transform: translateY(-100%);
 }
 
 .navbar-item {
@@ -91,11 +97,51 @@
 }
 
 .profile-circle {
-  border-radius: 50%;
-  aspect-ratio: 1;
+  border-radius: 100%;
+  height: 32px;
+  font-size: 12px;
+  line-height: 0;
   background-color: #c1c1c1;
-  margin: 0 1em;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#profile-dropdown {
+  right: 40px;
+}
+
+.docked-nav{
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  aspect-ratio: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-bottom-right-radius: 10%;
+  z-index: 1000000000;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.docked-nav:hover{
+  opacity: 1;
+}
+
+.docked-nav-expanded {
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  border-radius: 0;
+  opacity: 1;
+}
+
+.navbar-show-docked {
+  transform: translateX(0);
+}
+
+.navbar-hide-docked {
+  transform: translateX(-100%);
 }

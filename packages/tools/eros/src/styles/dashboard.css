@@ -159,7 +159,7 @@ h2 {
     .neo-bottom{
       position: absolute;
       color: #6f6cde;
-      transition: all 0.4s ease-in-out;
+      transition: all 0.25s ease-in-out;
       border-radius: 100%;
     }
 
@@ -184,7 +184,6 @@ h2 {
     .neo-bottom.start {
       box-shadow: -6px -6px 10px rgba(255, 255, 255, 0.8),
       6px 6px 10px rgba(0, 0, 0, 0.2);
-      transition: all 0.4s ease-in-out;
       opacity: 1;
     }
     .neo-bottom.start:hover{
@@ -193,7 +192,6 @@ h2 {
     .neo-bottom.later{
       box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5),
         inset 8px 8px 16px rgba(0, 0, 0, 0.1);
-      transition: all 0.4s ease-in-out;
       opacity: 0.3;
     }
     /* active {
