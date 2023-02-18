@@ -1,5 +1,5 @@
 import AuthProviders from '../../components/config/authentication/AuthProviders';
-import Header from '../../components/Header';
+import Header from '../../components/utility/Header';
 
 export default function Authentication() {
   return (

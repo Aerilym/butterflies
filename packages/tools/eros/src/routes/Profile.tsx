@@ -1,6 +1,7 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+
 import { useAuth } from '../components/authentication/AuthProvider';
-import InternalProfile from '../components/InternalProfile';
+import InternalProfile from '../components/profile/InternalProfile';
 
 export default function Profile() {
   const { user } = useAuth();

@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
+
 import { useAuth } from '../../components/authentication/AuthProvider';
-import Meeting from '../../components/Meeting';
+import Meeting from '../../components/meet/Meeting';
 
 export default function Room() {
   const { roomId } = useParams();

@@ -1,5 +1,5 @@
-import { capitaliseWords } from '../helper';
-import { UserData } from './authentication/AuthProvider';
+import { capitaliseWords } from '../../helper';
+import { UserData } from '../authentication/AuthProvider';
 
 export default function InternalProfile({ user }: { user: UserData }) {
   return (

@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import { createBrowserRouter, Navigate, RouterProvider, useParams } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ErrorPage from './ErrorPage';
 import Root from './routes/Root';
@@ -24,8 +23,12 @@ import Users from './routes/Users';
 import UsersBase from './routes/base/UsersBase';
 import UsersList from './routes/users/UsersList';
 import { User } from '@supabase/supabase-js';
-import { supabaseAdminAuthClient, supabaseAdminClient, supabaseInternalClient } from './supabase';
-import { TableColumn, TableData } from './components/Table';
+import {
+  supabaseAdminAuthClient,
+  supabaseAdminClient,
+  supabaseInternalClient,
+} from './services/supabase';
+import { TableColumn, TableData } from './components/utility/Table';
 import ProfileList from './routes/users/ProfileList';
 import MatchesList from './routes/users/MatchesList';
 import CustomList from './routes/users/CustomList';
@@ -39,6 +42,8 @@ import Login from './routes/Login';
 import { AuthLayout } from './routes/AuthLayout';
 import { UserData } from './components/authentication/AuthProvider';
 import { DashboardItem } from '../../../types/dashboard';
+
+import './styles/index.css';
 
 const getUserData = async () => {
   const userString = window.localStorage.getItem('user');

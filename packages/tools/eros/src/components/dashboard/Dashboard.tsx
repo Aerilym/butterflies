@@ -1,9 +1,10 @@
 import React from 'react';
-import '../../styles/dashboard.css'; // import the CSS file
 
 import LinkButton from './LinkButton';
 import LinkRow from './LinkRow';
-import { DashboardItem } from '../../../../../types/dashboard';
+import type { DashboardItem } from '../../../../../types/dashboard';
+
+import '../../styles/dashboard/dashboard.css';
 
 interface DashboardProps {
   data: DashboardItem[];

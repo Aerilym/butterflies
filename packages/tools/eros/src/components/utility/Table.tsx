@@ -15,6 +15,8 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { matchSorter } from 'match-sorter';
 
+import '../../styles/utility/table.css';
+
 export interface TableColumn {
   Header: string;
   accessor: string;
@@ -42,8 +44,6 @@ export interface RowWarnings {
 export interface Warnings {
   rowWarnings?: RowWarnings;
 }
-
-import '../styles/table.css';
 
 const supabaseDateTimeRegex = new RegExp(
   /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{6})?(Z|\+\d{2}:\d{2})?/

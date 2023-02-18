@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import { DashboardItem } from '../../../../../types/dashboard';
 import DashboardItemBlock from '../../components/config/dashboard/DashboardItemBlock';
 import DashboardItemForm from '../../components/config/dashboard/DashboardItemForm';
-import Header from '../../components/Header';
-
+import Header from '../../components/utility/Header';
 import Dashboard from '../../components/dashboard/Dashboard';
+import Loading from '../../components/utility/Loading';
 
 import '../../styles/config/internal/dashboard.css';
-import LinkRow from '../../components/LinkingRow';
-import Loading from '../../components/Loading';
 
 interface IndexedItem {
   index: number;
@@ -141,7 +140,7 @@ export default function DashboardManager() {
             )}
           </div>
         </div>
-        <div className="dashboard-live" >
+        <div className="dashboard-live">
           {dashboardPreviewItems.length > 0 ? (
             <Dashboard data={[...new Set(dashboardPreviewItems)]} />
           ) : null}

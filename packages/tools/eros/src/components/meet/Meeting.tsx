@@ -1,11 +1,12 @@
 import { JaaSMeeting } from '@jitsi/react-sdk';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { capitaliseWords } from '../helper';
-import { UserData } from './authentication/AuthProvider';
-import Countdown from './Countdown';
-import { generateJWT, JwtUser } from './jwt';
-import Loading from './Loading';
+
+import { capitaliseWords } from '../../helper';
+import { UserData } from '../authentication/AuthProvider';
+import Countdown from '../utility/Countdown';
+import { generateJWT, JwtUser } from '../../services/jwt';
+import Loading from '../utility/Loading';
 
 const PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCvmejOkoFezezY

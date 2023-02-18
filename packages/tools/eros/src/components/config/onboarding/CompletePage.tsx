@@ -1,6 +1,7 @@
 import React from 'react';
-import { CompletePageData } from '../../../../../../types/api';
-import Loading from '../../Loading';
+
+import type { CompletePageData } from '../../../../../../types/api';
+import Loading from '../../utility/Loading';
 
 type FormProps = {
   onSubmit: (value: CompletePageData) => void;

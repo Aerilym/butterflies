@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 import Authentication from '../components/authentication/Authentication';
 import { useAuth } from '../components/authentication/AuthProvider';
 

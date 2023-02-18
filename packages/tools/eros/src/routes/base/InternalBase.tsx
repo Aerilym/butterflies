@@ -1,4 +1,4 @@
-import LinkingRow from '../../components/LinkingRow';
+import LinkingRow from '../../components/utility/LinkingRow';
 import { internalLinks } from '../Internal';
 
 export default function InternalBase() {

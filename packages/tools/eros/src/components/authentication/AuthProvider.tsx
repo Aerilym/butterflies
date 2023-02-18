@@ -1,7 +1,8 @@
-import { Session, User } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import React, { createContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { supabaseInternalClient } from '../../supabase';
+
+import { supabaseInternalClient } from '../../services/supabase';
 
 type ContextProps = {
   userID: null | string;

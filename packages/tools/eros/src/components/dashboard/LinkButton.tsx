@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface LinkButtonProps {
   // props go here
   label: string; // label to display on the button

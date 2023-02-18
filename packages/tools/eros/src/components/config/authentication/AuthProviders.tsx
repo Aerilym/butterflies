@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+
 import { validAuthProviders } from '../../../../../../types/fields';
-import Loading from '../../Loading';
+import Loading from '../../utility/Loading';
 
 export default function AuthProviders() {
   const [providerOrder, setProviderOrder] = useState<string[]>([] as string[]);

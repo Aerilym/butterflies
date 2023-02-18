@@ -1,4 +1,4 @@
-import LinkingRow from '../../components/LinkingRow';
+import LinkingRow from '../../components/utility/LinkingRow';
 import { configLinks } from '../Config';
 
 export default function ConfigBase() {

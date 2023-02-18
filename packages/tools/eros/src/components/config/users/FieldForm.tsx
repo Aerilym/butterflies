@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip } from 'react-tooltip';
+
 import { FieldSelectorOptions, OnboardingStepItem } from '../../../../../../types/fields';
-import Loading from '../../Loading';
 
 type SelectorOptions = FieldSelectorOptions['selector'] | '';
 

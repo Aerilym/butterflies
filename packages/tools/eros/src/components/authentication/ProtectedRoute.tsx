@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
+
 import { useAuth } from './AuthProvider';
 
 export const ProtectedRoute = ({ children }: { children: any }) => {

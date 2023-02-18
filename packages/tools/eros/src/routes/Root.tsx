@@ -1,10 +1,12 @@
-import '../App.css';
-import 'react-tooltip/dist/react-tooltip.css';
-import '../styles/tooltips.css';
 import { Outlet } from 'react-router-dom';
+
 import { useAuth } from '../components/authentication/AuthProvider';
 import { navMap } from '../main';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/utility/Navbar';
+
+import '../styles/app.css';
+import 'react-tooltip/dist/react-tooltip.css';
+import '../styles/utility/tooltips.css';
 
 const customBarPaths = {
   locked: {

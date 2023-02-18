@@ -1,4 +1,5 @@
 import { MarkerProps } from 'react-simple-maps';
+
 import Map from '../components/godview/Map';
 
 const markers: MarkerProps[] = [{ coordinates: [144.9669, -37.8159] }];

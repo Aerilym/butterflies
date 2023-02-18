@@ -1,4 +1,4 @@
-import LinkingRow from '../../components/LinkingRow';
+import LinkingRow from '../../components/utility/LinkingRow';
 import { usersLinks } from '../Users';
 
 export default function UsersBase() {

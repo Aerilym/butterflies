@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { capitaliseWords } from '../helper';
-import { NavMap } from '../main';
-import '../styles/navbar.css';
-import { UserData } from './authentication/AuthProvider';
+
+import { capitaliseWords } from '../../helper';
+import { NavMap } from '../../main';
+import { UserData } from '../authentication/AuthProvider';
+
+import '../../styles/utility/navbar.css';
 
 export type CustomBarPaths = Record<
   string,

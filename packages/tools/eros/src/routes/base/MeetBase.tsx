@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../../components/authentication/AuthProvider';
-import InternalProfile from '../../components/InternalProfile';
+import InternalProfile from '../../components/profile/InternalProfile';
 
 interface ScheduledMeeting {
   name: string;

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { OnboardingStepItem } from '../../../../../types/fields';
-
-import Header from '../../components/Header';
+import type { OnboardingStepItem } from '../../../../../types/fields';
+import Header from '../../components/utility/Header';
 import FieldForm from '../../components/config/users/FieldForm';
+import Loading from '../../components/utility/Loading';
+import Table, { RowWarning, TableData } from '../../components/utility/Table';
+import { supabaseAdminClient } from '../../services/supabase';
 
 import '../../styles/config/onboarding/Form.css';
-import Loading from '../../components/Loading';
-import Table, { RowWarning, TableData } from '../../components/Table';
-import { supabaseAdminClient } from '../../supabase';
 
 const generalRequiredFields = ['label', 'field', 'bucket', 'selector'];
 

@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import { OnboardingStepItem } from '../../../../../types/fields';
-import { CompletePageData } from '../../../../../types/api';
-
-import Header from '../../components/Header';
+import type { OnboardingStepItem } from '../../../../../types/fields';
+import type { CompletePageData } from '../../../../../types/api';
+import Header from '../../components/utility/Header';
 import OnboardingOrder from '../../components/config/onboarding/OnboardingOrder';
 import CompletePage from '../../components/config/onboarding/CompletePage';
+import Loading from '../../components/utility/Loading';
 
 import '../../styles/config/onboarding/Form.css';
 import '../../styles/config/onboarding/OnboardingOrder.css';
-import Loading from '../../components/Loading';
 
 export default function Onboarding() {
   const [fields, setFields] = useState<OnboardingStepItem[]>([] as OnboardingStepItem[]);

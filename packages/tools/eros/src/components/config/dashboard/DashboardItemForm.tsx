@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
-import { DashboardItem } from '../../../../../../types/dashboard';
-import Loading from '../../Loading';
+
+import type { DashboardItem } from '../../../../../../types/dashboard';
+import Loading from '../../utility/Loading';
 
 type FormProps = {
   data?: DashboardItem[];

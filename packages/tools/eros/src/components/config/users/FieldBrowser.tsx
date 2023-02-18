@@ -1,5 +1,6 @@
 import { Tooltip } from 'react-tooltip';
-import { OnboardingStepItem } from '../../../../../../types/fields';
+
+import type { OnboardingStepItem } from '../../../../../../types/fields';
 
 type FormProps = {
   fields: OnboardingStepItem[];

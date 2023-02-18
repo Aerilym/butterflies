@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface LinkRowProps {
   // props go here
   label: string; // label to display on the button
