@@ -171,7 +171,7 @@ export class LocationAPI {
     location: GeocodeLocation | string
   ): Promise<LocationGeocodedLocation> {
     log.debug('Getting position from geocode location');
-    if (typeof location !== 'string') location = parseLocation(location);
+    if (this.isGeocodeLocation(location)) location = parseLocation(location);
     const position = (await locationManager.geocodeAsync(location))[0];
     log.debug('Position from geocode location', position);
     return position;
@@ -182,5 +182,9 @@ export class LocationAPI {
     const location = await lookupLocationFromIP();
     log.debug('Location from IP', location);
     return location;
+  }
+
+  isGeocodeLocation(location: any): location is GeocodeLocation {
+    return 'geocodeTimestamp' in location && 'latitude' in location && 'longitude' in location;
   }
 }
