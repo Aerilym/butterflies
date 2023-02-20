@@ -243,6 +243,8 @@ const router = createBrowserRouter([
                 loader: async () => {
                   const { data, error } = await supabaseAdminAuthClient.listUsers();
 
+                  if (error) console.error(error);
+
                   const cols: TableColumn[] = [];
                   const users = data;
 

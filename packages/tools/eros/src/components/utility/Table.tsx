@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ForwardRefExoticComponent, MutableRefObject } from 'react';
 import {
   useTable,
@@ -507,10 +508,12 @@ export default function Table({ columns, data, warnings }: TableProps) {
                   >
                     <img
                       className="eye eye-open"
+                      alt="eye open"
                       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABH0lEQVR4nO2UvU5CQRCFv4poxELFzkIT8TVAan9ewehDGJFefBsE30ILLbil2lzt4QEwk5xCNzOXxcJQ8CWT3MycM7uZ3buwYtnZBq6AIVAAU0Wh3KU0C7MO9NRsNidMcytPFnvAc0bjWRKvwMG85kfAl2MeAC1gQ9HWiFKdeZtR813gwzFdV2yo6+jfgYYnfgx2btSAe+ATKIG+csbI8T2QcB7MtaV636lZzjgOvKc/FygCUV310qlZztgMvON/XeAsELUrRnSnWifwnqTn4F27oWo1LVI6h1x1OX7R0BVLxV1ieo7+DdiJDM3gRxvpttQVnWDn5j0k46l4+sNT8QLsk8maRjPNaDwBbuRZmC3gQoc2VrOJvgeqmWbFEvMNriXJVcp1zQIAAAAASUVORK5CYII="
                     />
                     <img
                       className="eye eye-closed"
+                      alt="eye closed"
                       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABQ0lEQVR4nO3UMUtcURAF4M8tJHaCgiliJNjERiwSi5A/IRohKdJa6t8waUST/AiTSq1Mo4goGLBaqxjQ2mihy5IYePJkEi4Lu/vY7MIWe+DA5c7cc96dufPoodsxggVsoIyfuIz1ZsQetiI8iPeoImvCauTmZwphEt8LCGc1PMPzZuJTUYKsRd7gZT3xx7j4D/EsmPdprFa8D7ttEM+Ce6H5D/NtFM+Cr1ODww4YfEsNjjpgcJwavInNP1jGxxikcgGhk8j9hHe4jf23tU3ej8AWSklspYH4WpJXCqMsSp5q3ONJMgNfMJDEZrAT77wSL242iT/Aepy9wni9WXiB60g8wITmeJrcvtJo0P7iWYx9FvX8jFcYRX8wX8/FV/+O3HNMK4ghrOJXgSbnBh8wrAU8wiK2cRp/zpw/8BVLcZseuhh3OoHcHMUbMBYAAAAASUVORK5CYII="
                     />
                   </button>

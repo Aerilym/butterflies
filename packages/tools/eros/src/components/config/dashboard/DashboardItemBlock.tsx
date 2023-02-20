@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 
 import type { DashboardItem } from '../../../../../../types/dashboard';
@@ -25,13 +25,13 @@ export default function DashboardItemBlock({
     handleUpdate(item, itemIndex);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     setItem(dataItem);
   }, [dataItem]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (item.label) handlePreviewUpdate(item, itemIndex);
-  }, [item]);
+  }, [handlePreviewUpdate, item, itemIndex]);
 
   return (
     <div className="dashboard-item">

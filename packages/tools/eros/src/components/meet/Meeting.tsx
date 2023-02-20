@@ -61,7 +61,7 @@ export default function Meeting({ roomName, user }: { roomName: string; user?: U
       console.log('jwt', jwt);
       setLoading(false);
     });
-  }, []);
+  }, [user?.avatar_url, user?.email, user?.first_name, user?.id, user?.preferred_name]);
 
   useEffect(() => {
     if (endMeeting) {
@@ -76,7 +76,7 @@ export default function Meeting({ roomName, user }: { roomName: string; user?: U
         clearTimeout(redirectTimeout);
       }
     };
-  }, [endMeeting]);
+  }, [endMeeting, navigate, redirectTimeout]);
 
   const handleRejoinMeeting = () => {
     if (redirectTimeout) {

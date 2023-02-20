@@ -11,7 +11,7 @@ export default function Login() {
     if (userID) {
       navigate('/');
     }
-  }, [userID]);
+  }, [navigate, userID]);
   return (
     <div className="top-container">
       <div

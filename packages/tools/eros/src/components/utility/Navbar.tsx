@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { capitaliseWords } from '../../helper';
@@ -30,40 +30,38 @@ export default function Navbar({ navMap, customBarPaths, user }: NavbarProps) {
 
   let location = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPath(location.pathname);
   }, [location]);
 
-  function shouldLock(path: string): boolean {
-    return (
-      customBarPaths.locked.fullPath.includes(path) ||
-      customBarPaths.locked.prefixPath.some((p) => path.startsWith(p))
-    );
-  }
-
-  function shouldDock(path: string): boolean {
-    return (
-      customBarPaths.docked.fullPath.includes(path) ||
-      customBarPaths.docked.prefixPath.some((p) => path.startsWith(p))
-    );
-  }
-
-  function handleLockedBar(): void {
-    setShowDocked(false);
-    setDocked(false);
-    setShowNavbar(true);
-  }
-
-  function handleDockedBar(): void {
-    if (docked) return;
-    setShowNavbar(false);
-    setDocked(true);
-  }
-
   useEffect(() => {
+    function shouldLock(path: string): boolean {
+      return (
+        customBarPaths.locked.fullPath.includes(path) ||
+        customBarPaths.locked.prefixPath.some((p) => path.startsWith(p))
+      );
+    }
+
+    function shouldDock(path: string): boolean {
+      return (
+        customBarPaths.docked.fullPath.includes(path) ||
+        customBarPaths.docked.prefixPath.some((p) => path.startsWith(p))
+      );
+    }
+
+    function handleLockedBar(): void {
+      setShowDocked(false);
+      setDocked(false);
+      setShowNavbar(true);
+    }
+
+    function handleDockedBar(): void {
+      if (docked) return;
+      setShowNavbar(false);
+      setDocked(true);
+    }
     function handleMouseMove(event: MouseEvent) {
       const path = navbarRef?.current?.id ?? '/';
-      console.log('gonna lock', shouldLock(path));
       if (shouldLock(path)) return handleLockedBar();
       if (shouldDock(path)) return handleDockedBar();
 
@@ -76,7 +74,13 @@ export default function Navbar({ navMap, customBarPaths, user }: NavbarProps) {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [
+    customBarPaths.docked.fullPath,
+    customBarPaths.docked.prefixPath,
+    customBarPaths.locked.fullPath,
+    customBarPaths.locked.prefixPath,
+    docked,
+  ]);
 
   return (
     <>

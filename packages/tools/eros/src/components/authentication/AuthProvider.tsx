@@ -82,7 +82,6 @@ export const AuthProvider = ({
   const handleLogout = () => {
     supabaseInternalClient.auth.signOut();
     setUserID(null);
-    null;
     window.localStorage.removeItem('user');
     window.localStorage.removeItem('userID');
   };
@@ -110,6 +109,7 @@ export const AuthProvider = ({
             break;
           case 'TOKEN_REFRESHED':
             console.log('Token refreshed');
+            break;
           case 'USER_UPDATED':
             console.log(`User ${email} updated`);
             break;
