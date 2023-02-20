@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import { DashboardItem } from '../../../../../types/dashboard';
 import DashboardItemBlock from '../../components/config/dashboard/DashboardItemBlock';
 import DashboardItemForm from '../../components/config/dashboard/DashboardItemForm';
-import Header from '../../components/Header';
-
-import Dashboard from '../../../../dashboard/src/components/Dashboard';
+import Header from '../../components/utility/Header';
+import Dashboard from '../../components/dashboard/Dashboard';
+import Loading from '../../components/utility/Loading';
 
 import '../../styles/config/internal/dashboard.css';
-import LinkRow from '../../components/LinkingRow';
-import Loading from '../../components/Loading';
 
 interface IndexedItem {
   index: number;
@@ -86,33 +85,30 @@ export default function DashboardManager() {
   return (
     <div className="container">
       <Header title="Dashboard Manager" description="Manage the links on the internal dashboard." />
-      <a href="https://internal.butterflies.app/" target="_blank" rel="noopener noreferrer">
-        Dashboard
-      </a>
-      <div className="content">
-        {loading ? <Loading /> : null}
-        <div className="new-field-container">
-          {showForm ? (
-            <button
-              className="cancel-field"
-              onClick={() => {
-                setShowForm(!showForm);
-              }}
-            >
-              Cancel
-            </button>
-          ) : (
-            <button
-              className="create-field"
-              onClick={() => {
-                setShowForm(!showForm);
-              }}
-            >
-              Create New Link
-            </button>
-          )}
-          <DashboardItemForm data={dashboardItems} sections={sections} visible={showForm} />
-        </div>
+      {loading ? <Loading /> : null}
+      <div className="new-field-container">
+        {showForm ? (
+          <button
+            className="cancel-field"
+            onClick={() => {
+              setShowForm(!showForm);
+            }}
+          >
+            Cancel
+          </button>
+        ) : (
+          <button
+            className="create-field"
+            onClick={() => {
+              setShowForm(!showForm);
+            }}
+          >
+            Create New Link
+          </button>
+        )}
+        <DashboardItemForm data={dashboardItems} sections={sections} visible={showForm} />
+      </div>
+      <div className="dashboard-preview">
         <div className="dashboard-edit-container">
           <div className="dashboard-sections">
             {indexedItems.length === 0 ? (
@@ -143,12 +139,11 @@ export default function DashboardManager() {
               )
             )}
           </div>
-          <div className="dashboard-preview">
-            <h1>Live Preview</h1>
-            {dashboardPreviewItems.length > 0 ? (
-              <Dashboard data={[...new Set(dashboardPreviewItems)]} />
-            ) : null}
-          </div>
+        </div>
+        <div className="dashboard-live">
+          {dashboardPreviewItems.length > 0 ? (
+            <Dashboard data={[...new Set(dashboardPreviewItems)]} />
+          ) : null}
         </div>
       </div>
     </div>

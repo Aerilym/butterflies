@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import Loading from '../../components/Loading';
+import { useState } from 'react';
+
+import Loading from '../../components/utility/Loading';
 
 interface KV {
   key: string;

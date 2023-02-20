@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 export const internalLinks: { label: string; target: string; description: string }[] = [
   {
@@ -21,24 +21,6 @@ export const internalLinks: { label: string; target: string; description: string
 export default function Internal() {
   return (
     <div className="top-container">
-      <nav className="navigation side-nav">
-        <div className="navigation-menu expanded">
-          <ul>
-            {internalLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  to={link.target}
-                  className={
-                    useLocation().pathname.split('/')[2] === link.target ? 'route-active' : ''
-                  }
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
       <Outlet />
     </div>
   );

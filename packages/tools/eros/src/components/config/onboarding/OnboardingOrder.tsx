@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { OnboardingStepItem } from '../../../../../../types/fields';
-import Loading from '../../Loading';
+
+import type { OnboardingStepItem } from '../../../../../../types/fields';
+import Loading from '../../utility/Loading';
 
 type FormProps = {
   fields: OnboardingStepItem[];

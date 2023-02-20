@@ -1,8 +1,9 @@
-import Header from '../../components/Header';
+import { useLoaderData } from 'react-router-dom';
+
+import Header from '../../components/utility/Header';
+import Table, { TableProps } from '../../components/utility/Table';
 
 import '../../styles/config/onboarding/Form.css';
-import Table, { TableProps } from '../../components/Table';
-import { useLoaderData } from 'react-router-dom';
 
 export default function ProfileList() {
   const { data, columns } = useLoaderData() as TableProps;

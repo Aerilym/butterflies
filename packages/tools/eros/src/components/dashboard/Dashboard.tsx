@@ -1,9 +1,10 @@
 import React from 'react';
-import '../dashboard.css'; // import the CSS file
 
 import LinkButton from './LinkButton';
 import LinkRow from './LinkRow';
-import { DashboardItem } from '../../../../types/dashboard';
+import type { DashboardItem } from '../../../../../types/dashboard';
+
+import '../../styles/dashboard/dashboard.css';
 
 interface DashboardProps {
   data: DashboardItem[];
@@ -161,7 +162,7 @@ function buildDashboard(items: DashboardItem[]) {
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'center',
-          width: '100%',
+          width: 'calc(92% + 40px)',
           maxWidth: '2700px',
         }}
       >
@@ -175,6 +176,7 @@ function buildDashboard(items: DashboardItem[]) {
           justifyContent: 'center',
           flexWrap: 'wrap',
           width: '100%',
+          marginTop: '0',
           maxWidth: '2700px',
         }}
       >
