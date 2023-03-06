@@ -1,0 +1,31 @@
+name = "clickup-worker"
+main = "src/index.ts"
+compatibility_date = "2023-02-28"
+routes = [
+	{ pattern = "eros.butterflies.app/api/clickup/*", zone_id="e8daa9fb930a67d8d62e82b9d30c4e9e" },
+]
+kv_namespaces = [
+  { binding = "CLICKUP_ZULIP_SPACE_MAP", id = "43fa138323a14985b7226b36610ff26d" },
+  { binding = "BUTTERFLIES_EMAIL_MAP", id = "e75b32a6c790412cb0f1a0db7de8e897" },
+]
+
+[dev]
+port=8002
+
+[env.stg]
+name = "clickup-worker-stg"
+
+[env.prd]
+name = "clickup-worker"
+
+[vars]
+# The necessary secrets are:
+# - 
+# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
+ENVIRONMENT = "prd"
+
+[env.stg.vars]
+ENVIRONMENT = "stg"
+
+[env.prd.vars]
+ENVIRONMENT = "prd"
