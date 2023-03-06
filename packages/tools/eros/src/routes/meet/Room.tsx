@@ -15,6 +15,30 @@ export default function Room() {
         overflow: 'hidden',
       }}
     >
+      <button
+        onClick={() => {
+          window.open('https://app.clickup.com/t/860q2d03v', '_blank');
+        }}
+        style={{
+          padding: '1rem',
+          border: 'none',
+          borderRadius: '1rem 0 0 0',
+          color: 'white',
+          cursor: 'pointer',
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+        }}
+      >
+        <img
+          src="/images/icons/clickup.svg"
+          style={{
+            height: '3rem',
+            paddingRight: '0.3rem',
+            paddingLeft: '0.3rem',
+          }}
+        />
+      </button>
       <Meeting roomName={roomId} user={user} />
     </div>
   );
