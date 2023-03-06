@@ -7,13 +7,27 @@ interface ScheduledMeeting {
   name: string;
   start: Date;
   end: Date;
+  clickup: string;
 }
 
 const schedule = [
   {
-    name: 'General-Meeting',
-    start: new Date('2023-02-13T10:00:00.000Z'),
-    end: new Date('2023-02-13T11:00:00.000Z'),
+    name: 'Design',
+    start: new Date('2023-03-06T09:00:00.000Z'),
+    end: new Date('2023-02-06T10:00:00.000Z'),
+    clickup: 'https://app.clickup.com/t/860q2d03v',
+  },
+  {
+    name: 'Engineering',
+    start: new Date('2023-03-07T08:00:00.000Z'),
+    end: new Date('2023-02-07T09:00:00.000Z'),
+    clickup: 'https://app.clickup.com/t/860q2vugu',
+  },
+  {
+    name: 'Admin',
+    start: new Date('2023-03-07T09:00:00.000Z'),
+    end: new Date('2023-02-07T10:00:00.000Z'),
+    clickup: 'https://app.clickup.com/t/',
   },
 ];
 
@@ -26,21 +40,35 @@ export default function MeetBase() {
         <div>
           <h2>Scheduled Meetings</h2>
           {schedule.map((meeting: ScheduledMeeting) => (
-            <button
+            <div
               key={meeting.name}
-              onClick={() => {
-                window.location.href = `/meet/${meeting.name}`;
-              }}
               style={{
                 width: '100%',
                 textAlign: 'left',
                 padding: '1rem',
+                border: '1px solid grey',
+                borderRadius: '0.5rem',
                 marginBottom: '1rem',
+                backgroundColor: '#333',
               }}
             >
-              <h2>{meeting.name}</h2>
-              <h3>Start: {formatDistanceToNow(meeting.start)}</h3>
-            </button>
+              <h3>{meeting.name}</h3> <span>{formatDistanceToNow(meeting.start)}</span>
+              <h3>{`${meeting.start.toLocaleString()}`}</h3>
+              <button
+                onClick={() => {
+                  window.location.href = `/meet/${meeting.name}`;
+                }}
+              >
+                Join Meeting
+              </button>
+              <button
+                onClick={() => {
+                  window.open(meeting.clickup, '_blank');
+                }}
+              >
+                ClickUp
+              </button>
+            </div>
           ))}
         </div>
         <div>

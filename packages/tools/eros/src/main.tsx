@@ -44,6 +44,7 @@ import { UserData } from './components/authentication/AuthProvider';
 import { DashboardItem } from '../../../types/dashboard';
 
 import './styles/index.css';
+import WebhookManager from './routes/internal/WebhookManager';
 
 const getUserData = async () => {
   const userString = window.localStorage.getItem('user');
@@ -134,6 +135,10 @@ export const navMap: NavMap = {
       dashboard: {
         name: 'Dashboard',
         path: 'dashboard',
+      },
+      webhook: {
+        name: 'Webhooks',
+        path: 'webhooks',
       },
     },
   },
@@ -324,6 +329,10 @@ const router = createBrowserRouter([
               {
                 path: 'dashboard',
                 element: <DashboardManager />,
+              },
+              {
+                path: 'webhooks',
+                element: <WebhookManager />,
               },
               {
                 path: 'authentication',

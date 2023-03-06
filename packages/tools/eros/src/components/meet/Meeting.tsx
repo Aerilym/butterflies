@@ -135,6 +135,34 @@ export default function Meeting({ roomName, user }: { roomName: string; user?: U
         disableThirdPartyRequests: true,
         disableLocalVideoFlip: true,
         backgroundAlpha: 0.5,
+        startWithAudioMuted: 2,
+        useHostPageLocalStorage: true,
+        transcribingEnabled: true,
+        faceLandmarks: {
+          enableFaceCentering: true,
+          enableFaceExpressionsDetection: true,
+          enableDisplayFaceExpressions: true,
+          enableRTCStats: false,
+          faceCenteringThreshold: 20,
+          captureInterval: 1000,
+        },
+        lobby: {
+          autoKnock: true,
+          enableChat: true,
+        },
+        disableModeratorIndicator: true,
+        localRecording: {
+          disable: false,
+          notifyAllParticipants: true,
+        },
+        desktopSharingFrameRate: {
+          min: 3,
+          max: 30,
+        },
+        screenshotCapture: {
+          enabled: true,
+          mode: 'always',
+        },
       }}
       interfaceConfigOverwrite={{
         VIDEO_LAYOUT_FIT: 'nocrop',
